@@ -64,6 +64,13 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
 }
 
 
+/* to convert float to progress where input need to be 100.00 - 0.00 */
+char *asProgress( float perc ){
+
+	return "NaN";
+}
+
+/* to convert long to time selft hh:mm:sec. */
 char *secLeft( long secL ){
 	//double secD = (double)secL;
 	//printf("PP secDeft lf:[%lf] f:[%f] d:[%d] i:[%i]\n", secD, secD, secD, secD, secD );

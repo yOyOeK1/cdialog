@@ -80,6 +80,7 @@ struct mqNode mqNodes[] = {
 	{0,	"Tesla No# 0",		"%lf",	' ',		"%.3f vol.\n",	"e01MuxFix/teslaBat0Volt", 	"",	0 },
 	{0,	"Tesla No# 1",		"%lf",	' ',		"%.3f vol.\n",	"e01MuxFix/teslaBat1Volt", 	"",	0 },
 	{0,	"🔋 House battery",	"%lf",	' ',		"%.3f vol.\n",	"e01MuxFix/homeBatVolt", 	"",	0 },
+	{0,	"🔋 House percent",	"%lf",	' ',		"%.1f %%\n",	"e01MuxFix/homeBatPerc", 	"",	0 },
 	{-1}
 };
 
