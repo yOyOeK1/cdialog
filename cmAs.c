@@ -14,7 +14,7 @@ extern int chFill;
 
 
 // CNNPROGRESSBAR 13
-void cm_ProgressBar( int pId, cnn_Msg *msgT ){
+void cm_AsProgressBar( int pId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_ProgressBars[ i ].id == -1 ) break;
 		if( cnn_ProgressBars[ i ].id == pId ){
@@ -29,7 +29,7 @@ void cm_ProgressBar( int pId, cnn_Msg *msgT ){
 	}
 }
 // CNNASCOMPAS 14
-void cm_Compas( int nId, cnn_Msg *msgT ){
+void cm_AsCompas( int nId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_Compass[ i ].id == -1 ) break;
 		if( cnn_Compass[ i ].id == nId ){

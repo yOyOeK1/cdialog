@@ -156,11 +156,11 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 		return true;
 
 	}else if( nType == CNNPROGRESSBAR ){
-		cm_ProgressBar( nId, msgT );
+		cm_AsProgressBar( nId, msgT );
 		return true;
 
 	}else if( nType == CNNCOMPAS ){
-		cm_Compas( nId, msgT );
+		cm_AsCompas( nId, msgT );
 		return true;
 
 	}
@@ -310,7 +310,7 @@ int main( int argc, char *argv[] ){
 		cm_TimeSince( 1, &msgt );
 		cm_printf( 1, &msgt );
 		strcpy( msgt.payload, "90 % :)" );
-		cm_ProgressBar( 1, &msgt );
+		cm_AsProgressBar( 1, &msgt );
 		cm_printf( 1, &msgt );
 		return 0;
 		// pointer function ? END 

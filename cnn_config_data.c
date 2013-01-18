@@ -197,8 +197,8 @@ cnn_Hash cnn_Hashs[] = {
 	{ 3,	"Add",			CNNADD,		true,	&cm_add		},
 	{ 4,	"Divide",		CNNDIV,		true,	&cm_div 	},
 	{ 12,	"as Time since",	CNNTIMESINCE,	true,	&cm_TimeSince 	},
-	{ 13,	"as Progress bar",	CNNPROGRESSBAR,	true,	&cm_ProgressBar 	},
-	{ 14,	"as Compas",		CNNCOMPAS,	true,	&cm_Compas 	},
+	{ 13,	"as Progress bar",	CNNPROGRESSBAR,	true,	&cm_AsProgressBar 	},
+	{ 14,	"as Compas",		CNNCOMPAS,	true,	&cm_AsCompas 	},
 
 	{ 9,	"Canvas clear",		CNNCANVCLEAR,	true,	&cm_CanvClear 	},
 	{ 10,	"Canvas printf",	CNNCANVPRINTF,	true,	&cm_CanvPrintf 	},
