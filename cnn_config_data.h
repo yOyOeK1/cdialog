@@ -7,6 +7,7 @@
 #include "cmTime.h"
 #include "cmCanvas.h"
 #include "cmMath.h"
+#include "cmAs.h"
 
 
 extern char *cnn_name;

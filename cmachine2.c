@@ -33,7 +33,7 @@ extern int chFill;
 #include "mqtth.h"
 //#include "ccanvas.h"
 #include "cargs.h"
-#include "cpostprocess.h"
+//#include "cpostprocess.h"
 
 #endif
 
@@ -58,37 +58,6 @@ cnn_Msg cm_msgClone( int msgId ){
 	strcpy( tr.payload, msg.payload );
 	printf(" | . . .  cm message clone DONE\n");
 	return tr;
-}
-
-// CNNPROGRESSBAR 13
-void cm_ProgressBar( int pId, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnn_ProgressBars[ i ].id == -1 ) break;
-		if( cnn_ProgressBars[ i ].id == pId ){
-			cmt_NodeName( "CM_PROGRESSBAR", pId, cnn_ProgressBars[ i ].name );
-			long int mesLong = strtol( msgT->payload, NULL, 10 );
-			col = cnn_ProgressBars[ i ].width;
-			snprintf( msgT->payload, 512, 
-				cnn_ProgressBars[ i ].printAs, cPP_asProgress( mesLong ) 
-				);
-			break;
-		}
-	}
-}
-// CNNASCOMPAS 14
-void cm_Compas( int nId, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnn_Compass[ i ].id == -1 ) break;
-		if( cnn_Compass[ i ].id == nId ){
-			cmt_NodeName( "CM_COMPASS", nId, cnn_Compass[ i ].name );
-			long int mesLong = strtol( msgT->payload, NULL, 10 );
-			col = cnn_Compass[ i ].width;
-			snprintf( msgT->payload, 512, 
-				cnn_Compass[ i ].printAs, cPP_asCompass( mesLong ) 
-				);
-			break;
-		}
-	}
 }
 
 void cm_printf( int id, cnn_Msg *msgT ){
