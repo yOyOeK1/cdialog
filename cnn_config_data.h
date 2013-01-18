@@ -39,6 +39,10 @@ extern int cnn_CanvPrintfsCount;
 extern cnn_CanvRender cnn_CanvRenders[];
 extern int cnn_CanvRendersCount;
 
+extern cnn_TimeSince cnn_TimeSinces[];
+extern int cnn_TimeSincesCount;
+
+
 extern cnn_Cmd cnnCmds[];
 extern int cnnCmdsCount;
 

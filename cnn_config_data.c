@@ -112,6 +112,15 @@ cnn_CanvRender cnn_CanvRenders[] = {
 };
 int cnn_CanvRendersCount = 1;
 
+// cnn_TimeSince
+// id 12
+cnn_TimeSince cnn_TimeSinces[] = {
+	{ 1,	"tt uptime", "%lf", " | . . . o o o Uptime:\n"
+				    " |                [%s] <- tt test" },
+	{ -1 }
+};
+int cnn_TimeSincesCount = 1;
+
 #include <stdio.h>
 void cmn_test0( int id, int msgPts ){
 	printf("cmn_test0 id[%i] msgPts[%i]\n", id, msgPts );
@@ -127,8 +136,8 @@ cnn_Nudle cnnNudles[] = {
 	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
 	{8,	CNNMQTTSUB,	4,	CNNPRINTF,	5	},
 	{9,	CNNKEYBIND,	8,	CNNCMD,		2	},
-	{10,	CNNCMD,		2,	CNNDIV,		3	},
-	{11,	CNNDIV,		3,	CNNPRINTF,	7	},
+	//{10,	CNNCMD,		2,	CNNDIV,		3	},
+	//{11,	CNNDIV,		3,	CNNPRINTF,	7	},
 
 	{12,	CNNKEYBIND,	12,	CNNCMD,		1	},
 	{13,	CNNCMD,		1,	CNNPRINTF,	5	},
@@ -143,10 +152,13 @@ cnn_Nudle cnnNudles[] = {
 	{18,	CNNKEYBIND,	15,	CNNCANVCLEAR,	1	},
 	{18,	CNNKEYBIND,	16,	CNNCANVPRINTF,	1	},
 
+	{19,	CNNCMD,		2,	CNNTIMESINCE,	1	},
+	{20,	CNNTIMESINCE,	1,	CNNPRINTF,	5	},
+
 	{-1}	
 };
 
-int cnn_KeyModeNow = 5;
+int cnn_KeyModeNow = 0;
 cnn_KeyMode cnn_KeyModes[] = {
 	{0,	"root"		},
 	{1,	"main"		},

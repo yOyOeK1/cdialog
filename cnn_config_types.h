@@ -112,6 +112,14 @@ typedef struct{
 	unsigned int count;
 } cnn_CanvRender;
 
+#define CNNTIMESINCE 12
+typedef struct{
+	int id;
+	char name[512];
+	char parseArg[512];
+	char printAs[512];
+} cnn_TimeSince;
+
 typedef struct{
 	int id;
 	int srcType;

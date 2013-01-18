@@ -283,6 +283,23 @@ void cm_CanvRender( int ccrId, cnn_Msg *msgT ){
 	}
 }
 
+// CNNTIMESINCE 12
+void cm_TimeSince( int tsId, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnn_TimeSinces[ i ].id == -1 ) break;
+		if( cnn_TimeSinces[ i ].id == tsId ){
+			cmiNodeName( "CM_TIMESINCE", tsId, cnn_TimeSinces[ i ].name );
+			long int mesLong = strtol( msgT->payload, NULL, 10 );
+			snprintf( msgT->payload, 512, 
+				cnn_TimeSinces[ i ].printAs, cPP_secLeft( mesLong ) 
+				);
+			break;
+		}
+	}
+}
+// CNNPROGRESSBARA 13
+
+
 // ------------------------------
 bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 	if( nType == CNNPRINTF ){
@@ -315,6 +332,10 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 
 	}else if( nType == CNNCANVRENDER ){
 		cm_CanvRender( nId, msgT );
+		return true;
+
+	}else if( nType == CNNTIMESINCE ){
+		cm_TimeSince( nId, msgT );
 		return true;
 
 	}else{
