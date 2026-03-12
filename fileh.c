@@ -24,10 +24,10 @@ char* file_read_to_chars( char *filePath ){
 }
 
 
-int main(){
+//int main(){
 
-	printf("File test ...\n");
-	printf("[fTest][%s]\n", file_read_to_chars("/tmp/d"));
-	return 0;
+//	printf("File test ...\n");
+//	printf("[fTest][%s]\n", file_read_to_chars("/tmp/d"));
+//	return 0;
 
-}
+//}

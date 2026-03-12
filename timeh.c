@@ -9,11 +9,12 @@ char* time_now_tt(){
 	char *tr = asctime( mtime );
 	
 
-	sprintf( tr, "[%d%02d%02d_tt%02d%02d%02d]", mtime->tm_year-100,
+	sprintf( tr, "%02d%02d%02d_tt%02d%02d%02d", mtime->tm_year-100,
             mtime->tm_mon + 1, mtime->tm_mday ,
             mtime->tm_hour, mtime->tm_min, mtime->tm_sec
 	    );	
-
+	// end it
+	tr[15] = 0;
 	//printf("Tm_tt [%s]\n", tr );//asctime( mtime) );
 	return tr; //asctime( mtime);// ::NiceTime ::";
 }
@@ -26,11 +27,11 @@ char* time_now_nice(){
 	return tr; //asctime( mtime);// ::NiceTime ::";
 }
 
-int main(){
+/*int main(){
 
 	printf("Time test ...\n");
 	printf("[tTest_tt][%s]\n", time_now_tt());
 	printf("[tTest][%s]\n", time_now_nice());
 	return 0;
 }
-
+*/
