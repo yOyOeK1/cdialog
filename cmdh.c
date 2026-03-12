@@ -11,7 +11,7 @@ char* cmd_to_chars( char *cmd ){
 		return NULL;
 	}
 	
-	printf("#c ... cmd DONE\n");
+	//printf("#c ... cmd DONE\n");
 	char line[512];
 	static char lineLast[512];
 	int lineN = 0;

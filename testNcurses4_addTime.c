@@ -52,6 +52,20 @@ void clTest(){
 	printw( "󱩅 hot 󰻠  󰝢  󰘚 󱤓 󰝲  󱚼 󰖪  " );
 }
 
+void clHelp(){
+	move( 1,1 );
+	printw(
+		" 󰋖 - help\n"
+		"h -	as help\n"
+		"b - 	as battery\n"
+		"t - 	as time\n"
+		"c - 	as clien\n"
+		"C - 	as CMD\n"
+		"\nq - 	as Quit"
+	);
+
+}
+
 bool onMouseEvent( MEVENT even){
       // Check button states and display coordinates
       if (even.bstate & BUTTON1_PRESSED) {
@@ -76,19 +90,20 @@ bool onKeyEvent ( char ch ){
         if( ch == 'c' ){
 		clear();
         }else if( ch == 'h' ){
-		move(8,5);
+		clHelp();
+		move(15,5);
 		clTest();
-	}else if( ch == 't' ){
-		mvprintw( 1,5, "[T] %s",time_now_tt() );
-	}else if( ch == 'b' ){
-		mvprintw( 1,5, "[batter] %s",file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
+	}else if( ch == 't' ){ // time 
+		mvprintw( 0,0, "%s",time_now_tt() );
+	}else if( ch == 'b' ){ // battery local / laptop
+		mvprintw( 0,17, "󰄌%s%%",file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
 	}else if( ch == 'C' ){
 		mvprintw( 1,5, "[cmd] [%s]", cmd_to_chars("cal") );
 	}else if( ch == 'f' ){
 		mvprintw( 1,5, "[F] %s",file_read_to_chars("/tmp/d") );
 	}
 
-        mvprintw(4, 0, "Char key press: [ %c ]", ch);
+        mvprintw(row-1, 0, "Char key press: [ %c ]", ch);
 
 	return false;
 }
