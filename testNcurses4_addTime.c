@@ -1,13 +1,17 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <pthread.h>
+#include <unistd.h>
 
 #include "fileh.h"
 #include "timeh.h"
 #include "cmdh.h"
+#include "dogh.h"
 
 
 int row,col;
+pthread_t dogTest1;
 
 void ncursInit(){
     // init uft / emoji style 
@@ -61,10 +65,29 @@ void clHelp(){
 		"t - 	as time\n"
 		"c - 	as clien\n"
 		"C - 	as CMD\n"
+		"! - 	as thread ... start\n"
+		"@ - 	as thread ... kill\n"
 		"\nq - 	as Quit"
 	);
 
 }
+void *onBatteryUpdate( void *vargp ){
+	while( true ){
+		mvprintw( 0,18, " 󰄌 %s %% ", file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
+		refresh();
+		sleep( 10 );
+	}
+}
+
+void *onClockUpdate( void *vargp ){
+	while( true ){
+		mvprintw( 0,0, "  %s\r", time_now_tt() );
+		refresh();
+		sleep( 1 );
+	}
+
+}
+
 
 bool onMouseEvent( MEVENT even){
       // Check button states and display coordinates
@@ -89,18 +112,31 @@ bool onKeyEvent ( char ch ){
 	
         if( ch == 'c' ){
 		clear();
+
         }else if( ch == 'h' ){
 		clHelp();
 		move(15,5);
 		clTest();
-	}else if( ch == 't' ){ // time 
-		mvprintw( 0,0, "%s",time_now_tt() );
+
+	}else if( ch == '!' ){ // start thread
+		pthread_create( &dogTest1, NULL, myDogTest, NULL);
+		//dog_create("gogo");
+
+	}else if( ch == '@' ){ // kill thread
+		pthread_cancel( dogTest1 );
+
+	}else if( ch == 't' ){ // time A
+		onClockUpdate("");
+	
 	}else if( ch == 'b' ){ // battery local / laptop
-		mvprintw( 0,17, "󰄌%s%%",file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
+		onBatteryUpdate("");
+
 	}else if( ch == 'C' ){
 		mvprintw( 1,5, "[cmd] [%s]", cmd_to_chars("cal") );
+
 	}else if( ch == 'f' ){
 		mvprintw( 1,5, "[F] %s",file_read_to_chars("/tmp/d") );
+
 	}
 
         mvprintw(row-1, 0, "Char key press: [ %c ]", ch);
@@ -121,6 +157,12 @@ int main(void) {
     cl("OK!");
 
     refresh();
+
+    pthread_t ptBat;
+    pthread_create( &ptBat, NULL, onBatteryUpdate, NULL );
+    pthread_t ptClock;
+    pthread_create( &ptClock, NULL, onClockUpdate, NULL );
+
 
     while ((ch = getch()) != 'q') {
 
