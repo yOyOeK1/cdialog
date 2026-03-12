@@ -1,10 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "config.h"
+
+int time_now(){
+	time_t tNow;
+	time( &tNow );
+	tNow+= TIME_ZONE_OFFSET;
+	return tNow;
+}
 
 char* time_now_tt(){
-	time_t tnow;
-	time( &tnow );
+	time_t tnow = time_now();
+	//time( &tnow );
+	// time zone offset
+	//tnow+= TIME_ZONE_OFFSET;//60*60*-5;
 	struct tm *mtime = localtime( &tnow );
 	char *tr = asctime( mtime );
 	
@@ -19,8 +29,8 @@ char* time_now_tt(){
 	return tr; //asctime( mtime);// ::NiceTime ::";
 }
 char* time_now_nice(){
-	time_t tnow;
-	time( &tnow );
+	time_t tnow = time_now();
+	//time( &tnow );
 	struct tm *mtime = localtime( &tnow );
 	char *tr = asctime( mtime );
 	//printf("Tm [%s]\n", tr );//asctime( mtime) );
