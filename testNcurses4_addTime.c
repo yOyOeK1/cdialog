@@ -76,6 +76,8 @@ bool onKeyEvent ( char ch ){
 		clTest();
 	}else if( ch == 't' ){
 		mvprintw( 1,5, "[T] %s",time_now_tt() );
+	}else if( ch == 'b' ){
+		mvprintw( 1,5, "[batter] %s",file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
 	}else if( ch == 'f' ){
 		mvprintw( 1,5, "[F] %s",file_read_to_chars("/tmp/d") );
 	}
