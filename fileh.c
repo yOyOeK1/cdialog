@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
-
+#include <string.h>
 
 char* file_read_to_chars( char *filePath ){
 	FILE *f = fopen( filePath, "r" );
@@ -16,6 +16,8 @@ char* file_read_to_chars( char *filePath ){
 	char *tr = (char *)malloc(  fSize+1 );
 	fseek( f, 0, 0 );
 	fgets( tr, fSize, f );
+	// trim buffer to end 
+	tr[ strcspn( tr, "\r\n") ] = 0;
 	fclose( f );
 	
 	//printf("File size is: %ld\nFile content -----\n%s\n---------\n", fSize, tr );
