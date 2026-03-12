@@ -71,21 +71,32 @@ void clHelp(){
 	);
 
 }
-void *onBatteryUpdate( void *vargp ){
+
+void onBatteryUpdate(){
+	attron( A_BOLD|A_ALTCHARSET );
+	mvprintw( 0,18, " 󰄌 %s %% ", file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
+	attroff( A_BOLD|A_ALTCHARSET );
+	refresh();
+}
+
+void *dogBattery( void *vargp ){
 	while( true ){
-		mvprintw( 0,18, " 󰄌 %s %% ", file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
-		refresh();
-		sleep( 10 );
+		onBatteryUpdate();
+		sleep( 15 );
 	}
 }
 
-void *onClockUpdate( void *vargp ){
-	while( true ){
-		mvprintw( 0,0, "  %s\r", time_now_tt() );
-		refresh();
-		sleep( 1 );
-	}
+void onClockUpdate(){
+	mvprintw( 0,0, "  %s\r", time_now_tt() );
+	refresh();
+}
 
+
+void *dogClock( void *vargp ){
+	while( true ){
+		onClockUpdate();
+		sleep( 10 );
+	}
 }
 
 
@@ -126,10 +137,10 @@ bool onKeyEvent ( char ch ){
 		pthread_cancel( dogTest1 );
 
 	}else if( ch == 't' ){ // time A
-		onClockUpdate("");
+		onClockUpdate();
 	
 	}else if( ch == 'b' ){ // battery local / laptop
-		onBatteryUpdate("");
+		onBatteryUpdate();
 
 	}else if( ch == 'C' ){
 		mvprintw( 1,5, "[cmd] [%s]", cmd_to_chars("cal") );
@@ -159,9 +170,9 @@ int main(void) {
     refresh();
 
     pthread_t ptBat;
-    pthread_create( &ptBat, NULL, onBatteryUpdate, NULL );
+    pthread_create( &ptBat, NULL, dogBattery, NULL );
     pthread_t ptClock;
-    pthread_create( &ptClock, NULL, onClockUpdate, NULL );
+    pthread_create( &ptClock, NULL, dogClock, NULL );
 
 
     while ((ch = getch()) != 'q') {
