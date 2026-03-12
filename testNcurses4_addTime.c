@@ -4,6 +4,7 @@
 
 #include "fileh.h"
 #include "timeh.h"
+#include "cmdh.h"
 
 
 int row,col;
@@ -37,7 +38,10 @@ void ncursInit(){
 }
 
 void cl( char *msg ){
-	mvprintw( 7,0,"[cl] [ %s ]", msg );
+	move( 7, 0 );
+	attron( A_DIM );
+	printw( "[cldIM] [ %s ]", msg );
+	attroff( A_DIM );
 }
 
 void clTest(){
@@ -78,6 +82,8 @@ bool onKeyEvent ( char ch ){
 		mvprintw( 1,5, "[T] %s",time_now_tt() );
 	}else if( ch == 'b' ){
 		mvprintw( 1,5, "[batter] %s",file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
+	}else if( ch == 'C' ){
+		mvprintw( 1,5, "[cmd] [%s]", cmd_to_chars("cal") );
 	}else if( ch == 'f' ){
 		mvprintw( 1,5, "[F] %s",file_read_to_chars("/tmp/d") );
 	}
@@ -94,7 +100,7 @@ int main(void) {
 
     ncursInit();	    
     attron( A_REVERSE );
-    mvprintw(1, 0, "1Click the mouse or press 'q' to exit");
+    mvprintw(1, 0, "1Click the mouse or press 'q' to exit size[ %i x %i]", row, col );
     attroff( A_REVERSE );
 
     cl("OK!");
@@ -104,13 +110,12 @@ int main(void) {
     while ((ch = getch()) != 'q') {
 
 
-        if (ch == KEY_MOUSE) {
-		if (getmouse(&event) == OK) {
+        if( ch == KEY_MOUSE && getmouse(&event) == OK ){
                 // Clear previous message
                 move(2, 0);
                 clrtoeol();
-		doRefresh = onMouseEvent( event);
-            }
+		doRefresh = onMouseEvent( event );
+            
 	}
 
 	onKeyEvent( ch );

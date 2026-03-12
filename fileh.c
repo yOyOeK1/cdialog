@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <dirent.h>
 
 
 char* file_read_to_chars( char *filePath ){
@@ -23,11 +23,30 @@ char* file_read_to_chars( char *filePath ){
 	return tr;
 }
 
+char* file_read_dirList( char *dirPath ){
+	DIR *dp;
+	struct dirent *entry;
 
-//int main(){
+	dp = opendir( dirPath );
+	if( dp != NULL ){
+		while( ( entry = readdir( dp  ) ) ){
+			printf("*t[%02i] [%s]\n", entry->d_type, entry->d_name);
+		}	
+	}else{
+		perror("Dir list error\n");
+	}
+	return NULL;
+}
 
-//	printf("File test ...\n");
-//	printf("[fTest][%s]\n", file_read_to_chars("/tmp/d"));
-//	return 0;
+/*
+int main(){
 
-//}
+	printf("File test ...\n");
+	printf("[fTest][%s]\n", file_read_to_chars("/tmp/d"));
+	
+	// read dir 
+	printf("[fTest][%s]\n", file_read_dirList("/tmp/") );
+	return 0;
+
+}
+*/
