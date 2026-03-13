@@ -6,43 +6,34 @@
 #define BUFMAX 4098
 
 
-struct msg{
-	int inDb;
-	char topic[BUFMAX];
-	int topicId;
-	char msg[BUFMAX];
-	int entryDate;
-};
-
-
-struct topic{
+struct aItem{
 	int id;
 	char topic[BUFMAX];
-	char tableName[BUFMAX];
+	char payload[BUFMAX];
 };
 
-int topicsCount = 0;
-struct topic * topics;
+int aItemsCount = 0;
+struct aItem * aItems;
 
 
 
-struct topic topicPut( int id, char *topic, char *tableName){
-	struct topic tmp[topicsCount];
-	for(int t=0;t<topicsCount;t++){
-		tmp[t] = topics[t];
+struct aItem aItemPut( int id, char *topic, char *payload){
+	struct aItem tmp[aItemsCount];
+	for(int t=0;t<aItemsCount;t++){
+		tmp[t] = aItems[t];
 	}
-	topics = malloc( (topicsCount+1)*sizeof(struct topic) );
-	for(int t=0;t<topicsCount;t++){
-		topics[t] = tmp[t];
+	aItems = malloc( (aItemsCount+1)*sizeof(struct aItem) );
+	for(int t=0;t<aItemsCount;t++){
+		aItems[t] = tmp[t];
 	}
 
-	topics[ topicsCount ].id = id;
-	strcpy( topics[topicsCount].topic, topic );
-	strcpy( topics[topicsCount].tableName, tableName );
+	aItems[ aItemsCount ].id = id;
+	strcpy( aItems[aItemsCount].topic, topic );
+	strcpy( aItems[aItemsCount].payload, payload );
 
-	topicsCount++;
+	aItemsCount++;
 
-	return topics[ (topicsCount-1) ];
+	return aItems[ (aItemsCount-1) ];
 }
 
 
@@ -50,21 +41,21 @@ struct topic topicPut( int id, char *topic, char *tableName){
 
 
 int getTopicIndex( char *topic ){
-	for(int t=0;t<topicsCount;t++)
-		if( strcmp(topics[t].topic, topic ) == 0 )
+	for(int t=0;t<aItemsCount;t++)
+		if( strcmp(aItems[t].topic, topic ) == 0 )
 			return t;
 
 	return -1;
 }
 
-struct topic getTopic(char *topic){
+struct aItem getTopic(char *topic){
 	int index = getTopicIndex( topic );
 	if( index != -1 ){
-		printf("topic from cashe\n");
-		return topics[index];
+		printf("aItem from cashe\n");
+		return aItems[index];
 	}
 
-	return topicPut( 1, topic, "aa");
+	return aItemPut( 1, topic, "aa");
 }
 
 
@@ -74,12 +65,14 @@ int main(){
 
 	printf("array test ... \n");
 	int idC = 0;
-	topicPut( idC++, "testId0", "as table name is id:0" );
-	topicPut( idC++, "testId1", "as table name is id:1" );
+	aItemPut( idC++, "testId0", "as table name is id:0" );
+	aItemPut( idC++, "testId1", "as table name is id:1" );
 
 	int fRes = getTopicIndex( "testId1" );
 	printf(" ... find result is [ %i ] = [ 1 ]\n", fRes );
-	printf(" ... topic of [0] [ %s ]\n" , topics[0].topic );
+	struct aItem ait = getTopic("testId0");
+	printf(" ... find result is [ %i ] = [ 0 ]\n", ait.id );
+	printf(" ... aItem of [0] [ %s ]\n" , aItems[0].topic );
 
 	printf("array test ... DONE\n");
 	
