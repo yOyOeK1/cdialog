@@ -73,9 +73,9 @@ void clHelp(){
 }
 
 void onBatteryUpdate(){
-	attron( A_BOLD|A_ALTCHARSET );
+	attron( A_BOLD );
 	mvprintw( 0,18, " 󰄌 %s %% ", file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
-	attroff( A_BOLD|A_ALTCHARSET );
+	attroff( A_BOLD );
 	refresh();
 }
 
