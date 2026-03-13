@@ -1,91 +1,95 @@
 
-#include <mosquitto.h>
+/*
+ *
+ */
+
+#define VER 2026.03.02
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <dirent.h>
 #include <string.h>
-#include <ncurses.h>
+#include <mosquitto.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <time.h>
+#include <ncurses.h>
 
 #include "config.h"
 
 
-struct mosquitto *mqc;
 
-void mqtt_on_connect( struct mosquitto *mosq, void *obj, int result )
+
+struct mosquitto *mosq1;
+
+
+void on_connect(struct mosquitto *mosq, void *obj, int result)
 {
-	int rc = MOSQ_ERR_SUCCESS;
+    //int rc = MOSQ_ERR_SUCCESS;
 
-	printf("mqtt on _ connected\n");
-	if( !result ){
-		printf("mqtt subscribe\n");
-		mosquitto_subscribe( mosq, NULL, "#", 0 );
-	}else{
-		fprintf( stderr, "EE mqtt on connection\n%s\n", mosquitto_connack_string( result ) );
-	}
+    printf("mqtth ... connect\n");
+    if(!result){
+        mosquitto_subscribe(mosq, NULL, "#", 0);
+        printf("mqtth ... subscribed\n");
+    }else{
+        fprintf(stderr, "EE mqtth ... \n%s\n", mosquitto_connack_string(result));
+    }
 }
 
-int mqttLineC=0;
-void mqtt_on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
+
+int add = 0;
+void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
-	/*
-	printf(" [_ _]  mqtt msg\t%s --> [%i] %s\n", 
+	printf(" [_ 󰃌 _]%s --> [%i] %s\n", 
 		message->topic, 
 		message->payloadlen, 
 		message->payload
-		);
-
-	if( true ){// if need to fillter or post process 
-		//putMsg( message->topic, message->payload );
-		move( 5+( mqttLineC++%4)  ,5 );
-		printw( "%s[@][%p]\n", message->topic, message->payload );
-	}else{
-		printf("---------\ndrop msg topic [%s] \n-------------\n",
-			message->topic
-		);
-	}
-	*/
+	);
+	add++;
 }
 
-void mqtt_init()
-{
-	printf("mqtt - init ... [ %s : %i ]\n", mqttHost, mqttPort );
+void mqttInit(){
+	printf("mqtt - init ... to [ %s : %i ]\n", mqttHost, mqttPort );
 	mosquitto_lib_init();
-	printf("1mqtt - init ... [ %s : %i ]\n", mqttHost, mqttPort );
-	mqc = mosquitto_new( NULL, true, NULL);
-	printf("2mqtt - init ... [ %s : %i ]\n", mqttHost, mqttPort );
-	mosquitto_connect_callback_set( mqc, mqtt_on_connect );
-	printf("3mqtt - init ... [ %s : %i ]\n", mqttHost, mqttPort );
-	mosquitto_message_callback_set( mqc, mqtt_on_message );
-	printf("4mqtt - init ... [ %s : %i ]\n", mqttHost, mqttPort );
-	mosquitto_connect( mqc, mqttHost, mqttPort, 60 );
-	printf("5mqtt - init ... [ %s : %i ]\n", mqttHost, mqttPort );
+	mosq1 = mosquitto_new( NULL, true, NULL);
+	mosquitto_connect_callback_set( mosq1, on_connect );
+	mosquitto_message_callback_set( mosq1, on_message );
+	mosquitto_connect( mosq1, mqttHost, mqttPort, 60 );
 
 }
 
-void mqtt_doIt(){
-	
-	printf("90mqtt - init ... [ %s : %i ]\n", mqttHost, mqttPort );
-	mosquitto_loop_forever( mqc, -1, 1 );
-	printf("91mqtt - init ... [ %s : %i ]\n", mqttHost, mqttPort );
-	mosquitto_destroy( mqc );
-	printf("92mqtt - init ... [ %s : %i ]\n", mqttHost, mqttPort );
+void mqttDoIt(){
+	mosquitto_loop_forever(mosq1, -1, 1);
+	mosquitto_destroy(mosq1);
     	mosquitto_lib_cleanup();
-	printf("93mqtt - init ... [ %s : %i ]\n", mqttHost, mqttPort );
 
 }
 
-///*
-int main( void ){
+int mqIter = 0;
+void *myThread( void *vargp){
+	while( true ){
+		//printf( "iter...%i\n", add );
+		//move( 1, 2 );
+		if( (add%2)==0 )
+			printf("  %i\n",mqIter++);
+		else
+			printf("  %i\n",mqIter++);
+		sleep(1);
 
-	printf("## mqtth test .....\n");
+	}
 
-	mqtt_init();
-	mqtt_doIt();
-	
-	printf("## mqtth test .....DONE\n");
-	return 0;
 }
 
-//*/
+
+
+
+
+int main(){
+
+	printf("mqtth test ...\n");
+	pthread_t thread_id;
+	pthread_create( &thread_id, NULL, myThread, NULL );
+
+	mqttInit();
+	mqttDoIt();
+
+}
