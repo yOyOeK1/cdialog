@@ -59,6 +59,7 @@ void mqttInit(){
 
 void mqttDoIt(){
 	mosquitto_loop_forever(mosq1, -1, 1);
+	//mosquitto_disconnect() and mosquitto_loop_stop()
 	mosquitto_destroy(mosq1);
     	mosquitto_lib_cleanup();
 
