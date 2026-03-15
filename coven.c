@@ -1,8 +1,7 @@
 #include <ncurses.h>
 #include <stdlib.h>
 
-#include "recipe2.h"
-
+#include "covenStructs.h"
 
 int main(){
 
