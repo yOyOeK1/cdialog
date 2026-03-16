@@ -22,7 +22,7 @@ char* cmd_to_chars( char *cmd ){
 		//printf( "[%i]%s", lineN++, line );
 	}
 	if( tSize > 0 ) lineLast[ tSize-1 ] = 0;
-	//printf( "As last size (%i) / (%i)\n--------\n[%s]\n-------------\n", sizeof(lineLast), tSize, lineLast );
+	printf( "As last size (%i) / (%i)\n--------\n[%s]\n-------------\n", sizeof(lineLast), tSize, lineLast );
 	//fseek( f, 0, SEEK_END);
 	//long fSize = ftell( f );
 	//char tr[ fSize+1 ];

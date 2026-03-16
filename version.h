@@ -1,0 +1,2 @@
+
+#define CDIALOG_VER "260315_tt142152"
