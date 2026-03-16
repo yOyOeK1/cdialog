@@ -4,14 +4,20 @@
 #include <pthread.h>
 #include <unistd.h>
 
+
+#include "version.h"
+
 #include "fileh.h"
 #include "timeh.h"
 #include "cmdh.h"
 #include "dogh.h"
-
+#include "stateMachine.h"
 
 int row,col;
 pthread_t dogTest1;
+bool mainLoop = true;
+
+
 
 void ncursInit(){
     // init uft / emoji style 
@@ -59,8 +65,11 @@ void clTest(){
 void clHelp(){
 	move( 1,1 );
 	printw(
-		" 󰋖 - help\n"
+		" 󰋖 - 	help\n"
 		"h -	as help\n"
+		"0 | 1 - wifi off | on \n"
+		"ss - 	state machine\n"
+		"  q - 	quit\n"
 		"b - 	as battery\n"
 		"t - 	as time\n"
 		"c - 	as clien\n"
@@ -120,8 +129,8 @@ bool onMouseEvent( MEVENT even){
 }
 
 bool onKeyEvent ( char ch ){
-	
-        if( ch == 'c' ){
+	if( SM_chkCh( ch ) ){
+	}else if( ch == 'c' ){
 		clear();
 
         }else if( ch == 'h' ){
@@ -136,36 +145,77 @@ bool onKeyEvent ( char ch ){
 	}else if( ch == '@' ){ // kill thread
 		pthread_cancel( dogTest1 );
 
+	}else if( ch == 's' ){ // state machine enter
+		char tDeb[512];
+        	snprintf( tDeb, 512, "SM] ... [ %s ]", SM_getState() );
+		cl( tDeb );
+		SM_children( 1 );
+		//mvprintw( 1,5, "SM] ... [ %s ]", SM_getState() );      
+
 	}else if( ch == 't' ){ // time A
 		onClockUpdate();
 	
 	}else if( ch == 'b' ){ // battery local / laptop
 		onBatteryUpdate();
 
+/*	}else if( ch == '1' && strcmp( "settings", SM_getState() ) == 0 ){
+		mvprintw( 1,5, "[wifi 0] [%s]", cmd_to_chars(
+			"sudo /home/yoyo/.viteyss/oven/oMachine/wifiSet.sh 1"
+			) );
+	}else if( ch == '0' ){
+		mvprintw( 1,5, "[wifi 0] [%s]", cmd_to_chars(
+			"sudo /home/yoyo/.viteyss/oven/oMachine/wifiSet.sh 0"
+			) );
+*/
+	}else if( ch == 'r' ){
+		mvprintw( 1,5, "[rebuild] [%s]", cmd_to_chars(
+			"./build4.sh"
+			) );
 	}else if( ch == 'C' ){
 		mvprintw( 1,5, "[cmd] [%s]", cmd_to_chars("cal") );
 
 	}else if( ch == 'f' ){
 		mvprintw( 1,5, "[F] %s",file_read_to_chars("/tmp/d") );
 
+	}else if ( ch == 'q' ) {
+		mainLoop = false;
 	}
 
         mvprintw(row-1, 0, "Char key press: [ %c ]", ch);
 
-	return false;
+	return true;
 }
 
-int main(void) {
+void drawSMState(){
+    // show SM status
+    attron( A_DIM | A_REVERSE );
+    
+    mvprintw( 0, col - 10 , "  %s", SM_getState() );
+    attroff( A_DIM | A_REVERSE );
+}
+
+int main( int argc, char* argv[] ) {
+
     MEVENT event;
     bool doRefresh = false;
     int ch;
-
+ //    󰛨 󱩎 󱩖 +
     ncursInit();	    
-    attron( A_REVERSE );
-    mvprintw(1, 0, "1Click the mouse or press 'q' to exit size[ %i x %i]", row, col );
-    attroff( A_REVERSE );
+ 
+    SM_init( "cdialog_main" );
 
+    // welcome bar info 
+    attron( A_REVERSE );
+    mvprintw(1, 0, "Click the mouse or press 'q' to exit size[ %i x %i]", row, col );
+    attroff( A_REVERSE );
+    attron( A_DIM );
+    mvprintw(2, 0, "Version: [ %s ]", CDIALOG_VER );
+    attroff( A_DIM );
+
+    // cl test 
     cl("OK!");
+
+    drawSMState();
 
     refresh();
 
@@ -175,8 +225,9 @@ int main(void) {
     pthread_create( &ptClock, NULL, dogClock, NULL );
 
 
-    while ((ch = getch()) != 'q') {
 
+    while ( mainLoop ){
+	ch = getch();
 
         if( ch == KEY_MOUSE && getmouse(&event) == OK ){
                 // Clear previous message
@@ -184,11 +235,11 @@ int main(void) {
                 clrtoeol();
 		doRefresh = onMouseEvent( event );
             
-	}
-
-	onKeyEvent( ch );
+	}else if( onKeyEvent( ch ) )
+		doRefresh = true;
 
 	if( doRefresh ){
+		drawSMState();
         	refresh(); // Update the screen with new information
 		doRefresh = false;
 	}
