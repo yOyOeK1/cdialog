@@ -41,13 +41,21 @@ int ccNsCount = 0;
 int col = 20;
 int row = 4;
 char *ccFB;
+int ccFBc = 0;
+
+int ccInit_FB(){
+	ccFBc = col*row + 1;
+	ccFB = malloc( ccFBc * sizeof( char ) );
+	printf("#* .. ccFB size [ %i ] for [ %i x %i ] terminal size\n", ccFBc, col, row );
+}
+
+int ccFree_FB(){
+	free( ccFB );
+}
 
 int ccInit(){
-	
-	int tChar = col*row + 1;
-	ccFB = malloc( tChar * sizeof( char ) );
-	printf("#* .. ccFB size [ %i ] for [ %i x %i ] terminal size\n", tChar, col, row );
 
+	ccInit_FB();
 
 	struct ccNode cPwd = { 1, {0, 0 }, {0, 0 }, { 255,0,0,255 }, "Entry0","Full text of entry 0", "widgetTick", 0 };
 	//printf("* at adding cPwd and name [ %s ] \n",cPwd.name);
@@ -80,6 +88,14 @@ int ccUpdate(){
 
 }
 
+int cc_printf( int x, int y, char *msg ){
+	for( int i=0,ic=strlen(msg); i<ic; i++){
+		ccFB[ y*col + x + i ] = msg[ i ];
+
+	}
+	return 0;
+}
+
 int ccDraw(){
 	int cur = 0;
 	int wLen = 0;
@@ -94,6 +110,8 @@ int ccDraw(){
 				ccFB[ cur++ ] = '\n';
 			} 
 			ccFB[ cur++ ] = ccNs[w].text[ c ];
+
+			if( cur >= ccFBc ) return 0;
 		}
 		
 		cur+= CC_NODE_MARGIN;
@@ -122,21 +140,40 @@ void ccClear( char cBlank ){
 }
 
 void ccRender(){
-	printf( "\n\nccRender ................\n%s................ccRender DONE\n", ccFB );
+	printf( "\n\nccRender  %i x %i ................\n\e[38;2;255;0;0m%s\e[0m................ccRender DONE\n", 
+		col,row,
+		ccFB 
+		);
 }
 
 
 int SMWork = 1;
-int ch;
+int ch = '\n';
+int chFill = '.';
 int chNo = 0;
 
 int main( int argc, char *argv[] ){
 	
-	printf( "ccanvas ... test\n" );
+	printf( "ccanvas ... test argc(%i)\n", argc );
+
+	if( argc > 1 ){
+		for( int a=0; a<argc ; a++ ){
+			if( strncmp( argv[ a ], "-row=", 5 ) == 0 ){
+				printf("#* ... --row=\n");
+				sscanf( argv[ a ], "-row=%d", &row );
+			} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
+				printf("#* ... --col=\n");
+				sscanf( argv[ a ], "-col=%d", &col );
+			} 
+
+		}
+	}
+	
+
 
 	ccInit();
 	//ccRender();
-	//ccClear('x');
+	ccClear( chFill );
 	//ccDraw();
 	//ccRender();
 		
@@ -147,27 +184,66 @@ int main( int argc, char *argv[] ){
 
 	// main loop START
 	while( SMWork == 1 ){
-		ccClear(' ');
-		ccUpdate();
-		ccDraw();
-		ccRender();
-
-		printf( "To quit press [q]\n" );
-		//scanf( "%c", &ch );
-		ch = getchar();
 		if( ch == '\n' ){
+
+		if( line[0] == 'q' ){
+			SMWork = 0;
+			break;
+		} else if( line[0] == 'c' && strlen( line ) == 2 ){
+			chFill = (char)line[1];
+			ccClear( chFill );
+
+		} else if( line[0] == 'p' ){
+			cc_printf( 5, 2, "5x2 land" );
+		} else if( line[0] == 'c' ){
+			ccClear( chFill );
+
+		} else if( line[0] == 's' && line[1] == 'r' ){
+			//line[0] = '0';
+			//line[1] = '0';
+			//row = atoi( line );
+			sscanf( line, "sr%d", &row );
+			printf("#* ... [%s] set new row(%i)\n", line, row );
+			ccFree_FB();
+			ccInit_FB();
+			
+
+		} else if( line[0] == 's' && line[1] == 'c' ){
+			//line[0] = '0';
+			//line[1] = '0';
+			
+			//col = atoi( line );
+			sscanf( line, "sc%d", &col );
+
+			printf("#* ... [%s] set new col(%i)\n", line, col);
+
+			ccFree_FB();
+			ccInit_FB();
+		}
+	
+
 			line[ chNo ] = 0;
 			chNo = 0;
+		
+			//ccClear( chFill );
+			ccUpdate();
+			ccDraw();
+			ccRender();
+
+			printf( "To quit press [q] fill[%c]\n", chFill );
+			//scanf( "%c", &ch );
+			//scanf("%s", line );
+			
+
 		}else{
 			line[ chNo++ ] = ch;
 		}
 
+		ch = getchar();
+		
 		printf("#* ... pressd [%c]\n", ch);
 
-		if( ch == 'q' )
-			SMWork = 0;
-	
-	}
+	}	
 	// main loop END
 
 
