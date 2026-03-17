@@ -10,25 +10,39 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "timeh.h"
+
+#include "ccanvas.h"
+#include "ccNode.h"
+
 #include <unistd.h>
 #include <pthread.h>
 #include <time.h>
 
-struct ccNode{
-	int id;
-	int pos[2];
-	int size[2];
-	char fbColor[4];
-	char bgColor[4];
-	char name[512];
-	char text[512];
-	char fUpdate[128];
-	int entryDate;
 
-};
+struct ccNode ccNs[10];
+int ccNsCount = 0;
+
+int col = 50;
+int row = 4;
+int CC_NODE_MARGIN = 2;
+int ch = '\n';
+int chFill = '.';
+int chNo = 0;
+char line[512] = "-";
+bool asBar = false;
+
+char *ccFB;
+int ccFBc = 0;
+
+int SMWork = 1;
+int SMLoop = 0;
+
+
+
 
 //
-// widTic
+// widTic	for node 
 //
 int widgetTickC=0;
 int *widgetTick(  struct ccNode *cN, int frameNo ){
@@ -38,21 +52,52 @@ int *widgetTick(  struct ccNode *cN, int frameNo ){
 }
 
 //
-
+// for node if not defined 
+//
 int *fUpdateDef( struct ccNode *cN, int frameNo ){
 	
 	printf("fUpdateDef ... fNo[%i] of [ %s ]\n", frameNo, cN->name );
 	return 0;
 }
 
+// 
+// dogTimeCounter dog() loop() ....
+//
+int dogTimeCounter=0;
+void *dogTimeLooper( void *vargp ){
+	sleep( 1 );
+	while( SMWork == 1 ){
+		char isDog[50];
+		snprintf( isDog, 50, " | 󱑌 [%s] ", time_now_tt() );
+		cc_printf( col-23, 0, isDog );
+		ccRender();
+		sleep( 10 );
+	}
+	printf("@* ... dogTimeLooper DONE\n" );
+}
 
-struct ccNode ccNs[10];
-int ccNsCount = 0;
 
-int col = 50;
-int row = 4;
-char *ccFB;
-int ccFBc = 0;
+
+// 
+// dogCounter dog() loop() ....
+//
+int dogCounter=0;
+void *dogLooper( void *vargp ){
+	sleep( 1 );
+	while( SMWork == 1 ){
+		//printf("@* loop\n")
+		//widgetTickC
+		char isDog[50];
+		snprintf( isDog, 50, " dog(%i) loop(%i)", dogCounter++, SMLoop );
+		//printf("%s ---\n", isDog);
+		cc_printf( col-40, row-1, isDog );
+		ccRender();
+		sleep( 2 );
+	}
+	printf("@* ... dogLooper DONE\n" );
+}
+
+
 
 int ccInit_FB(){
 	ccFBc = col*row + 1;
@@ -80,10 +125,6 @@ int ccInit(){
 
 	return ccNsCount;
 }
-
-int CC_NODE_MARGIN = 2;
-
-char line[512] = "-";
 
 int ccUpdate(){
 	printf("#* ... ccUpdate \n");
@@ -116,17 +157,14 @@ int ccDraw(){
 		printf( "w* cur[%i] [ %s ] len(%i)\n", cur, ccNs[w].name, wLen  );
 
 		for( c=0; c<wLen ;c++ ){
-			if( ((cur+1)%col) == 0 ){
-				ccFB[ cur++ ] = '\n';
-			} 
-			ccFB[ cur++ ] = ccNs[w].text[ c ];
 
+			ccFB[ cur++ ] = ccNs[w].text[ c ];
+			if( ((cur+1)%col) == 0 ){
+				ccFB[ cur ] = '\n';
+			} 
 			if( cur >= ccFBc ) return 0;
 		}
-
-		
-		
-		cur+= CC_NODE_MARGIN;
+		//cur+= CC_NODE_MARGIN;
 	}
 	return 0;
 }
@@ -158,47 +196,29 @@ void ccRender(){
 		ccFB 
 		);
 	*/
-	printf("\n%s\r", ccFB );
-}
-
-int SMWork = 1;
-int SMLoop = 0;
-
-
-int dogCounter=0;
-void *dogLooper( void *vargp ){
-	sleep( 1 );
-	while( SMWork == 1 ){
-		//printf("@* loop\n")
-		//widgetTickC;
-		char isDog[50];
-		snprintf( isDog, 50, "dog(%i) loop(%i)", dogCounter++, SMLoop );
-		//printf("%s ---\n", isDog);
-		cc_printf( col-19, row-1, isDog );
-		ccRender();
-		//free( isDog );
-		sleep( 2 );
+	if( asBar == true ){
+		ccFB[ strcspn( ccFB, "\n") ] = '\0';
+		printf(",[{ \"full_text\": \"%i\", \"full_text\":\"%s\"}]\n", 1,ccFB );
+	}else{
+		printf("%s\n", ccFB );
 	}
-	printf("@* ... dogLooper DONE\n" );
 }
 
 
 
-
-
-int ch = '\n';
-int chFill = '.';
-int chNo = 0;
 
 int main( int argc, char *argv[] ){
 	
-	printf( "ccanvas ... test argc(%i)\n", argc );
 
 	if( argc > 1 ){
 		for( int a=0; a<argc ; a++ ){
 			if( strncmp( argv[ a ], "-row=", 5 ) == 0 ){
 				printf("#* ... --row=\n");
 				sscanf( argv[ a ], "-row=%d", &row );
+			} else if( strncmp( argv[ a ], "-asBar", 6 ) == 0 ){
+				printf("{\"version\": 1}[[]\n");
+				asBar = true;
+
 			} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
 				printf("#* ... --col=\n");
 				sscanf( argv[ a ], "-col=%d", &col );
@@ -212,6 +232,7 @@ int main( int argc, char *argv[] ){
 	}
 	
 
+	printf( "ccanvas ... test argc(%i)\n", argc );
 
 	ccInit();
 	//ccRender();
@@ -223,6 +244,9 @@ int main( int argc, char *argv[] ){
 	//ccDraw();
 	//ccRender();
 
+
+	pthread_t tdogTimeLoop;
+	pthread_create( &tdogTimeLoop, NULL, dogTimeLooper, NULL );
 
 	pthread_t tdogLoop;
 	pthread_create( &tdogLoop, NULL, dogLooper, NULL );

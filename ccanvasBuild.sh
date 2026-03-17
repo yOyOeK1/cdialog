@@ -1,1 +1,1 @@
-gcc ccanvas.c -lm -o ccanvash.bin && ./ccanvash.bin $* 
+gcc timeh.c ccanvas.c -lm -o ccanvash.bin && ./ccanvash.bin $* 
