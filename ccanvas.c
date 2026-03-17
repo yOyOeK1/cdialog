@@ -216,7 +216,7 @@ int main( int argc, char *argv[] ){
 				printf("#* ... --row=\n");
 				sscanf( argv[ a ], "-row=%d", &row );
 			} else if( strncmp( argv[ a ], "-asBar", 6 ) == 0 ){
-				printf("{\"version\": 1}[[]\n");
+				printf("{\"version\": 1, \"click_events\":true }[[]\n");
 				asBar = true;
 
 			} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
