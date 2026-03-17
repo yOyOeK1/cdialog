@@ -11,6 +11,7 @@
 #include <string.h>
 
 #include "timeh.h"
+#include "fileh.h"
 
 #include "ccanvas.h"
 #include "ccNode.h"
@@ -61,6 +62,23 @@ int *fUpdateDef( struct ccNode *cN, int frameNo ){
 }
 
 // 
+// dogBatteryCounter dog() loop() ....
+//
+int dogBatteryCounter=0;
+void *dogBatteryLooper( void *vargp ){
+	sleep( 1 );
+	while( SMWork == 1 ){
+		char isDog[50];
+		snprintf( isDog, 50, " | 󰄌 [%s]%% ", file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
+		cc_printf( col-36, 0, isDog );
+		ccRender();
+		sleep( 15 );
+	}
+	printf("@* ... dogBatteryLooper DONE\n" );
+}
+
+
+// 
 // dogTimeCounter dog() loop() ....
 //
 int dogTimeCounter=0;
@@ -90,7 +108,7 @@ void *dogLooper( void *vargp ){
 		char isDog[50];
 		snprintf( isDog, 50, " dog(%i) loop(%i)", dogCounter++, SMLoop );
 		//printf("%s ---\n", isDog);
-		cc_printf( col-40, row-1, isDog );
+		cc_printf( col-59, 0, isDog );
 		ccRender();
 		sleep( 2 );
 	}
@@ -198,14 +216,16 @@ void ccRender(){
 	*/
 	if( asBar == true ){
 		ccFB[ strcspn( ccFB, "\n") ] = '\0';
-		printf(",[{ \"full_text\": \"%i\", \"full_text\":\"%s\"}]\n", 1,ccFB );
+		printf(",[{ \"full_text\":\"%s\"}]\n", ccFB );
 	}else{
 		printf("%s\n", ccFB );
 	}
 }
 
 
-
+char tmsg[51200];
+// mem res 121252 	virt 1560
+// 	   1316		virt 1368
 
 int main( int argc, char *argv[] ){
 	
@@ -244,6 +264,9 @@ int main( int argc, char *argv[] ){
 	//ccDraw();
 	//ccRender();
 
+
+	pthread_t tdogBatteryLoop;
+	pthread_create( &tdogBatteryLoop, NULL, dogBatteryLooper, NULL );
 
 	pthread_t tdogTimeLoop;
 	pthread_create( &tdogTimeLoop, NULL, dogTimeLooper, NULL );
@@ -294,7 +317,6 @@ int main( int argc, char *argv[] ){
 			ccRender();
 
 			//printf( "To quit press [q] fill[%c]\n", chFill );
-			char tmsg[51200];
 			snprintf( tmsg, 512, "To quit press [q] fill[%c] size[ %ix%i ]",
 				chFill, col, row );
 			cc_printf( 0, row-1, tmsg);
