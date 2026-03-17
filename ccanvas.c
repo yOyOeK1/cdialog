@@ -1,14 +1,25 @@
+//
+//	as i3bar
+//     status_command /home/yoyo/Apps/cdialog/ccanvash.bin -row=1 -col=150
+//
+//
+//
+//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-
+#include <unistd.h>
+#include <pthread.h>
+#include <time.h>
 
 struct ccNode{
 	int id;
 	int pos[2];
 	int size[2];
-	char color[4];
+	char fbColor[4];
+	char bgColor[4];
 	char name[512];
 	char text[512];
 	char fUpdate[128];
@@ -38,7 +49,7 @@ int *fUpdateDef( struct ccNode *cN, int frameNo ){
 struct ccNode ccNs[10];
 int ccNsCount = 0;
 
-int col = 20;
+int col = 50;
 int row = 4;
 char *ccFB;
 int ccFBc = 0;
@@ -57,14 +68,14 @@ int ccInit(){
 
 	ccInit_FB();
 
-	struct ccNode cPwd = { 1, {0, 0 }, {0, 0 }, { 255,0,0,255 }, "Entry0","Full text of entry 0", "widgetTick", 0 };
+	struct ccNode cPwd = { 1, {0, 0 }, {0, 0 },  { 255,0,0,255 }, { 255,0,200,255 }, "Entry0","Full text of entry 0", "widgetTick", 0 };
 	//printf("* at adding cPwd and name [ %s ] \n",cPwd.name);
 	ccNs[ ccNsCount++ ] = cPwd;
 	
-	struct ccNode cRenderC = { 2, {0, 0 }, {0, 0 }, { 255,255,255,255 }, "ERenderC","123456790",  "fUpdateD", 1 };
+	struct ccNode cRenderC = { 2, {0, 0 }, {0, 0 }, { 255,255,255,255 },  { 255,0,200,255 }, "ERenderC","123456790",  "fUpdateD", 1 };
 	ccNs[ ccNsCount++ ] = cRenderC;
 
-	struct ccNode cLastCmd = { 2, {0, -1 }, {0, 0 }, { 255,255,255,255 }, "lastCmd","123456790",  "fUpdateLastCmd", 1 };
+	struct ccNode cLastCmd = { 2, {0, -1 }, {0, 0 }, { 255,255,255,255 },  { 255,20,100,255 }, "lastCmd","123456790",  "fUpdateLastCmd", 1 };
 	ccNs[ ccNsCount++ ] = cLastCmd;
 
 	return ccNsCount;
@@ -100,7 +111,6 @@ int ccDraw(){
 	int cur = 0;
 	int wLen = 0;
 	int c;
-
 	for(int w=0; w<ccNsCount; w++ ){
 		wLen = strlen( ccNs[w].text );
 		printf( "w* cur[%i] [ %s ] len(%i)\n", cur, ccNs[w].name, wLen  );
@@ -113,6 +123,8 @@ int ccDraw(){
 
 			if( cur >= ccFBc ) return 0;
 		}
+
+		
 		
 		cur+= CC_NODE_MARGIN;
 	}
@@ -129,7 +141,7 @@ void ccClear( char cBlank ){
 	for( int y=0; y<row; y++ ){
 		for(int x=0; x<col; x++){
 			tmpc = ccGetPX( x, y );			
-			if( x == (col-1) )
+			if( x == (col-1) && row > 1)
 				*tmpc='\n';
 			else
 				*tmpc = cBlank;
@@ -140,14 +152,40 @@ void ccClear( char cBlank ){
 }
 
 void ccRender(){
+	/*
 	printf( "\n\nccRender  %i x %i ................\n\e[38;2;255;0;0m%s\e[0m................ccRender DONE\n", 
 		col,row,
 		ccFB 
 		);
+	*/
+	printf("\n%s\r", ccFB );
+}
+
+int SMWork = 1;
+int SMLoop = 0;
+
+
+int dogCounter=0;
+void *dogLooper( void *vargp ){
+	sleep( 1 );
+	while( SMWork == 1 ){
+		//printf("@* loop\n")
+		//widgetTickC;
+		char isDog[50];
+		snprintf( isDog, 50, "dog(%i) loop(%i)", dogCounter++, SMLoop );
+		//printf("%s ---\n", isDog);
+		cc_printf( col-19, row-1, isDog );
+		ccRender();
+		//free( isDog );
+		sleep( 2 );
+	}
+	printf("@* ... dogLooper DONE\n" );
 }
 
 
-int SMWork = 1;
+
+
+
 int ch = '\n';
 int chFill = '.';
 int chNo = 0;
@@ -164,6 +202,10 @@ int main( int argc, char *argv[] ){
 			} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
 				printf("#* ... --col=\n");
 				sscanf( argv[ a ], "-col=%d", &col );
+			} else if( strncmp( argv[ a ], "-chFill=", 8) == 0 ){
+				chFill = argv[ a ][8];
+				printf("#* ... --chFill= (%c)\n",chFill );
+				//sscanf( argv[ a ], "-chFill=%c", chFill );
 			} 
 
 		}
@@ -182,8 +224,14 @@ int main( int argc, char *argv[] ){
 	//ccRender();
 
 
+	pthread_t tdogLoop;
+	pthread_create( &tdogLoop, NULL, dogLooper, NULL );
+
+
+
 	// main loop START
 	while( SMWork == 1 ){
+		SMLoop++;
 		if( ch == '\n' ){
 
 		if( line[0] == 'q' ){
@@ -199,9 +247,6 @@ int main( int argc, char *argv[] ){
 			ccClear( chFill );
 
 		} else if( line[0] == 's' && line[1] == 'r' ){
-			//line[0] = '0';
-			//line[1] = '0';
-			//row = atoi( line );
 			sscanf( line, "sr%d", &row );
 			printf("#* ... [%s] set new row(%i)\n", line, row );
 			ccFree_FB();
@@ -209,14 +254,8 @@ int main( int argc, char *argv[] ){
 			
 
 		} else if( line[0] == 's' && line[1] == 'c' ){
-			//line[0] = '0';
-			//line[1] = '0';
-			
-			//col = atoi( line );
 			sscanf( line, "sc%d", &col );
-
 			printf("#* ... [%s] set new col(%i)\n", line, col);
-
 			ccFree_FB();
 			ccInit_FB();
 		}
@@ -230,7 +269,11 @@ int main( int argc, char *argv[] ){
 			ccDraw();
 			ccRender();
 
-			printf( "To quit press [q] fill[%c]\n", chFill );
+			//printf( "To quit press [q] fill[%c]\n", chFill );
+			char tmsg[51200];
+			snprintf( tmsg, 512, "To quit press [q] fill[%c] size[ %ix%i ]",
+				chFill, col, row );
+			cc_printf( 0, row-1, tmsg);
 			//scanf( "%c", &ch );
 			//scanf("%s", line );
 			
