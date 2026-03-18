@@ -23,6 +23,8 @@ struct mosquitto *mqMosqi;
 
 struct mosquitto *mqHandler;
 bool mqConnection = false;
+char mqTopicBase[512];
+int mqSubsCount = 0;
 
 void on_connect(struct mosquitto *mosq, void *obj, int result)
 {
@@ -31,8 +33,17 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
     printf("mqtth ... connect\n");
     if(!result){
         //mosquitto_subscribe(mosq, NULL, "#", 0);
-        mosquitto_subscribe(mosq, NULL, "dell/#", 0);
-        mosquitto_subscribe(mosq, NULL, "hu/#", 0);
+        //mosquitto_subscribe(mosq, NULL, "dell/#", 0);
+        //mosquitto_subscribe(mosq, NULL, "hu/#", 0);
+	for( mqSubsCount=0; true; mqSubsCount++ ){
+		if( mqSubs[ mqSubsCount ] == 0 ){
+			mqSubsCount--;
+			break;
+		}else{
+			printf("#* mq-sub to [ %s ]\n", mqSubs[ mqSubsCount ] );
+			mosquitto_subscribe( mosq, NULL, mqSubs[ mqSubsCount ], 0 );
+		}
+	}
         printf("mqtth ... subscribed\n");
 	mqHandler = mosq;
 	mqConnection = true;
@@ -54,7 +65,13 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 }
 
 void mqttInit(  ){
-	printf("mqtt - init ... to [ %s : %i ]\n", mqttHost, mqttPort );
+	snprintf( mqTopicBase, 512, "%s%s", mqTopicPrefix, machineName );
+
+	printf("mqtt - init ... to [ %s : %i ]\n"
+		"  use prefix	[ %s/ ... ]\n"
+		//"  topic's 	[ %i ]\n"
+		, mqttHost, mqttPort, mqTopicBase//, mqSubsCount
+		);
 	mosquitto_lib_init();
 	mqMosqi = mosquitto_new( NULL, true, NULL);
 	mosquitto_connect_callback_set( mqMosqi, on_connect );
@@ -97,17 +114,16 @@ void *myThread( void *vargp){
 	while( true ){
 		//printf( "iter...%i\n", add );
 		//move( 1, 2 );
-		if( (add%2)==0 ){
+		if( (add++%2)==0 ){
 			printf("  %i\n",mqIter++);
 			mqtt_publish( "and/ping", "okok"  );
 		}else
 			printf("  %i\n",mqIter++);
 		sleep( 1 );
 
-		if( mqIter > 3 ){
+		if( 0 &&  mqIter > 3 ){
 			printf("#* ... mqtt disconect ...\n");
-			//mosquitto_loop_stop( mqHandler, false );
-			//mqttDestroy();
+			// to force to close it / mqtt client down conection / disconnect
 			mosquitto_disconnect( mqMosqi );
 
 			printf("#* ... mqtt disconect ... DONE\n");
@@ -120,12 +136,7 @@ void *myThread( void *vargp){
 	return 0;
 }
 
-
-
-
-
 int main(){
-
 	printf("mqtth test ...\n");
 	pthread_t thread_id;
 	pthread_create( &thread_id, NULL, myThread, NULL );
@@ -133,7 +144,6 @@ int main(){
 	mqttInit( );
 	mqttDoIt( );
 	mqttDestroy();
-
 
 	printf("mqtth test ... DONE\n");
 }
