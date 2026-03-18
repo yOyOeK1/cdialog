@@ -49,7 +49,7 @@ int widgetTickC=0;
 int *widgetTick(  struct ccNode *cN, int frameNo ){
 	widgetTickC++;
 	printf(" widget tick ! %i\n", widgetTickC );
-	snprintf( cN->text, 50, "ok!(%i)", widgetTickC);
+	snprintf( cN->text, 50, "widTok!(%i)", widgetTickC);
 }
 
 //
@@ -115,6 +115,21 @@ void *dogLooper( void *vargp ){
 	printf("@* ... dogLooper DONE\n" );
 }
 
+// 
+// dogs a.k.a. children processis / timers
+//
+pthread_t tdogBatteryLoop;
+pthread_t tdogTimeLoop;
+pthread_t tdogLoop;
+void dogsStart(){
+	pthread_create( &tdogBatteryLoop, NULL, dogBatteryLooper, NULL );
+	pthread_create( &tdogTimeLoop, NULL, dogTimeLooper, NULL );
+	pthread_create( &tdogLoop, NULL, dogLooper, NULL );
+}
+void dogsStop(){
+
+}
+
 
 
 int ccInit_FB(){
@@ -172,7 +187,7 @@ int ccDraw(){
 	int c;
 	for(int w=0; w<ccNsCount; w++ ){
 		wLen = strlen( ccNs[w].text );
-		printf( "w* cur[%i] [ %s ] len(%i)\n", cur, ccNs[w].name, wLen  );
+		printf( "w* cur[%i] node[ %s ](%i) -> %s()\n", cur, ccNs[w].name, wLen, ccNs[w].fUpdate  );
 
 		for( c=0; c<wLen ;c++ ){
 
@@ -223,10 +238,43 @@ void ccRender(){
 }
 
 
+int cc_main_argcParse( int argc, char *argv[] ){
+       for( int a=0; a<argc ; a++ ){
+		if( strncmp( argv[ a ], "-row=", 5 ) == 0 ){
+			printf("#* ... --row=\n");
+			sscanf( argv[ a ], "-row=%d", &row );
+		} else if( strncmp( argv[ a ], "-asBar", 6 ) == 0 ){
+			printf("{\"version\": 1, \"click_events\":true }[[]\n");
+			asBar = true;
+
+		} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
+			printf("#* ... --col=\n");
+			sscanf( argv[ a ], "-col=%d", &col );
+		} else if( strncmp( argv[ a ], "-chFill=", 8) == 0 ){
+			chFill = argv[ a ][8];
+			printf("#* ... --chFill= (%c)\n",chFill );
+			//sscanf( argv[ a ], "-chFill=%c", chFill );
+		} else if( strncmp( argv[ a ], "-h", 2) == 0 ){
+			printf("#* ... -h	- this help (external function)\n\n"
+				"-asBar		- to run it as i3bar / str standard and jsonish\n"
+				"-row=N		- N rows to set\n"
+				"-col=N		- N cols / lines to set\n"
+				"-chFill=.	- . char to use as filler in clear\n"
+				);
+			return 0;
+		}
+	}
+
+       return 1;
+}
+
+
 char tmsg[51200];
 // mem res 121252 	virt 1560
 // 	   1316		virt 1368
 // 	   1241		virt 1576
+// 	   1935		virt 1416
+// 	   1943		     1576
 
 // to get nice time up
 // cat /proc/uptime | awk '{printf "%.2f min.\n", $1/60}'
@@ -234,30 +282,11 @@ char tmsg[51200];
 int main( int argc, char *argv[] ){
 	
 
-	if( argc > 1 ){
-		for( int a=0; a<argc ; a++ ){
-			if( strncmp( argv[ a ], "-row=", 5 ) == 0 ){
-				printf("#* ... --row=\n");
-				sscanf( argv[ a ], "-row=%d", &row );
-			} else if( strncmp( argv[ a ], "-asBar", 6 ) == 0 ){
-				printf("{\"version\": 1, \"click_events\":true }[[]\n");
-				asBar = true;
-
-			} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
-				printf("#* ... --col=\n");
-				sscanf( argv[ a ], "-col=%d", &col );
-			} else if( strncmp( argv[ a ], "-chFill=", 8) == 0 ){
-				chFill = argv[ a ][8];
-				printf("#* ... --chFill= (%c)\n",chFill );
-				//sscanf( argv[ a ], "-chFill=%c", chFill );
-			} 
-
-		}
-	}
+	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
+		
 	
-
 	printf( "ccanvas ... test argc(%i)\n", argc );
-
+	
 	ccInit();
 	//ccRender();
 	ccClear( chFill );
@@ -267,50 +296,39 @@ int main( int argc, char *argv[] ){
 	//strcpy( ccNs[0].text, "123Full Text Of Entry 0 " );
 	//ccDraw();
 	//ccRender();
-
-
-	pthread_t tdogBatteryLoop;
-	pthread_create( &tdogBatteryLoop, NULL, dogBatteryLooper, NULL );
-
-	pthread_t tdogTimeLoop;
-	pthread_create( &tdogTimeLoop, NULL, dogTimeLooper, NULL );
-
-	pthread_t tdogLoop;
-	pthread_create( &tdogLoop, NULL, dogLooper, NULL );
-
-
-
+	dogsStart();
+	
 	// main loop START
 	while( SMWork == 1 ){
 		SMLoop++;
 		if( ch == '\n' ){
 
-		if( line[0] == 'q' ){
-			SMWork = 0;
-			break;
-		} else if( line[0] == 'c' && strlen( line ) == 2 ){
-			chFill = (char)line[1];
-			ccClear( chFill );
+			if( line[0] == 'q' ){
+				SMWork = 0;
+				break;
 
-		} else if( line[0] == 'p' ){
-			cc_printf( 5, 2, "5x2 land" );
-		} else if( line[0] == 'c' ){
-			ccClear( chFill );
+			} else if( line[0] == 'c' && strlen( line ) == 2 ){
+				chFill = (char)line[1];
+				ccClear( chFill );
 
-		} else if( line[0] == 's' && line[1] == 'r' ){
-			sscanf( line, "sr%d", &row );
-			printf("#* ... [%s] set new row(%i)\n", line, row );
-			ccFree_FB();
-			ccInit_FB();
-			
+			} else if( line[0] == 'p' ){
+				cc_printf( 5, 2, "5x2 land" );
 
-		} else if( line[0] == 's' && line[1] == 'c' ){
-			sscanf( line, "sc%d", &col );
-			printf("#* ... [%s] set new col(%i)\n", line, col);
-			ccFree_FB();
-			ccInit_FB();
-		}
-	
+			} else if( line[0] == 'c' ){
+				ccClear( chFill );
+
+			} else if( line[0] == 's' && line[1] == 'r' ){
+				sscanf( line, "sr%d", &row );
+				printf("#* ... [%s] set new row(%i)\n", line, row );
+				ccFree_FB();
+				ccInit_FB();
+				
+			} else if( line[0] == 's' && line[1] == 'c' ){
+				sscanf( line, "sc%d", &col );
+				printf("#* ... [%s] set new col(%i)\n", line, col);
+				ccFree_FB();
+				ccInit_FB();
+			}
 
 			line[ chNo ] = 0;
 			chNo = 0;
@@ -320,25 +338,22 @@ int main( int argc, char *argv[] ){
 			ccDraw();
 			ccRender();
 
-			//printf( "To quit press [q] fill[%c]\n", chFill );
-			snprintf( tmsg, 512, "To quit press [q] fill[%c] size[ %ix%i ]",
+			snprintf( tmsg, 512, 
+				"To quit press [q] fill[%c] size[ %ix%i ]", 
 				chFill, col, row );
 			cc_printf( 0, row-1, tmsg);
 			//scanf( "%c", &ch );
 			//scanf("%s", line );
-			
 
 		}else{
 			line[ chNo++ ] = ch;
 		}
 
 		ch = getchar();
-		
 		printf("#* ... pressd [%c]\n", ch);
 
 	}	
 	// main loop END
-
 
 	printf( "ccanvas ... test ccCount(%i) DONE\n"
 		" .. ccNs[0].name [ %s ]\n",
