@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo '{"version": 1}'
+echo '{"version": 1, "click_events":true }'
 echo '['
 echo '[]'
 
