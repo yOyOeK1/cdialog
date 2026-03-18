@@ -67,8 +67,8 @@ int *fUpdateDef( struct ccNode *cN, int frameNo ){
 int dogBatteryCounter=0;
 void *dogBatteryLooper( void *vargp ){
 	sleep( 1 );
+	char isDog[50];
 	while( SMWork == 1 ){
-		char isDog[50];
 		snprintf( isDog, 50, " | 󰄌 [%s]%% ", file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
 		cc_printf( col-36, 0, isDog );
 		ccRender();
@@ -84,8 +84,8 @@ void *dogBatteryLooper( void *vargp ){
 int dogTimeCounter=0;
 void *dogTimeLooper( void *vargp ){
 	sleep( 1 );
+	char isDog[50];
 	while( SMWork == 1 ){
-		char isDog[50];
 		snprintf( isDog, 50, " | 󱑌 [%s] ", time_now_tt() );
 		cc_printf( col-23, 0, isDog );
 		ccRender();
@@ -102,10 +102,10 @@ void *dogTimeLooper( void *vargp ){
 int dogCounter=0;
 void *dogLooper( void *vargp ){
 	sleep( 1 );
+	char isDog[50];
 	while( SMWork == 1 ){
 		//printf("@* loop\n")
 		//widgetTickC
-		char isDog[50];
 		snprintf( isDog, 50, " dog(%i) loop(%i)", dogCounter++, SMLoop );
 		//printf("%s ---\n", isDog);
 		cc_printf( col-59, 0, isDog );
@@ -162,22 +162,23 @@ int ccInit(){
 int ccUpdate(){
 	printf("#* ... ccUpdate \n");
 	for(int w=0; w<ccNsCount; w++ ){
+
 		if( strcmp( ccNs[w].fUpdate, "fUpdateLastCmd" ) == 0 ){
 			snprintf( ccNs[w].text, 50, "Last cmd[%s]", line );
+		
 		}else if( strcmp( ccNs[w].fUpdate, "widgetTick" ) == 0 ){
 			widgetTick( &ccNs[w], 0 );
+		
 		}else{
 			fUpdateDef( &ccNs[ w ], 0 );
+		
 		}
 	}
-
 }
 
 int cc_printf( int x, int y, char *msg ){
-	for( int i=0,ic=strlen(msg); i<ic; i++){
+	for( int i=0,ic=strlen(msg); i<ic; i++)
 		ccFB[ y*col + x + i ] = msg[ i ];
-
-	}
 	return 0;
 }
 
@@ -187,13 +188,13 @@ int ccDraw(){
 	int c;
 	for(int w=0; w<ccNsCount; w++ ){
 		wLen = strlen( ccNs[w].text );
-		printf( "w* cur[%i] node[ %s ](%i) -> %s()\n", cur, ccNs[w].name, wLen, ccNs[w].fUpdate  );
+		printf( "ccDraw cur[%i] node[ %s ](%i) -> %s()\n", cur, ccNs[w].name, wLen, ccNs[w].fUpdate  );
 
 		for( c=0; c<wLen ;c++ ){
 
 			ccFB[ cur++ ] = ccNs[w].text[ c ];
-			if( ((cur+1)%col) == 0 ){
-				ccFB[ cur ] = '\n';
+			if( ((cur)%col) == 0 ){
+				ccFB[ cur++ ] = '\n';
 			} 
 			if( cur >= ccFBc ) return 0;
 		}
