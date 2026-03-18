@@ -226,6 +226,10 @@ void ccRender(){
 char tmsg[51200];
 // mem res 121252 	virt 1560
 // 	   1316		virt 1368
+// 	   1241		virt 1576
+
+// to get nice time up
+// cat /proc/uptime | awk '{printf "%.2f min.\n", $1/60}'
 
 int main( int argc, char *argv[] ){
 	
