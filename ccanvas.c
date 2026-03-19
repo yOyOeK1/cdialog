@@ -39,7 +39,7 @@ int ccFBc = 0;
 int SMWork = 1;
 int SMLoop = 0;
 
-
+//int ccBarROffset = 0;
 
 
 //
@@ -69,8 +69,9 @@ void *dogBatteryLooper( void *vargp ){
 	sleep( 1 );
 	char isDog[50];
 	while( SMWork == 1 ){
-		snprintf( isDog, 50, "|B[%s]%%", file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
-		cc_printf( col-9, 4, isDog );
+		snprintf( isDog, 50, " | [B %s%%]", file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
+
+		cc_printf( col-10 - 21, 0, isDog );
 		ccRender();
 		sleep( 1 );
 	}
@@ -86,8 +87,8 @@ void *dogTimeLooper( void *vargp ){
 	sleep( 1 );
 	char isDog[50];
 	while( SMWork == 1 ){
-		snprintf( isDog, 50, " |12[%s] ", time_now_tt() );
-		cc_printf( 1, 1, isDog );
+		snprintf( isDog, 50, " | [%s]", time_now_tt() );
+		cc_printf( col-21, 0, isDog );
 		ccRender();
 		sleep( 10 );
 	}
@@ -146,14 +147,20 @@ int ccInit(){
 
 	ccInit_FB();
 
-	struct ccNode cPwd = { 1, {0, 0 }, {0, 0 },  { 255,0,0,255 }, { 255,0,200,255 }, "Entry0","Full text of entry 0", "widgetTick", 0 };
+	struct ccNode cPwd = { 1, {0, 2 }, {0, 0 },  
+		{ 255,0,0,255 }, { 255,0,200,255 }, 
+		"Entry0","Full text of entry 0", "widgetTick", false, " ", 0 };
 	//printf("* at adding cPwd and name [ %s ] \n",cPwd.name);
 	ccNs[ ccNsCount++ ] = cPwd;
 	
-	struct ccNode cRenderC = { 2, {0, 0 }, {0, 0 }, { 255,255,255,255 },  { 255,0,200,255 }, "ERenderC","1234567890abcdefgh123456790",  "fUpdateD", 1 };
+	struct ccNode cRenderC = { 2, {0, 0 }, {0, 0 }, 
+		{ 255,255,255,255 },  { 255,0,200,255 }, 
+		"ERenderC","1234567890abcdefgh123456790",  "fUpdateD", false, " ", 1 };
 	ccNs[ ccNsCount++ ] = cRenderC;
 
-	struct ccNode cLastCmd = { 2, {0, 0 }, {0, 0 }, { 255,255,255,255 },  { 255,20,100,255 }, "lastCmd","12345678901234567890aoeuidhtn123456790",  "fUpdateLastCmd", 1 };
+	struct ccNode cLastCmd = { 2, {0, 0 }, {0, 0 },
+		{ 255,255,255,255 },  { 255,20,100,255 }, 
+		"lastCmd","12345678901234567890aoeuidhtn123456790",  "fUpdateLastCmd", false, " ", 1 };
 	ccNs[ ccNsCount++ ] = cLastCmd;
 
 	return ccNsCount;
@@ -199,9 +206,36 @@ int ccDraw(){
 	int c;
 	for(int w=0; w<ccNsCount; w++ ){
 		wLen = strlen( ccNs[w].text );
-		printf( "ccDraw cur[%i] node[ %s ](%i) -> %s()  ", cur, ccNs[w].name, wLen, ccNs[w].fUpdate  );
-		cur+= cc_printf( cur, 0, ccNs[w].text );
-		printf(" added (%i)\n", cur);
+		printf( "ccDraw cur[%i] node[ %s ](%i)\n"
+			"\t-> %s() pos:[%ix%i] ", 
+			cur, ccNs[w].name, wLen, ccNs[w].fUpdate, ccNs[w].pos[0], ccNs[w].pos[1]			
+			);
+
+
+		// have colors ? // font only 
+		if( asBar == false && ccNs[w].fbColor[0] != 0 && ccNs[w].tRenderDone == false ){
+			//\e[41m"$battPerc'%'"\e[0m
+			//48 is backgroung 38 font foreground
+			snprintf( ccNs[w].tRender, 1024, "\e[38;2;%i;%i;%im%s\e[0m", 
+				ccNs[w].fbColor[0], ccNs[w].fbColor[1], ccNs[w].fbColor[2],
+				ccNs[w].text
+				);
+			printf("tRander .... \n\t(%s)\n", ccNs[w].tRender);
+			ccNs[w].tRenderDone = true;
+
+		}
+
+		// by pos in ccNode
+		if(  ccNs[w].pos[0] != 0 ||  ccNs[w].pos[1] != 0 ){
+			cc_printf( ccNs[w].pos[0], ccNs[w].pos[1], ccNs[w].text );
+			printf(" ... position()\n");
+
+		// by currsor current	
+		} else {
+			cur+= cc_printf( cur, 0, ccNs[w].text );
+			printf(" ... cursor (%i)\n", cur);
+		}
+
 //		for( c=0; c<wLen ;c++ ){
 //
 //			ccFB[ cur++ ] = ccNs[w].text[ c ];
@@ -326,7 +360,7 @@ int main( int argc, char *argv[] ){
 				ccClear( chFill );
 
 			} else if( line[0] == 'p' ){
-				cc_printf( 5, 2, "5x2 land" );
+				cc_printf( 5, 11 , "5x11 land" );
 
 			} else if( line[0] == 'c' ){
 				ccClear( chFill );
