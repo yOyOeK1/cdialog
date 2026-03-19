@@ -69,10 +69,10 @@ void *dogBatteryLooper( void *vargp ){
 	sleep( 1 );
 	char isDog[50];
 	while( SMWork == 1 ){
-		snprintf( isDog, 50, " | 󰄌 [%s]%% ", file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
-		cc_printf( col-36, 0, isDog );
+		snprintf( isDog, 50, "|B[%s]%%", file_read_to_chars("/sys/class/power_supply/BAT0/capacity") );
+		cc_printf( col-9, 4, isDog );
 		ccRender();
-		sleep( 15 );
+		sleep( 1 );
 	}
 	printf("@* ... dogBatteryLooper DONE\n" );
 }
@@ -86,8 +86,8 @@ void *dogTimeLooper( void *vargp ){
 	sleep( 1 );
 	char isDog[50];
 	while( SMWork == 1 ){
-		snprintf( isDog, 50, " | 󱑌 [%s] ", time_now_tt() );
-		cc_printf( col-23, 0, isDog );
+		snprintf( isDog, 50, " |12[%s] ", time_now_tt() );
+		cc_printf( 1, 1, isDog );
 		ccRender();
 		sleep( 10 );
 	}
@@ -106,9 +106,9 @@ void *dogLooper( void *vargp ){
 	while( SMWork == 1 ){
 		//printf("@* loop\n")
 		//widgetTickC
-		snprintf( isDog, 50, " dog(%i) loop(%i)", dogCounter++, SMLoop );
+		snprintf( isDog, 50, " dog(%i) loop(%i) ", dogCounter++, SMLoop );
 		//printf("%s ---\n", isDog);
-		cc_printf( col-59, 0, isDog );
+		cc_printf( 1, 5, isDog );
 		ccRender();
 		sleep( 2 );
 	}
@@ -133,7 +133,7 @@ void dogsStop(){
 
 
 int ccInit_FB(){
-	ccFBc = col*row + 1;
+	ccFBc = (col)*row;
 	ccFB = malloc( ccFBc * sizeof( char ) );
 	printf("#* .. ccFB size [ %i ] for [ %i x %i ] terminal size\n", ccFBc, col, row );
 }
@@ -150,10 +150,10 @@ int ccInit(){
 	//printf("* at adding cPwd and name [ %s ] \n",cPwd.name);
 	ccNs[ ccNsCount++ ] = cPwd;
 	
-	struct ccNode cRenderC = { 2, {0, 0 }, {0, 0 }, { 255,255,255,255 },  { 255,0,200,255 }, "ERenderC","123456790",  "fUpdateD", 1 };
+	struct ccNode cRenderC = { 2, {0, 0 }, {0, 0 }, { 255,255,255,255 },  { 255,0,200,255 }, "ERenderC","1234567890abcdefgh123456790",  "fUpdateD", 1 };
 	ccNs[ ccNsCount++ ] = cRenderC;
 
-	struct ccNode cLastCmd = { 2, {0, -1 }, {0, 0 }, { 255,255,255,255 },  { 255,20,100,255 }, "lastCmd","123456790",  "fUpdateLastCmd", 1 };
+	struct ccNode cLastCmd = { 2, {0, 0 }, {0, 0 }, { 255,255,255,255 },  { 255,20,100,255 }, "lastCmd","12345678901234567890aoeuidhtn123456790",  "fUpdateLastCmd", 1 };
 	ccNs[ ccNsCount++ ] = cLastCmd;
 
 	return ccNsCount;
@@ -177,9 +177,20 @@ int ccUpdate(){
 }
 
 int cc_printf( int x, int y, char *msg ){
-	for( int i=0,ic=strlen(msg); i<ic; i++)
-		ccFB[ y*col + x + i ] = msg[ i ];
-	return 0;
+	int i,ic,iOffset = 0;
+	for( i=0,ic=strlen(msg); i<ic; i++){
+		if( ccFB[ y*(col) + x + i + iOffset ] == '\n' ){
+			iOffset++;
+		}
+		
+		if( (  y*(col) + x + i + iOffset ) > ccFBc-2 ){
+			ccFB[ ccFBc-1 ] = 0;
+			return ccFBc;
+		}
+
+		ccFB[ y*(col) + x + i + iOffset ] = msg[ i ];
+	}
+	return i+iOffset-1;
 }
 
 int ccDraw(){
@@ -188,16 +199,17 @@ int ccDraw(){
 	int c;
 	for(int w=0; w<ccNsCount; w++ ){
 		wLen = strlen( ccNs[w].text );
-		printf( "ccDraw cur[%i] node[ %s ](%i) -> %s()\n", cur, ccNs[w].name, wLen, ccNs[w].fUpdate  );
-
-		for( c=0; c<wLen ;c++ ){
-
-			ccFB[ cur++ ] = ccNs[w].text[ c ];
-			if( ((cur)%col) == 0 ){
-				ccFB[ cur++ ] = '\n';
-			} 
-			if( cur >= ccFBc ) return 0;
-		}
+		printf( "ccDraw cur[%i] node[ %s ](%i) -> %s()  ", cur, ccNs[w].name, wLen, ccNs[w].fUpdate  );
+		cur+= cc_printf( cur, 0, ccNs[w].text );
+		printf(" added (%i)\n", cur);
+//		for( c=0; c<wLen ;c++ ){
+//
+//			ccFB[ cur++ ] = ccNs[w].text[ c ];
+//			if( ((cur)%col) == 0 ){
+//				ccFB[ cur++ ] = '\n';
+//			} 
+//			if( cur >= ccFBc ) return 0;
+//		}
 		//cur+= CC_NODE_MARGIN;
 	}
 	return 0;
@@ -211,15 +223,16 @@ char *ccGetPX( int x, int y ){
 void ccClear( char cBlank ){
 	char *tmpc;
 	for( int y=0; y<row; y++ ){
-		for(int x=0; x<col; x++){
+		for(int x=0; x<=col; x++){
 			tmpc = ccGetPX( x, y );			
-			if( x == (col-1) && row > 1)
+			if( x == (col-1) && row > 0)
 				*tmpc='\n';
 			else
 				*tmpc = cBlank;
 
 		}
 	}
+	ccFB[ ccFBc-1 ] = 0;
 
 }
 
@@ -234,7 +247,7 @@ void ccRender(){
 		ccFB[ strcspn( ccFB, "\n") ] = '\0';
 		printf(",[{ \"full_text\":\"%s\"}]\n", ccFB );
 	}else{
-		printf("%s\n", ccFB );
+		printf("-----------------------------------------------\n%s\n", ccFB );
 	}
 }
 
