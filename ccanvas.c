@@ -154,12 +154,12 @@ int ccInit(){
 	ccNs[ ccNsCount++ ] = cPwd;
 	
 	struct ccNode cRenderC = { 2, {0, 0 }, {0, 0 }, 
-		{ 255,255,255,255 },  { 255,0,200,255 }, 
+		{ 255,25,255,255 },  { 255,0,200,255 }, 
 		"ERenderC","1234567890abcdefgh123456790",  "fUpdateD", false, " ", 1 };
 	ccNs[ ccNsCount++ ] = cRenderC;
 
 	struct ccNode cLastCmd = { 2, {0, 0 }, {0, 0 },
-		{ 255,255,255,255 },  { 255,20,100,255 }, 
+		{ 255,255,55,255 },  { 255,20,100,255 }, 
 		"lastCmd","12345678901234567890aoeuidhtn123456790",  "fUpdateLastCmd", false, " ", 1 };
 	ccNs[ ccNsCount++ ] = cLastCmd;
 
@@ -228,6 +228,8 @@ int ccDraw(){
 		// by pos in ccNode
 		if(  ccNs[w].pos[0] != 0 ||  ccNs[w].pos[1] != 0 ){
 			cc_printf( ccNs[w].pos[0], ccNs[w].pos[1], ccNs[w].text );
+			
+			//printf("\e[%i;%iH%s\n", ccNs[w].pos[1], ccNs[w].pos[0], ccNs[w].tRender);
 			printf(" ... position()\n");
 
 		// by currsor current	
