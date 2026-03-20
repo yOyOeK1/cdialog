@@ -24,4 +24,9 @@ if test "$?" = "0"; then
 else
 	echo "ERROR --------------------------"
 fi
+
+echo "#* ... for debugging run"
+echo '# mosquitto_sub -t "and/#" -h "hu" -p 10883 -V mqttv311 -d'
+echo "#"
+
 #./cMqtt2Bar
