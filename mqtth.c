@@ -64,7 +64,29 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 	add++;
 }
 
+void *myThread( void *vargp);
 void mqttInit(  ){
+	printf("#* mqtt - init ...\n");
+	for( int h=0; true; h++ ){
+		if( mqHosts[h].id == -1 )  break;
+	
+		struct mosquitto *pts;
+		
+		mqHosts[h].mqMosqi = (int)pts;
+		mqHosts[h].connected = false;
+		mqHosts[h].dogRun = true;
+		pts = mosquitto_new( NULL, true, NULL);
+		mosquitto_connect_callback_set( pts, on_connect );
+		mosquitto_message_callback_set( pts, on_message );
+		mosquitto_connect( pts, mqHosts[h].host , mqHosts[h].port, 60 );
+		printf(" ... No[%i] pointer is [%i]\n", h, mqHosts[h].mqMosqi );
+		
+		pthread_create( &mqHosts[h].thread_id, NULL, myThread, NULL);
+		
+		
+	}
+
+
 	snprintf( mqTopicBase, 512, "%s%s", mqTopicPrefix, machineName );
 
 	printf("mqtt - init ... to [ %s : %i ]\n"
@@ -119,7 +141,7 @@ void *myThread( void *vargp){
 			mqtt_publish( "and/ping", "okok"  );
 		}else
 			printf("  %i\n",mqIter++);
-		sleep( 1 );
+		sleep( 10 );
 
 		if( 0 &&  mqIter > 3 ){
 			printf("#* ... mqtt disconect ...\n");
@@ -140,6 +162,15 @@ int main(){
 	printf("mqtth test ...\n");
 	pthread_t thread_id;
 	pthread_create( &thread_id, NULL, myThread, NULL );
+	
+	// over hosts
+	printf("mqtt broker to connect:\n");
+	for( int h=0; true; h++ ){
+		if( mqHosts[h].id == -1 )  break;
+		printf(" * id[%i] (%s)\n\thost[%s]	port [%i] ...\n", 
+			mqHosts[h].id, mqHosts[h].name,  mqHosts[h].host, mqHosts[h].port );
+	}
+	// over hosts DONE
 
 	mqttInit( );
 	mqttDoIt( );
