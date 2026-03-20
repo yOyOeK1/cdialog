@@ -207,18 +207,24 @@ int cc_clear( char cBlank ){
 }
 // 
 int cc_printf( int x, int y, char *msg ){
-	int i,ic,iOffset = 0;
+	int i,ic,iOffset = 0, yColXI;
 	for( i=0,ic=strlen(msg); i<ic; i++){
-		if( ccFB[ y*(col) + x + i + iOffset ] == '\n' ){
+		yColXI = y*col + x + i;
+		if( ccFB[ yColXI + iOffset ] == '\n' ){
 			iOffset++;
 		}
 		
-		if( (  y*(col) + x + i + iOffset ) > ccFBc-2 ){
+		if( (  yColXI + iOffset ) > ccFBc-2 ){
 			ccFB[ ccFBc-1 ] = 0;
 			return ccFBc;
 		}
-
-		ccFB[ y*(col) + x + i + iOffset ] = msg[ i ];
+		
+		if( msg[i] == '\n' ){
+			y++;
+			iOffset = -i - 1;
+		}else {
+			ccFB[ yColXI + iOffset ] = msg[ i ];
+		}
 	}
 	return i+iOffset-1;
 }
@@ -364,7 +370,7 @@ int main( int argc, char *argv[] ){
 
 			} else if( line[0] == 'N' ){
 				snprintf( tmsg, 512, "net:[%s]", cmd_to_chars("ip a | grep inet | awk '{print $2}'") );
-				cc_printf( 2, 3 , tmsg );
+				cc_printf( 20, 3 , tmsg );
 
 			} else if( line[0] == 'T' ){
 				snprintf( tmsg, 512, "cmd(T):[%s]", cmd_to_chars("date") );
