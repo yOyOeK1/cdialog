@@ -64,9 +64,12 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 	add++;
 }
 
-void *myThread( void *vargp);
-void mqttInit(  ){
+
+
+void mqttInit( ){
 	printf("#* mqtt - init ...\n");
+	
+	/*
 	for( int h=0; true; h++ ){
 		if( mqHosts[h].id == -1 )  break;
 	
@@ -80,12 +83,9 @@ void mqttInit(  ){
 		mosquitto_message_callback_set( pts, on_message );
 		mosquitto_connect( pts, mqHosts[h].host , mqHosts[h].port, 60 );
 		printf(" ... No[%i] pointer is [%i]\n", h, mqHosts[h].mqMosqi );
-		
-		pthread_create( &mqHosts[h].thread_id, NULL, myThread, NULL);
-		
-		
+		//pthread_create( &mqHosts[h].thread_id, NULL, myThread, NULL);
 	}
-
+	*/
 
 	snprintf( mqTopicBase, 512, "%s%s", mqTopicPrefix, machineName );
 
@@ -106,7 +106,7 @@ void mqttDoIt( ){
 	mosquitto_loop_forever( mqMosqi, -1, 1);
 	//mosquitto_disconnect() and mosquitto_loop_stop()
 }
-void mqttDestroy(){
+void mqttDestroy( ){
 	printf("#* ... mq destroy ... ");
 	if( mqMosqi ){
 		mosquitto_destroy( mqMosqi );
@@ -131,7 +131,7 @@ void mqtt_publish( char *topic, char *msg ){
 }
 
 int mqIter = 0;
-void *myThread( void *vargp){
+void *myThread( void *vargp ){
 
 	while( true ){
 		//printf( "iter...%i\n", add );
@@ -158,11 +158,12 @@ void *myThread( void *vargp){
 	return 0;
 }
 
-int main(){
+int main( ){
 	printf("mqtth test ...\n");
 	pthread_t thread_id;
 	pthread_create( &thread_id, NULL, myThread, NULL );
-	
+
+	/*
 	// over hosts
 	printf("mqtt broker to connect:\n");
 	for( int h=0; true; h++ ){
@@ -171,6 +172,7 @@ int main(){
 			mqHosts[h].id, mqHosts[h].name,  mqHosts[h].host, mqHosts[h].port );
 	}
 	// over hosts DONE
+	*/
 
 	mqttInit( );
 	mqttDoIt( );

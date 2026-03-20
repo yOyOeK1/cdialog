@@ -13,16 +13,17 @@ char* cmd_to_chars( char *cmd ){
 	
 	//printf("#c ... cmd DONE\n");
 	char line[512];
-	static char lineLast[512];
+	char *lineLast;
+	lineLast = malloc( sizeof(char)*512 );
 	int lineN = 0;
 	int tSize = 0;
 	while( fgets( line, 512, f ) != NULL ){
 		strcat(lineLast, line);
 		tSize+= strlen( line );
-		//printf( "[%i]%s", lineN++, line );
+		printf( "[%i]%s 	%s", lineN++, line, lineLast );
 	}
 	if( tSize > 0 ) lineLast[ tSize-1 ] = 0;
-	printf( "As last size (%i) / (%i)\n--------\n[%s]\n-------------\n", sizeof(lineLast), tSize, lineLast );
+	//printf( "As last size (%i) / (%i)\n--------\n[%s]\n-------------\n", sizeof(lineLast), tSize, lineLast );
 	//fseek( f, 0, SEEK_END);
 	//long fSize = ftell( f );
 	//char tr[ fSize+1 ];
@@ -31,9 +32,7 @@ char* cmd_to_chars( char *cmd ){
 	//fgets( tr, fSize, f );
 	
 	pclose( f );
-	
 	//printf("CMD res -----\n%s\n---------\n", lineLast );
-
 	return lineLast;
 }
 

@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "cmdh.h"
 #include "timeh.h"
 #include "fileh.h"
 
@@ -25,7 +26,7 @@ struct ccNode ccNs[10];
 int ccNsCount = 0;
 
 int col = 50;
-int row = 4;
+int row = 7;
 int CC_NODE_MARGIN = 2;
 int ch = '\n';
 int chFill = '.';
@@ -176,13 +177,35 @@ int ccUpdate(){
 		}else if( strcmp( ccNs[w].fUpdate, "widgetTick" ) == 0 ){
 			widgetTick( &ccNs[w], 0 );
 		
-		}else{
+		}else if( strcmp( ccNs[w].fUpdate, "fUpdateD" ) == 0 ){
 			fUpdateDef( &ccNs[ w ], 0 );
 		
 		}
 	}
 }
+//
+char *cc_getPx( int x, int y ){
+	return &ccFB[ y*col + x ];
+}
 
+
+// to clear FB
+int cc_clear( char cBlank ){
+	char *tmpc;
+	for( int y=0; y<row; y++ ){
+		for(int x=0; x<=col; x++){
+			tmpc = cc_getPx( x, y );			
+			if( x == (col-1) && row > 0)
+				*tmpc='\n';
+			else
+				*tmpc = cBlank;
+
+		}
+	}
+	ccFB[ ccFBc-1 ] = 0;
+	return 0;
+}
+// 
 int cc_printf( int x, int y, char *msg ){
 	int i,ic,iOffset = 0;
 	for( i=0,ic=strlen(msg); i<ic; i++){
@@ -249,27 +272,6 @@ int ccDraw(){
 		//cur+= CC_NODE_MARGIN;
 	}
 	return 0;
-}
-
-char *ccGetPX( int x, int y ){
-	return &ccFB[ y*col + x ];
-}
-
-// to clear FB
-void ccClear( char cBlank ){
-	char *tmpc;
-	for( int y=0; y<row; y++ ){
-		for(int x=0; x<=col; x++){
-			tmpc = ccGetPX( x, y );			
-			if( x == (col-1) && row > 0)
-				*tmpc='\n';
-			else
-				*tmpc = cBlank;
-
-		}
-	}
-	ccFB[ ccFBc-1 ] = 0;
-
 }
 
 void ccRender(){
@@ -339,7 +341,7 @@ int main( int argc, char *argv[] ){
 	
 	ccInit();
 	//ccRender();
-	ccClear( chFill );
+	cc_clear( chFill );
 	//ccDraw();
 	//ccRender();
 		
@@ -356,16 +358,23 @@ int main( int argc, char *argv[] ){
 			if( line[0] == 'q' ){
 				SMWork = 0;
 				break;
-
 			} else if( line[0] == 'c' && strlen( line ) == 2 ){
 				chFill = (char)line[1];
-				ccClear( chFill );
+				cc_clear( chFill );
+
+			} else if( line[0] == 'N' ){
+				snprintf( tmsg, 512, "net:[%s]", cmd_to_chars("ip a | grep inet | awk '{print $2}'") );
+				cc_printf( 2, 3 , tmsg );
+
+			} else if( line[0] == 'T' ){
+				snprintf( tmsg, 512, "cmd(T):[%s]", cmd_to_chars("date") );
+				cc_printf( 2, 3 , tmsg );
 
 			} else if( line[0] == 'p' ){
-				cc_printf( 5, 11 , "5x11 land" );
+				cc_printf( 2, 3 , "5x11 land" );
 
 			} else if( line[0] == 'c' ){
-				ccClear( chFill );
+				cc_clear( chFill );
 
 			} else if( line[0] == 's' && line[1] == 'r' ){
 				sscanf( line, "sr%d", &row );
@@ -383,7 +392,7 @@ int main( int argc, char *argv[] ){
 			line[ chNo ] = 0;
 			chNo = 0;
 		
-			//ccClear( chFill );
+			//cc_clear( chFill );
 			ccUpdate();
 			ccDraw();
 			ccRender();
