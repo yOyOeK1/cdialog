@@ -158,21 +158,21 @@ void *myThread( void *vargp ){
 	return 0;
 }
 
+/*
 int main( ){
 	printf("mqtth test ...\n");
 	pthread_t thread_id;
 	pthread_create( &thread_id, NULL, myThread, NULL );
 
-	/*
-	// over hosts
-	printf("mqtt broker to connect:\n");
-	for( int h=0; true; h++ ){
-		if( mqHosts[h].id == -1 )  break;
-		printf(" * id[%i] (%s)\n\thost[%s]	port [%i] ...\n", 
-			mqHosts[h].id, mqHosts[h].name,  mqHosts[h].host, mqHosts[h].port );
-	}
-	// over hosts DONE
-	*/
+//	
+//	// over hosts
+//	printf("mqtt broker to connect:\n");
+//	for( int h=0; true; h++ ){
+//		if( mqHosts[h].id == -1 )  break;
+//		printf(" * id[%i] (%s)\n\thost[%s]	port [%i] ...\n", 
+//			mqHosts[h].id, mqHosts[h].name,  mqHosts[h].host, mqHosts[h].port );
+//	}
+//	// over hosts DONE
 
 	mqttInit( );
 	mqttDoIt( );
@@ -180,3 +180,4 @@ int main( ){
 
 	printf("mqtth test ... DONE\n");
 }
+*/

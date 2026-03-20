@@ -40,7 +40,23 @@ int ccFBc = 0;
 int SMWork = 1;
 int SMLoop = 0;
 
-//int ccBarROffset = 0;
+
+
+// Keys Root
+//
+struct keyBind {
+	int parentId;
+	char ch[51];
+	int doWhat;
+	char parser[512];
+	char args[512];
+};
+struct keyBind keyBinds[] = {
+	{ 0, "w",	0,/*"cmdh"*/	"whoami:[ %s ]",	"whoami" },
+	{ 0, "f",	0,/*"cmdh"*/ 	"%s",	"free -h" },
+	{-1}
+};
+
 
 
 //
@@ -301,18 +317,18 @@ void ccRender(){
 int cc_main_argcParse( int argc, char *argv[] ){
        for( int a=0; a<argc ; a++ ){
 		if( strncmp( argv[ a ], "-row=", 5 ) == 0 ){
-			printf("#* ... --row=\n");
+			printf("#* ... -row=\n");
 			sscanf( argv[ a ], "-row=%d", &row );
 		} else if( strncmp( argv[ a ], "-asBar", 6 ) == 0 ){
 			printf("{\"version\": 1, \"click_events\":true }[[]\n");
 			asBar = true;
 
 		} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
-			printf("#* ... --col=\n");
+			printf("#* ... -col=\n");
 			sscanf( argv[ a ], "-col=%d", &col );
 		} else if( strncmp( argv[ a ], "-chFill=", 8) == 0 ){
 			chFill = argv[ a ][8];
-			printf("#* ... --chFill= (%c)\n",chFill );
+			printf("#* ... -chFill= (%c)\n",chFill );
 			//sscanf( argv[ a ], "-chFill=%c", chFill );
 		} else if( strncmp( argv[ a ], "-h", 2) == 0 ){
 			printf("#* ... -h	- this help (external function)\n\n"
@@ -357,7 +373,10 @@ int main( int argc, char *argv[] ){
 	//ccDraw();
 	//ccRender();
 	dogsStart();
-	
+
+	int mLevel = 0;
+	int kBin = 0;
+
 	// main loop START
 	while( SMWork == 1 ){
 		SMLoop++;
@@ -399,15 +418,40 @@ int main( int argc, char *argv[] ){
 
 			line[ chNo ] = 0;
 			chNo = 0;
-		
+	
+
+
+			for( kBin=0; true; kBin++ ){
+				if( keyBinds[kBin].parentId == -1 ) break;
+
+				printf( "kBin cmp [%s] = [%s]\n", keyBinds[kBin].ch, line );
+				if( keyBinds[kBin].parentId == mLevel && 
+					strcmp( line, keyBinds[kBin].ch ) == 0 ){
+
+					printf("OK\n");
+					if( keyBinds[kBin].doWhat == 0 ){ // cmd
+						
+						snprintf( tmsg, 512, keyBinds[kBin].parser, cmd_to_chars( keyBinds[kBin].args  ) );
+						cc_printf( 2, 3 , tmsg );
+
+
+					} else {
+						printf("EE NOT IMPlemented yet doWhat [%i]\n", keyBinds[kBin].doWhat);	
+					}
+					break;
+				}
+
+			}
+
+
 			//cc_clear( chFill );
 			ccUpdate();
 			ccDraw();
 			ccRender();
 
 			snprintf( tmsg, 512, 
-				"To quit press [q] fill[%c] size[ %ix%i ]", 
-				chFill, col, row );
+				"[%i]To quit press [q] fill[%c] size[ %ix%i ]", 
+				mLevel, chFill, col, row );
 			cc_printf( 0, row-1, tmsg);
 			//scanf( "%c", &ch );
 			//scanf("%s", line );
