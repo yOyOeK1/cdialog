@@ -74,7 +74,7 @@ void *dogBatteryLooper( void *vargp ){
 
 		cc_printf( col-10 - 21, 0, isDog );
 		ccRender();
-		sleep( 1 );
+		sleep( 11 );
 	}
 	printf("@* ... dogBatteryLooper DONE\n" );
 }
@@ -110,9 +110,9 @@ void *dogLooper( void *vargp ){
 		//widgetTickC
 		snprintf( isDog, 50, " dog(%i) loop(%i) ", dogCounter++, SMLoop );
 		//printf("%s ---\n", isDog);
-		cc_printf( 1, 5, isDog );
+		cc_printf( 1, row-3, isDog );
 		ccRender();
-		sleep( 2 );
+		sleep( 5 );
 	}
 	printf("@* ... dogLooper DONE\n" );
 }
@@ -148,7 +148,7 @@ int ccInit(){
 
 	ccInit_FB();
 
-	struct ccNode cPwd = { 1, {0, 2 }, {0, 0 },  
+	struct ccNode cPwd = { 1, {0, row-2 }, {0, 0 },  
 		{ 255,0,0,255 }, { 255,0,200,255 }, 
 		"Entry0","Full text of entry 0", "widgetTick", false, " ", 0 };
 	//printf("* at adding cPwd and name [ %s ] \n",cPwd.name);
@@ -159,7 +159,7 @@ int ccInit(){
 		"ERenderC","1234567890abcdefgh123456790",  "fUpdateD", false, " ", 1 };
 	ccNs[ ccNsCount++ ] = cRenderC;
 
-	struct ccNode cLastCmd = { 2, {0, 0 }, {0, 0 },
+	struct ccNode cLastCmd = { 2, {0, 1 }, {0, 0 },
 		{ 255,255,55,255 },  { 255,20,100,255 }, 
 		"lastCmd","12345678901234567890aoeuidhtn123456790",  "fUpdateLastCmd", false, " ", 1 };
 	ccNs[ ccNsCount++ ] = cLastCmd;
@@ -291,7 +291,9 @@ void ccRender(){
 		ccFB[ strcspn( ccFB, "\n") ] = '\0';
 		printf(",[{ \"full_text\":\"%s\"}]\n", ccFB );
 	}else{
-		printf("-----------------------------------------------\n%s\n", ccFB );
+		for( int c=0; c< col; c++ )
+			printf("-");
+		printf("\n%s\n", ccFB );
 	}
 }
 
@@ -369,8 +371,8 @@ int main( int argc, char *argv[] ){
 				cc_clear( chFill );
 
 			} else if( line[0] == 'N' ){
-				snprintf( tmsg, 512, "net:[%s]", cmd_to_chars("ip a | grep inet | awk '{print $2}'") );
-				cc_printf( 20, 3 , tmsg );
+				snprintf( tmsg, 512, "net(N):\n%s", cmd_to_chars("ip a | grep inet | awk '{print $2}'") );
+				cc_printf( 1, 3 , tmsg );
 
 			} else if( line[0] == 'T' ){
 				snprintf( tmsg, 512, "cmd(T):[%s]", cmd_to_chars("date") );
