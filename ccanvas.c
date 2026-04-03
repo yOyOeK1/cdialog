@@ -314,7 +314,7 @@ void ccRender(){
 		printf(",[\n");
 		printf(" {\"name\":\"canvA\",\"full_text\":\"%s\"}", ccFB );
 		printf(",{\"name\":\"ccRenderC\",\"full_text\":\"%i\",\"color\":\"#ff%i%iff\"}", ccRenderCount, ( ccRenderCount % 9 ),  ( ccRenderCount % 9 ));
-		printf("]\n");
+		printf("\n]\n");
 	}else{
 		for( int c=0; c< col; c++ )
 			printf("-");
@@ -331,7 +331,8 @@ int cc_main_argcParse( int argc, char *argv[] ){
 			//printf("#* ... -row=\n");
 			sscanf( argv[ a ], "-row=%d", &row );
 		} else if( strncmp( argv[ a ], "-asBar", 6 ) == 0 ){
-			//printf("{\"version\":1,\"click_events\":true}\n[\n[]\n");
+			//printf("{ \"version\": 1, \"click_events\": true }\n[\n[]\n");
+			//printf("{ \"version\": 1, \"stop_signal\": 10, \"cont_signal\": 12, \"click_events\": true }\n[\n[]\n");
 			printf("{ \"version\": 1 }\n[\n[]\n");
 			asBar = true;
 
