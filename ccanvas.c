@@ -65,7 +65,7 @@ struct keyBind keyBinds[] = {
 int widgetTickC=0;
 int *widgetTick(  struct ccNode *cN, int frameNo ){
 	widgetTickC++;
-	printf(" widget tick ! %i\n", widgetTickC );
+	//printf(" widget tick ! %i\n", widgetTickC );
 	snprintf( cN->text, 50, "widTok!(%i)", widgetTickC);
 }
 
@@ -74,7 +74,8 @@ int *widgetTick(  struct ccNode *cN, int frameNo ){
 //
 int *fUpdateDef( struct ccNode *cN, int frameNo ){
 	
-	printf("fUpdateDef ... fNo[%i] of [ %s ]\n", frameNo, cN->name );
+	if( asBar == false )
+		printf("fUpdateDef ... fNo[%i] of [ %s ]\n", frameNo, cN->name );
 	return 0;
 }
 
@@ -140,7 +141,7 @@ pthread_t tdogBatteryLoop;
 pthread_t tdogTimeLoop;
 pthread_t tdogLoop;
 void dogsStart(){
-	pthread_create( &tdogBatteryLoop, NULL, dogBatteryLooper, NULL );
+//	pthread_create( &tdogBatteryLoop, NULL, dogBatteryLooper, NULL );
 	pthread_create( &tdogTimeLoop, NULL, dogTimeLooper, NULL );
 	pthread_create( &tdogLoop, NULL, dogLooper, NULL );
 }
@@ -153,7 +154,8 @@ void dogsStop(){
 int ccInit_FB(){
 	ccFBc = (col)*row;
 	ccFB = malloc( ccFBc * sizeof( char ) );
-	printf("#* .. ccFB size [ %i ] for [ %i x %i ] terminal size\n", ccFBc, col, row );
+	if( asBar == false )
+		printf("#* .. ccFB size [ %i ] for [ %i x %i ] terminal size\n", ccFBc, col, row );
 }
 
 int ccFree_FB(){
@@ -184,7 +186,9 @@ int ccInit(){
 }
 
 int ccUpdate(){
-	printf("#* ... ccUpdate \n");
+	if( asBar == false )
+		printf("#* ... ccUpdate \n");
+	
 	for(int w=0; w<ccNsCount; w++ ){
 
 		if( strcmp( ccNs[w].fUpdate, "fUpdateLastCmd" ) == 0 ){
@@ -251,10 +255,11 @@ int ccDraw(){
 	int c;
 	for(int w=0; w<ccNsCount; w++ ){
 		wLen = strlen( ccNs[w].text );
-		printf( "ccDraw cur[%i] node[ %s ](%i)\n"
-			"\t-> %s() pos:[%ix%i] ", 
-			cur, ccNs[w].name, wLen, ccNs[w].fUpdate, ccNs[w].pos[0], ccNs[w].pos[1]			
-			);
+		if( asBar == false )
+			printf( "ccDraw cur[%i] node[ %s ](%i)\n"
+				"\t-> %s() pos:[%ix%i] ", 
+				cur, ccNs[w].name, wLen, ccNs[w].fUpdate, ccNs[w].pos[0], ccNs[w].pos[1]			
+				);
 
 
 		// have colors ? // font only 
@@ -275,12 +280,12 @@ int ccDraw(){
 			cc_printf( ccNs[w].pos[0], ccNs[w].pos[1], ccNs[w].text );
 			
 			//printf("\e[%i;%iH%s\n", ccNs[w].pos[1], ccNs[w].pos[0], ccNs[w].tRender);
-			printf(" ... position()\n");
+			//printf(" ... position()\n");
 
 		// by currsor current	
 		} else {
 			cur+= cc_printf( cur, 0, ccNs[w].text );
-			printf(" ... cursor (%i)\n", cur);
+			//printf(" ... cursor (%i)\n", cur);
 		}
 
 //		for( c=0; c<wLen ;c++ ){
@@ -296,6 +301,7 @@ int ccDraw(){
 	return 0;
 }
 
+int ccRenderCount=0;
 void ccRender(){
 	/*
 	printf( "\n\nccRender  %i x %i ................\n\e[38;2;255;0;0m%s\e[0m................ccRender DONE\n", 
@@ -305,26 +311,32 @@ void ccRender(){
 	*/
 	if( asBar == true ){
 		ccFB[ strcspn( ccFB, "\n") ] = '\0';
-		printf(",[{ \"full_text\":\"%s\"}]\n", ccFB );
+		printf(",[\n");
+		printf(" {\"name\":\"canvA\",\"full_text\":\"%s\"}", ccFB );
+		printf(",{\"name\":\"ccRenderC\",\"full_text\":\"%i\",\"color\":\"#ff%i%iff\"}", ccRenderCount, ( ccRenderCount % 9 ),  ( ccRenderCount % 9 ));
+		printf("]\n");
 	}else{
 		for( int c=0; c< col; c++ )
 			printf("-");
 		printf("\n%s\n", ccFB );
 	}
+
+	ccRenderCount++;
 }
 
 
 int cc_main_argcParse( int argc, char *argv[] ){
        for( int a=0; a<argc ; a++ ){
 		if( strncmp( argv[ a ], "-row=", 5 ) == 0 ){
-			printf("#* ... -row=\n");
+			//printf("#* ... -row=\n");
 			sscanf( argv[ a ], "-row=%d", &row );
 		} else if( strncmp( argv[ a ], "-asBar", 6 ) == 0 ){
-			printf("{\"version\": 1, \"click_events\":true }[[]\n");
+			//printf("{\"version\":1,\"click_events\":true}\n[\n[]\n");
+			printf("{ \"version\": 1 }\n[\n[]\n");
 			asBar = true;
 
 		} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
-			printf("#* ... -col=\n");
+			//printf("#* ... -col=\n");
 			sscanf( argv[ a ], "-col=%d", &col );
 		} else if( strncmp( argv[ a ], "-chFill=", 8) == 0 ){
 			chFill = argv[ a ][8];
@@ -360,8 +372,8 @@ int main( int argc, char *argv[] ){
 
 	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
 		
-	
-	printf( "ccanvas ... test argc(%i)\n", argc );
+	if( asBar == false )	
+		printf( "ccanvas ... test argc(%i)\n", argc );
 	
 	ccInit();
 	//ccRender();
@@ -424,7 +436,8 @@ int main( int argc, char *argv[] ){
 			for( kBin=0; true; kBin++ ){
 				if( keyBinds[kBin].parentId == -1 ) break;
 
-				printf( "kBin cmp [%s] = [%s]\n", keyBinds[kBin].ch, line );
+				if( asBar == false ) 
+					printf( "kBin cmp [%s] = [%s]\n", keyBinds[kBin].ch, line );
 				if( keyBinds[kBin].parentId == mLevel && 
 					strcmp( line, keyBinds[kBin].ch ) == 0 ){
 
