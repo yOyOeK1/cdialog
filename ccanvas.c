@@ -52,6 +52,7 @@ struct keyBind {
 	char args[512];
 };
 struct keyBind keyBinds[] = {
+	{ 0, "W",	0,/*"cmdh"*/	"ip's:\n%s",		"ip a | grep 'inet ' | awk '{print $2}'" },
 	{ 0, "w",	0,/*"cmdh"*/	"whoami:[ %s ]",	"whoami" },
 	{ 0, "f",	0,/*"cmdh"*/ 	"%s",	"free -h" },
 	{-1}
