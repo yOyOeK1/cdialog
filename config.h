@@ -65,17 +65,21 @@ struct mqNode {
 	int parentId;
 	char title[512];
 	char args[512];
+	char postp;
 	char printAs[512];
 	char topic[512];
 	char payload[1024];
 	int entryDate;
 };
 struct mqNode mqNodes[] = {
-	{0,	"Battery selected",	"%d",		"No# %i\n",	"e01Mux/batSel", 		"",	0 },
-	{0,	"🔀 e01Mux switch ...",	"%lf",		"%.0f sec.\n",	"e01Mux/left", 			"",	0 },
-	{0,	"Tesla No# 0",		"%lf",		"%.3f vol.\n",	"e01MuxFix/teslaBat0Volt", 	"",	0 },
-	{0,	"Tesla No# 1",		"%lf",		"%.3f vol.\n",	"e01MuxFix/teslaBat1Volt", 	"",	0 },
-	{0,	"🔋 House battery",	"%lf",		"%.3f vol.\n",	"e01MuxFix/homeBatVolt", 	"",	0 },
+	{0,	"Battery selected",	"%d",	' ',		"No# %i\n",	"e01Mux/batSel", 		"",	0 },
+	
+	//{0,	"🔀 e01Mux switch ...",	"%lf",	't',		"%s\n",		"e01Mux/left", 			"",	0 },
+	{0,	"🔀 e01Mux switch ...",	"%lf",	' ',		"%.0f sec.\n",	"e01Mux/left", 			"",	0 },
+	
+	{0,	"Tesla No# 0",		"%lf",	' ',		"%.3f vol.\n",	"e01MuxFix/teslaBat0Volt", 	"",	0 },
+	{0,	"Tesla No# 1",		"%lf",	' ',		"%.3f vol.\n",	"e01MuxFix/teslaBat1Volt", 	"",	0 },
+	{0,	"🔋 House battery",	"%lf",	' ',		"%.3f vol.\n",	"e01MuxFix/homeBatVolt", 	"",	0 },
 	{-1}
 };
 

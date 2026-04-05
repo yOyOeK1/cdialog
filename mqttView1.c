@@ -64,6 +64,23 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
 }
 
 
+char *secLeft( long secL ){
+	double secD = (double)secL;
+	printf("PP secDeft lf:[%lf] f:[%f] d:[%d] i:[%i]\n", secD, secD, secD, secD, secD );
+	printf("PP secLeft lf:[%lf] f:[%f] d:[%d] i:[%i]\n", secL, secL, secL, secL, secL );
+	char *tr;
+	tr = malloc(sizeof(char)*128);
+	if( secL < 60.00 ){
+		snprintf( tr, 128, "%i sec.2", (int)secL );
+	}else if( secL < 3600.00 ){
+		int m = (int)(secL/60.00);
+		secL = ((int)secL)%60;
+		snprintf( tr, 128, "%i:%i m:sec.3", m, secL );
+	}
+
+	return tr;
+}
+
 int add = 0;
 bool addDone = false;
 char mesBuff[512];
@@ -75,8 +92,16 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 		if( strcmp( mqNodes[ q ].topic, message->topic ) == 0 ){
 			sscanf( message->payload, mqNodes[ q ].args, &mesBuff );
 			//printf("D as i:[%i] d:[%d] f:[%f]\n", mesBuff, mesBuff, mesBuff	);	
+			if( mqNodes[ q ].postp == ' ' )
+				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, *mesBuff );
+			else if( mqNodes[ q ].postp == 't' ){
+				long lmes = (long)(*mesBuff);
+			
+				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, secLeft( lmes  ) );
+			
+			}
 
-			snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, *mesBuff );
+
 			//strcpy( mqNodes[ q ].payload, message->payload );
 			mqNodes[ q ].entryDate = add;
 			printf( "%s\n\t%s", mqNodes[ q ].title, mqNodes[ q ].payload );
@@ -195,6 +220,10 @@ void *myThread( void *vargp ){
 
 int main( ){
 	#ifdef DEBUG
+		printf("SecLeft ... 10 is [%s]\n", secLeft(10) );
+		printf("SecLeft ... 100 is [%s]\n", secLeft(100) );
+		printf("SecLeft ... 1000 is [%s]\n", secLeft(1000) );
+
 		printf("DEBUG BUILD mqtth test ...\n");
 	#endif
 	pthread_t thread_id;
