@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 #include "cmdh.h"
 #include "timeh.h"
 #include "fileh.h"
@@ -25,8 +26,8 @@
 struct ccNode ccNs[10];
 int ccNsCount = 0;
 
-int col = 50;
-int row = 7;
+int col = 70;
+int row = 10;
 int CC_NODE_MARGIN = 2;
 int ch = '\n';
 int chFill = '.';
@@ -39,7 +40,6 @@ int ccFBc = 0;
 
 int SMWork = 1;
 int SMLoop = 0;
-
 
 
 // Keys Root
