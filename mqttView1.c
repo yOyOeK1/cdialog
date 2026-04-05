@@ -74,7 +74,8 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 	for( int q=0; true; q++ ){
 		if( strcmp( mqNodes[ q ].topic, message->topic ) == 0 ){
 			sscanf( message->payload, mqNodes[ q ].args, &mesBuff );
-				
+			//printf("D as i:[%i] d:[%d] f:[%f]\n", mesBuff, mesBuff, mesBuff	);	
+
 			snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, *mesBuff );
 			//strcpy( mqNodes[ q ].payload, message->payload );
 			mqNodes[ q ].entryDate = add;
