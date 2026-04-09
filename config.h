@@ -74,8 +74,8 @@ struct mqNode {
 struct mqNode mqNodes[] = {
 	{0,	"Battery selected",	"%d",	' ',		"No# %i\n",	"e01Mux/batSel", 		"",	0 },
 	
-	//{0,	"🔀 e01Mux switch ...",	"%lf",	't',		"%s\n",		"e01Mux/left", 			"",	0 },
-	{0,	"🔀 e01Mux switch ...",	"%lf",	' ',		"%.0f sec.\n",	"e01Mux/left", 			"",	0 },
+	{0,	"🔀 e01Mux switch ...",	"%lf",	't',		"%s\n",		"e01Mux/left", 			"",	0 },
+	//{0,	"🔀 e01Mux switch ...",	"%lf",	' ',		"%.0f sec.\n",	"e01Mux/left", 			"",	0 },
 	
 	{0,	"Tesla No# 0",		"%lf",	' ',		"%.3f vol.\n",	"e01MuxFix/teslaBat0Volt", 	"",	0 },
 	{0,	"Tesla No# 1",		"%lf",	' ',		"%.3f vol.\n",	"e01MuxFix/teslaBat1Volt", 	"",	0 },
