@@ -44,7 +44,7 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
         //mosquitto_subscribe(mosq, NULL, "hu/#", 0);
 
 	for( int q=0; true; q++ ){
-		printf("mqNode(%i)  [ %s ] @ [ %s ]\n", q, mqNodes[ q ].title, mqNodes[ q ].topic );
+		printf("mqNode q:[%i]\n\t[ %s ] @ [ %s ]\n", q, mqNodes[ q ].title, mqNodes[ q ].topic );
 		mosquitto_subscribe( mosq, NULL, mqNodes[ q ].topic, 0 );
 
 
@@ -78,6 +78,7 @@ float mesFloat;
 void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
 	addDone = false;
+	//printf("obj [%i] topic: [%s]\n", message->mid, message->topic ); 
 	
 	for( int q=0; true; q++ ){
 		if( strcmp( mqNodes[ q ].topic, message->topic ) == 0 ){
