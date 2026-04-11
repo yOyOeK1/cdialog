@@ -85,7 +85,7 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 			
 			} else if( mqNodes[ q ].postp == 'p' ){
 				mesFloat = strtof( message->payload, NULL );
-				printf("as progress got float [%f]\n", mesFloat );
+				//printf("as progress got float [%f]\n", mesFloat );
 				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, cPP_asProgress( mesFloat  ) );
 			
 			}
