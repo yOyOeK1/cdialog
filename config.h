@@ -38,7 +38,11 @@ struct mqSub mqSubsN[] = {
 	{-1},
 };
 
-
+// at pinebook pro offset is
+// 0
+// at dell yoyo
+// -5
+//
 int TIME_ZONE_OFFSET = 0; //-5 * 60 * 60; // sec
 
 char *mqttHost = "192.168.43.1";
