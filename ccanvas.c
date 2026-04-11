@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+#include "cargs.h"
 #include "cmdh.h"
 #include "timeh.h"
 #include "fileh.h"
@@ -26,14 +26,19 @@
 struct ccNode ccNs[10];
 int ccNsCount = 0;
 
-int col = 70;
-int row = 10;
+//int col = 70;
+//int row = 10;
+//bool asBar = false;
+//int chFill = '.';
+extern int col;
+extern int row;
+extern bool asBar;
+extern int chFill;
+
 int CC_NODE_MARGIN = 2;
 int ch = '\n';
-int chFill = '.';
 int chNo = 0;
 char line[512] = "-";
-bool asBar = false;
 
 char *ccFB;
 int ccFBc = 0;
@@ -186,6 +191,13 @@ int ccInit(){
 	return ccNsCount;
 }
 
+
+//
+char *cc_getPx( int x, int y ){
+	return &ccFB[ y*col + x ];
+}
+
+
 int ccUpdate(){
 	if( asBar == false )
 		printf("#* ... ccUpdate \n");
@@ -203,10 +215,6 @@ int ccUpdate(){
 		
 		}
 	}
-}
-//
-char *cc_getPx( int x, int y ){
-	return &ccFB[ y*col + x ];
 }
 
 
@@ -324,40 +332,6 @@ void ccRender(){
 
 	ccRenderCount++;
 }
-
-
-int cc_main_argcParse( int argc, char *argv[] ){
-       for( int a=0; a<argc ; a++ ){
-		if( strncmp( argv[ a ], "-row=", 5 ) == 0 ){
-			//printf("#* ... -row=\n");
-			sscanf( argv[ a ], "-row=%d", &row );
-		} else if( strncmp( argv[ a ], "-asBar", 6 ) == 0 ){
-			//printf("{ \"version\": 1, \"click_events\": true }\n[\n[]\n");
-			//printf("{ \"version\": 1, \"stop_signal\": 10, \"cont_signal\": 12, \"click_events\": true }\n[\n[]\n");
-			printf("{ \"version\": 1 }\n[\n[]\n");
-			asBar = true;
-
-		} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
-			//printf("#* ... -col=\n");
-			sscanf( argv[ a ], "-col=%d", &col );
-		} else if( strncmp( argv[ a ], "-chFill=", 8) == 0 ){
-			chFill = argv[ a ][8];
-			printf("#* ... -chFill= (%c)\n",chFill );
-			//sscanf( argv[ a ], "-chFill=%c", chFill );
-		} else if( strncmp( argv[ a ], "-h", 2) == 0 ){
-			printf("#* ... -h	- this help (external function)\n\n"
-				"-asBar		- to run it as i3bar / str standard and jsonish\n"
-				"-row=N		- N rows to set\n"
-				"-col=N		- N cols / lines to set\n"
-				"-chFill=.	- . char to use as filler in clear\n"
-				);
-			return 0;
-		}
-	}
-
-       return 1;
-}
-
 
 char tmsg[51200];
 // mem res 121252 	virt 1560
