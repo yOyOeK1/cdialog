@@ -3,7 +3,7 @@
 #
 
 bTarget="mqttView1.test.bin"
-bSrc="mqttView1.c"
+bSrc="cpostprocess.c mqttView1.c"
 inc="-I/home/yoyo/src/mosquitto-2.0.13/include "
 libsDir="-L/home/yoyo/src/mosquitto-2.0.13/bu/lib "
 libs="-lmosquitto -lrt -lm -lpthread -lcurses -lncurses -lncursesw "
