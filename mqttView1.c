@@ -16,7 +16,7 @@
 
 #include "config.h"
 
-
+#include "cpostprocess.h"
 
 
 struct mosquitto *mqMosqi;
@@ -63,44 +63,11 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
     }
 }
 
-
-/* to convert float to progress where input need to be 100.00 - 0.00 */
-char *asProgress( float perc ){
-
-	return "NaN";
-}
-
-/* to convert long to time selft hh:mm:sec. */
-char *secLeft( long secL ){
-	//double secD = (double)secL;
-	//printf("PP secDeft lf:[%lf] f:[%f] d:[%d] i:[%i]\n", secD, secD, secD, secD, secD );
-	//printf("PP secLeft lf:[%lf] f:[%f] d:[%d] i:[%i]\n", secL, secL, secL, secL, secL );
-	char *tr;
-	tr = malloc(sizeof(char)*128);
-	if( secL < 60 ){
-		snprintf( tr, 128, "%i sec.", (int)secL );
-	
-	} else if( secL < 3600 ){
-		int m = (int)(secL/60);
-		secL = ((int)secL)%60;
-		snprintf( tr, 128, "%i:%02i mm:s.", m, secL );
-	
-	} else {
-		int h = (int)(secL/3600);
-		int m = (int)(secL/60)%60;
-		secL = ((int)secL)%60;
-		
-		snprintf( tr, 128, "%i:%02i:%02i hh:mm:s.", h, m, secL );
-
-	}
-
-	return tr;
-}
-
 int add = 0;
 bool addDone = false;
 char mesBuff[512];
 long int mesLong;
+float mesFloat;
 void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
 	addDone = false;
@@ -114,7 +81,12 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 			
 			} else if( mqNodes[ q ].postp == 't' ){
 				mesLong = strtol( message->payload, NULL, 10 );
-				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, secLeft( mesLong  ) );
+				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, cPP_secLeft( mesLong  ) );
+			
+			} else if( mqNodes[ q ].postp == 'p' ){
+				mesFloat = strtof( message->payload, NULL );
+				printf("as progress got float [%f]\n", mesFloat );
+				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, cPP_asProgress( mesFloat  ) );
 			
 			}
 
@@ -237,11 +209,11 @@ void *myThread( void *vargp ){
 
 int main( ){
 	#ifdef DEBUG
-		printf("SecLeft ... 10 is [%s]\n", secLeft(10) );
-		printf("SecLeft ... 100 is [%s]\n", secLeft(100) );
-		printf("SecLeft ... 1000 is [%s]\n", secLeft(1000) );
-		printf("SecLeft ... 10000 is [%s]\n", secLeft(10000) );
-		printf("SecLeft ... 100000 is [%s]\n", secLeft(100000) );
+		printf("SecLeft ... 10 is [%s]\n", cPP_secLeft(10) );
+		printf("SecLeft ... 100 is [%s]\n", cPP_secLeft(100) );
+		printf("SecLeft ... 1000 is [%s]\n", cPP_secLeft(1000) );
+		printf("SecLeft ... 10000 is [%s]\n", cPP_secLeft(10000) );
+		printf("SecLeft ... 100000 is [%s]\n", cPP_secLeft(100000) );
 
 		printf("DEBUG BUILD mqtth test ...\n");
 	#endif
