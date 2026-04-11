@@ -20,6 +20,12 @@
 #include "cpostprocess.h"
 
 
+extern int col;
+extern int row;
+extern bool asBar;
+extern int chFill;
+
+
 struct mosquitto *mqMosqi;
 
 struct mosquitto *mqHandler;
@@ -208,7 +214,10 @@ void *myThread( void *vargp ){
 }
 
 
-int main( ){
+int main( int argc, char *argv[] ){
+
+	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
+
 	#ifdef DEBUG
 		printf("SecLeft ... 10 is [%s]\n", cPP_secLeft(10) );
 		printf("SecLeft ... 100 is [%s]\n", cPP_secLeft(100) );
@@ -217,6 +226,14 @@ int main( ){
 		printf("SecLeft ... 100000 is [%s]\n", cPP_secLeft(100000) );
 
 		printf("DEBUG BUILD mqtth test ...\n");
+
+		printf("progress ... 0.00 is \n\t%s\n", cPP_asProgress( 0.00 ) );
+		printf("progress ... 0.01 is \n\t%s\n", cPP_asProgress( 0.01 ) );
+		printf("progress ... 30.00 is \n\t%s\n", cPP_asProgress( 30.00 ) );
+		printf("progress ... 90.00 is \n\t%s\n", cPP_asProgress( 90.00 ) );
+		printf("progress ... 99.99 is \n\t%s\n", cPP_asProgress( 99.99 ) );
+		printf("progress ... 100.00 is \n\t%s\n", cPP_asProgress( 100.00 ) );
+
 	#endif
 	pthread_t thread_id;
 	pthread_create( &thread_id, NULL, myThread, NULL );
