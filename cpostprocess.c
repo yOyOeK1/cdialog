@@ -1,7 +1,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <stdbool.h>
 
 extern int col;
 extern int row;

@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <string.h>
-
+#include <stdbool.h>
 
 int col = 70;
 int row = 10;
