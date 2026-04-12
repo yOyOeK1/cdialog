@@ -35,7 +35,8 @@ int main() {
         close(pipefd[1]);
 
         // Execute bash command
-        execlp("sh", "sh", "-c", "./test_csubstream.sh", NULL);
+        execlp("sh", "sh", "-c", "termux-sensor -s orientation -d 1000", NULL);
+        //execlp("sh", "sh", "-c", "./test_csubstream.sh", NULL);
         //execlp("sh", "sh", "-c", "ls -l /etc | head -n 5", NULL);
         
         // If exec fails
