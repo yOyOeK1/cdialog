@@ -214,7 +214,7 @@ void *myThread( void *vargp ){
 	return 0;
 }
 
-
+#ifdef MQTTVIEW1TEST
 int main( int argc, char *argv[] ){
 
 
@@ -242,4 +242,4 @@ int main( int argc, char *argv[] ){
 
 	printf("#* ... mqtth View 1 test ... DONE\n");
 }
-
+#endif
