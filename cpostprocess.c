@@ -13,11 +13,17 @@ extern int chFill;
 
 #else
 
-int col = 50;
-int row = 10;
-bool asBar = false;
-int chFill = '.';
+#include "cargs.h"
+extern int col;
+extern int row;
+extern bool asBar;
+extern int chFill;
 
+//int col = 50;
+//int row = 10;
+//bool asBar = false;
+//int chFill = '.';
+//
 #endif
 
 //int colTmp = 40; // should be replace / update with resize of window 
@@ -66,9 +72,12 @@ char *cPP_secLeft( long secL ){
 }
 
 #ifdef CPPTEST
-int main(){
+int main( int argc, char *argv[] ){
 
-	printf("c postprocess CPPTEST ... START\n");
+	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
+
+
+	printf("c postprocess CPPTEST ... START size [ %ix%i ]\n", col, row);
 	
 	printf("SecLeft ... 10 is [%s]\n", cPP_secLeft(10) );
 	printf("SecLeft ... 100 is [%s]\n", cPP_secLeft(100) );

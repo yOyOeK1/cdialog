@@ -217,7 +217,11 @@ void *myThread( void *vargp ){
 
 int main( int argc, char *argv[] ){
 
+
 	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
+
+	printf("#* ... mqtt View 1  size [ %ix%i ]\n", col, row);
+
 
 	pthread_t thread_id;
 	pthread_create( &thread_id, NULL, myThread, NULL );
@@ -236,6 +240,6 @@ int main( int argc, char *argv[] ){
 	mqttDoIt( );
 	mqttDestroy();
 
-	printf("mqtth test ... DONE\n");
+	printf("#* ... mqtth View 1 test ... DONE\n");
 }
 
