@@ -3,7 +3,7 @@
 #
 
 bTarget="cpostprocess.test.bin"
-bSrc="cpostprocess.c"
+bSrc="cargs.c cpostprocess.c"
 inc=""
 libsDir=""
 libs="-lm"
