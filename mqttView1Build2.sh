@@ -14,7 +14,7 @@ mv "$bTarget" "$bTarget"".last"
 echo "#* ... build ..."
 #	-Wimplicit-function-declaration \
 #	-Wno-error=int-conversion \
-gcc -DDEBUG \
+gcc -DDEBUG -DMQTTVIEW1TEST \
 	-fno-builtin \
 -o $bTarget $bSrc $inc $libsDir $libs
 
