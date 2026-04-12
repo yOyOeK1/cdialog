@@ -3,11 +3,22 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+
+#ifndef CPPTEST
+
 extern int col;
 extern int row;
 extern bool asBar;
 extern int chFill;
 
+#else
+
+int col = 50;
+int row = 10;
+bool asBar = false;
+int chFill = '.';
+
+#endif
 
 //int colTmp = 40; // should be replace / update with resize of window 
 
@@ -54,4 +65,27 @@ char *cPP_secLeft( long secL ){
 	return tr;
 }
 
+#ifdef CPPTEST
+int main(){
 
+	printf("c postprocess CPPTEST ... START\n");
+	
+	printf("SecLeft ... 10 is [%s]\n", cPP_secLeft(10) );
+	printf("SecLeft ... 100 is [%s]\n", cPP_secLeft(100) );
+	printf("SecLeft ... 1000 is [%s]\n", cPP_secLeft(1000) );
+	printf("SecLeft ... 10000 is [%s]\n", cPP_secLeft(10000) );
+	printf("SecLeft ... 100000 is [%s]\n", cPP_secLeft(100000) );
+
+
+	printf("progress ... 0.00 is \n\t%s\n", cPP_asProgress( 0.00 ) );
+	printf("progress ... 0.01 is \n\t%s\n", cPP_asProgress( 0.01 ) );
+	printf("progress ... 30.00 is \n\t%s\n", cPP_asProgress( 30.00 ) );
+	printf("progress ... 90.00 is \n\t%s\n", cPP_asProgress( 90.00 ) );
+	printf("progress ... 99.99 is \n\t%s\n", cPP_asProgress( 99.99 ) );
+	printf("progress ... 100.00 is \n\t%s\n", cPP_asProgress( 100.00 ) );
+
+
+	printf("c postprocess CPPTEST ... DONE\n");
+	return 0;
+}
+#endif
