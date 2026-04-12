@@ -12,5 +12,5 @@ sleep 1
 cal
 sleep 1
 date
-echo "DONE.............. exit 0"
-exit 0
+echo "DONE.............. exit 1"
+exit 1
