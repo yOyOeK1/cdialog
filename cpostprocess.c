@@ -27,9 +27,19 @@ extern int chFill;
 #endif
 
 //int colTmp = 40; // should be replace / update with resize of window 
+//A small plot' ) let map = " ▁▂▃▄▅▆▇"
+
+
+
 
 /* to convert float to progress where input need to be 100.00 - 0.00 */
 char *cPP_asProgress( float perc ){
+	/*
+	bTheme = [ ' ⠽','⠿','⠂','⠯ ' ];
+        bTheme = [ '[_','▇','_','_]' ]; };
+        */
+
+
 	char *tr;
 	tr = malloc( sizeof( char ) * ( col + 1 ) );
 	snprintf( tr, col, "%03.0f%% %s", perc, "   " );  
