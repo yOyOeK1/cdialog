@@ -8,8 +8,7 @@
 
 int csubstream( struct csubexec csube ){
     printf("\n\n#* ... cmd[ %s ] ... \n\t"
-	"on_nline:[%p] | "
-	"on_done:[%p] | "
+	"on_nline:[%p] | on_done:[%p] | "
 	"... START\n", csube.cmd, csube.on_nline, csube.on_done );
     csube.exitCode = -1;
     //int pipefd[2];
