@@ -99,12 +99,21 @@ int csubstream( struct csubexec csube ){
 #ifdef CSUBSTREAMTEST
 
 // -------------- TEST FUNCTIONS FOR TEST -------- START 
+int onlMax = 0;
 int onNewLine( char *nl ){
 	int slen = strlen( nl );
 	if( nl[ slen - 1 ] == '\n' ){
 		nl[ slen - 1 ] = 0;
 	}
-	printf("* on new line [%s] (%i)\n", nl, slen);
+	if( onlMax < slen ) onlMax = slen;
+
+	printf("* on new_line_[%s]", nl);
+
+	for( int f=slen; f< onlMax; f++ )
+		printf("_");
+	printf(" (%i)\n", slen );
+	
+
 	return 0;
 }
 
