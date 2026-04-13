@@ -6,16 +6,23 @@
 
 struct csubexec{
 	char cmd[512];
+	int (*on_nline)( char *line );
+	int (*on_done)( int exitCode );
 	int pipefd[2];
 	pid_t pid;
 	char buffer[1024];
 	int linesC;
 	int status;
+	int exitCode;
 };
 
 
 int csubstream( struct csubexec csube ) {
-    printf("csubstream ... with ... cmd[%s]\n", csube.cmd );
+    printf("\n\n#* ... cmd[ %s ] ... \n\t"
+	"on_nline:[%p] | "
+	"on_done:[%p] | "
+	"... START\n", csube.cmd, csube.on_nline, csube.on_done );
+    csube.exitCode = -1;
     //int pipefd[2];
     //pid_t pid;
     //char buffer[1024];
@@ -71,8 +78,12 @@ int csubstream( struct csubexec csube ) {
 
         printf("--- Capturing Output ---\n");
         while (fgets(csube.buffer, sizeof(csube.buffer), stream) != NULL) {
-            // Process the line in the buffer
-            printf("[%03i] Buffer: %s", csube.linesC++, csube.buffer );
+	    if( csube.on_nline == 0 ){
+		    // Process the line in the buffer
+		    printf("[%03i] Buffer: %s", csube.linesC++, csube.buffer );
+	    }else{
+		    csube.on_nline( csube.buffer );	
+	    }
         }
 
         fclose(stream);
@@ -82,37 +93,55 @@ int csubstream( struct csubexec csube ) {
         waitpid(csube.pid, &csube.status, 0);
 
         if(WIFEXITED(csube.status)) {
-            int exit_code = WEXITSTATUS(csube.status);
-            printf("--- Child exited with code: %d ---\n", exit_code);
+            csube.exitCode = WEXITSTATUS(csube.status);
+            printf("--- Child exited with code: %d ---\n", csube.exitCode);
         } else if(WIFSIGNALED(csube.status)) {
             printf("--- Child terminated by signal: %d ---\n", WTERMSIG(csube.status));
         }
+
+	if( csube.on_done != 0 )
+		csube.on_done( csube.exitCode );
+    	printf("#* ... cmd[ %s ] DONE\n\n", csube.cmd );
+    
     }
 
     return 0;
 }
 
+#ifdef CSUBSTREAMTEST
+
+// -------------- TEST FUNCTIONS FOR TEST -------- START 
+int onNewLine( char *nl ){
+	int slen = strlen( nl );
+	if( nl[ slen - 1 ] == '\n' ){
+		nl[ slen - 1 ] = 0;
+	}
+	printf("* on new line [%s] (%i)\n", nl, slen);
+	return 0;
+}
+
+int onDone( int exitCode ){
+	printf("* on done ... got exit code [%i]", exitCode );
+}
+
+// -------------- TEST FUNCTIONS FOR TEST ------- END 
 
 int main(){
 
 	printf("#* ... csubstream ... START\n");
 
-	struct csubexec cse0 = {
-		.cmd = "whoami",
-	};
+	struct csubexec cse0 = { .cmd = "whoami" };
 	csubstream( cse0 );	
-	
 
-	struct csubexec cse1 = {
-		.cmd = "./test_csubstream.sh"
-	};
+	struct csubexec cse1 = { .cmd = "./test_csubstream.sh", .on_nline = onNewLine, .on_done = onDone };
 	csubstream( cse1 );	
 
-	struct csubexec cse2 = {
-		.cmd = "termux-sensor -s orientation -d 500 -n 5"
-	};
+	struct csubexec cse2 = { .cmd = "termux-sensor -s orientation -d 500 -n 5" };
 	csubstream( cse2 );	
+
 	printf("#* ... csubstream ... DONE\n");
 	return 0;
 }
+
+#endif
 
