@@ -4,20 +4,9 @@
 #include <sys/wait.h>
 #include <string.h>
 
-struct csubexec{
-	char cmd[512];
-	int (*on_nline)( char *line );
-	int (*on_done)( int exitCode );
-	int pipefd[2];
-	pid_t pid;
-	char buffer[1024];
-	int linesC;
-	int status;
-	int exitCode;
-};
+#include "csubstreamNode.h"
 
-
-int csubstream( struct csubexec csube ) {
+int csubstream( struct csubexec csube ){
     printf("\n\n#* ... cmd[ %s ] ... \n\t"
 	"on_nline:[%p] | "
 	"on_done:[%p] | "
@@ -123,7 +112,6 @@ int onNewLine( char *nl ){
 int onDone( int exitCode ){
 	printf("* on done ... got exit code [%i]", exitCode );
 }
-
 // -------------- TEST FUNCTIONS FOR TEST ------- END 
 
 int main(){
