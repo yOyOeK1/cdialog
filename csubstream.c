@@ -107,6 +107,11 @@ int main(){
 		.cmd = "./test_csubstream.sh"
 	};
 	csubstream( cse1 );	
+
+	struct csubexec cse2 = {
+		.cmd = "termux-sensor -s orientation -d 500 -n 5"
+	};
+	csubstream( cse2 );	
 	printf("#* ... csubstream ... DONE\n");
 	return 0;
 }
