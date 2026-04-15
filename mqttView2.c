@@ -13,10 +13,10 @@
 #include <pthread.h>
 #include <time.h>
 #include <ncurses.h>
+#include <stdbool.h>
 
 #include "config.h"
 
-#include "ccNode.h"
 #include "ccanvas.h"
 #include "cargs.h"
 #include "cpostprocess.h"
@@ -194,6 +194,9 @@ void mqtt_publish( char *topic, char *msg ){
 
 int mqIter = 0;
 void *myThread( void *vargp ){
+
+	sleep( 1 );
+	ccRender();
 
 	while( true ){
 		
