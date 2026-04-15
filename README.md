@@ -33,6 +33,15 @@ Current builders have sufix `...BuildN.sh` where N is a number / version / varia
 There is many files in this project. Loking at them in sens of files with extension of *.c . Many of them represent a functionality / work. Example can be file `dogh.c`. It's set of functions and variables alowing to play with watchDog's concept. files, mqtt, cmd, time, ...
 
 
+### mqttView2
+
+On event / message published at mqtt viewer. It use ccanvas to have `terminal buffor` to draw blocks of text and data. This one now use `config.h` to build it subscription list. How to source / postprocess data is in same place.
+
+
+To run it:
+```bash
+./mqttView2.test.bin -chFill=_ -col=60 -row=40
+```
 
 
 

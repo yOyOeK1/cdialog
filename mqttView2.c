@@ -2,8 +2,7 @@
 /*
  *
  */
-
-#define VER 2026.0405
+#define MQTTVIEWVER "2026.0415"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -203,7 +202,7 @@ void *myThread( void *vargp ){
 		sleep( 10 );
 		
 		//sscanf( mesBuff, "dogLoop(%i)", mqIter++ );
-		snprintf( mesBuff, 512, "dogLoop(%i)", mqIter );
+		snprintf( mesBuff, 512, "dogLoop(%i) ver:%s", mqIter,  MQTTVIEWVER );
 		cc_printf( 10, row-1, mesBuff );
 		
 		ccRender();
