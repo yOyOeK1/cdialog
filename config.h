@@ -85,8 +85,8 @@ struct mqNode mqNodes[] = {
 	{0,	"🔀 e01Mux switch ...",	"%lf",	't',		"%s\n",			"e01Mux/left", 			"",	0 },
 	//{0,	"🔀 e01Mux switch ...",	"%lf",	' ',		"%.0f sec.\n",		"e01Mux/left", 			"",	0 },
 	
-	{0,	/*Tesla */"No# 0",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat0Volt", 	"",	0 },
-	{0,	/*Tesla */"No# 1",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat1Volt", 	"",	0 },
+	{0,	/*Tesla */" - No# 0",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat0Volt", 	"",	0 },
+	{0,	/*Tesla */" - No# 1",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat1Volt", 	"",	0 },
 	{0,	"🔋 House battery",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/homeBatVolt", 	"",	0 },
 	{0,	"🔋 House percent",	"%lf",	'p',		"[%s]\n",			"e01MuxFix/homeBatPerc", 	"",	0 },
 	//{0,	"🔋 House percent",	"%lf",	' ',		"%.1f %%\n",		"e01MuxFix/homeBatPerc", 	"",	0 },
