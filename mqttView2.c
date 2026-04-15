@@ -77,6 +77,7 @@ bool addDone = false;
 char mesBuff[512];
 long int mesLong;
 float mesFloat;
+int colOrg;
 void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
 	addDone = false;
@@ -94,10 +95,12 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, cPP_secLeft( mesLong  ) );
 			
 			} else if( mqNodes[ q ].postp == 'p' ){
+				colOrg = col;
+				col-= ( 21 + 10 );
 				mesFloat = strtof( message->payload, NULL );
 				//printf("as progress got float [%f]\n", mesFloat );
 				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, cPP_asProgress( mesFloat  ) );
-			
+				col = colOrg;
 			}
 
 
@@ -260,20 +263,8 @@ int main( int argc, char *argv[] ){
 	ccInit();
 	cc_clear( chFill );
 
-
-
 	pthread_t thread_id;
 	pthread_create( &thread_id, NULL, myThread, NULL );
-
-//	
-//	// over hosts
-//	printf("mqtt broker to connect:\n");
-//	for( int h=0; true; h++ ){
-//		if( mqHosts[h].id == -1 )  break;
-//		printf(" * id[%i] (%s)\n\thost[%s]	port [%i] ...\n", 
-//			mqHosts[h].id, mqHosts[h].name,  mqHosts[h].host, mqHosts[h].port );
-//	}
-//	// over hosts DONE
 
 	mqttInit( );
 	mqttDoIt( );
