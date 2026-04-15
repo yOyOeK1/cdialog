@@ -9,14 +9,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+
 
 #include "cargs.h"
 #include "cmdh.h"
 #include "timeh.h"
 #include "fileh.h"
 
+#ifdef CCANVASTEST
 #include "ccanvas.h"
+#endif
+
 #include "ccNode.h"
+
 
 #include <unistd.h>
 #include <pthread.h>
