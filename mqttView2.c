@@ -54,7 +54,7 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
 
 	}
 
-
+	/*
 	for( mqSubsCount=0; true; mqSubsCount++ ){
 		if( mqSubs[ mqSubsCount ] == 0 ){
 			mqSubsCount--;
@@ -64,6 +64,7 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
 			mosquitto_subscribe( mosq, NULL, mqSubs[ mqSubsCount ], 0 );
 		}
 	}
+	*/
         printf("mqtth ... subscribed\n");
 	mqHandler = mosq;
 	mqConnection = true;
@@ -104,6 +105,9 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 			//strcpy( mqNodes[ q ].payload, message->payload );
 			mqNodes[ q ].entryDate = add;
 			printf( "%s\n\t%s", mqNodes[ q ].title, mqNodes[ q ].payload );
+			cc_printf( 1, q, mqNodes[ q ].title );
+			cc_printf( 21, q, mqNodes[ q ].payload );
+			ccRender();
 			addDone = true;
 			break;
 		}
@@ -112,7 +116,7 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 		if( mqNodes[ q + 1 ].parentId == -1 ) break;
 	}
 
-	if( addDone == false ){
+	if( 0 && addDone == false ){
 		printf(" [_ 󰃌 _]%s --> [%i] %s\n", 
 			message->topic, 
 			message->payloadlen, 
@@ -193,19 +197,22 @@ void *myThread( void *vargp ){
 
 	while( true ){
 		
-		sleep( 1 );
-
-		cc_printf( 0, row-1, "Dd" );
+		sleep( 10 );
+		
+		//sscanf( mesBuff, "dogLoop(%i)", mqIter++ );
+		snprintf( mesBuff, 512, "dogLoop(%i)", mqIter );
+		cc_printf( 10, row-1, mesBuff );
+		
 		ccRender();
 
 		/*
 		//printf( "iter...%i\n", add );
 		//move( 1, 2 );
 		if( (add++%2)==0 ){
-			printf("  %i\n",mqIter++);
+			printf("  %i\n",mqIter);
 			mqtt_publish( "and/ping", "okok"  );
 		}else
-			printf("  %i\n",mqIter++);
+			printf("  %i\n",mqIter);
 		*/
 
 		/*
@@ -218,6 +225,8 @@ void *myThread( void *vargp ){
 			break;
 		}
 		*/
+
+		mqIter++;
 
 	}
 
@@ -243,7 +252,7 @@ int main( int argc, char *argv[] ){
 	printf("#* ... mqtt View 1  size [ %ix%i ]\n", col, row);
 
 	ccInit();
-	cc_clear( '_' );
+	cc_clear( chFill );
 
 
 
