@@ -40,8 +40,29 @@ On event / message published at mqtt viewer. It use ccanvas to have `terminal bu
 
 To run it:
 ```bash
-./mqttView2.test.bin -chFill=_ -col=60 -row=40
+./mqttView2.test.bin -chFill=_ -col=60 -row=10
 ```
+
+Current a.k.a. sceenshot of app running:
+```bash
+----------------------------------------
+_Battery selected____No# 1_____________
+_🔀 e01Mux switch .21:39 mm:s._______
+_Tesla No# 0_________22.930 vol._______
+_Tesla No# 1_________22.791 vol._______
+_🔋 House battery__13.471 vol._______
+_🔋 House percent__[084%  ###########
+#################______]______________
+_______________________________________
+_______________________________________
+__________dogLoop(1) ver:2026.0415_____
+```
+
+
+
+### TODO / FIX / KNOWN bugs
+
+[ ] ccanvas don't do correct unicode characters :(
 
 
 
