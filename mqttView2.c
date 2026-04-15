@@ -16,6 +16,8 @@
 
 #include "config.h"
 
+#include "ccNode.h"
+#include "ccanvas.h"
 #include "cargs.h"
 #include "cpostprocess.h"
 
@@ -190,6 +192,13 @@ int mqIter = 0;
 void *myThread( void *vargp ){
 
 	while( true ){
+		
+		sleep( 1 );
+
+		cc_printf( 0, row-1, "Dd" );
+		ccRender();
+
+		/*
 		//printf( "iter...%i\n", add );
 		//move( 1, 2 );
 		if( (add++%2)==0 ){
@@ -197,8 +206,9 @@ void *myThread( void *vargp ){
 			mqtt_publish( "and/ping", "okok"  );
 		}else
 			printf("  %i\n",mqIter++);
-		sleep( 10 );
+		*/
 
+		/*
 		if( 0 &&  mqIter > 3 ){
 			printf("#* ... mqtt disconect ...\n");
 			// to force to close it / mqtt client down conection / disconnect
@@ -207,6 +217,7 @@ void *myThread( void *vargp ){
 			printf("#* ... mqtt disconect ... DONE\n");
 			break;
 		}
+		*/
 
 	}
 
@@ -230,6 +241,10 @@ int main( int argc, char *argv[] ){
 	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
 
 	printf("#* ... mqtt View 1  size [ %ix%i ]\n", col, row);
+
+	ccInit();
+	cc_clear( '_' );
+
 
 
 	pthread_t thread_id;

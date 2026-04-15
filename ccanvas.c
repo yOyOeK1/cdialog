@@ -47,6 +47,19 @@ int SMWork = 1;
 int SMLoop = 0;
 
 
+#ifdef CCANVASTEST
+//
+// for node if not defined 
+//
+int *fUpdateDef( struct ccNode *cN, int frameNo ){
+	
+	if( asBar == false )
+		printf("fUpdateDef ... fNo[%i] of [ %s ]\n", frameNo, cN->name );
+	return 0;
+}
+
+
+
 // Keys Root
 //
 struct keyBind {
@@ -75,15 +88,6 @@ int *widgetTick(  struct ccNode *cN, int frameNo ){
 	snprintf( cN->text, 50, "widTok!(%i)", widgetTickC);
 }
 
-//
-// for node if not defined 
-//
-int *fUpdateDef( struct ccNode *cN, int frameNo ){
-	
-	if( asBar == false )
-		printf("fUpdateDef ... fNo[%i] of [ %s ]\n", frameNo, cN->name );
-	return 0;
-}
 
 // 
 // dogBatteryCounter dog() loop() ....
@@ -154,6 +158,7 @@ void dogsStart(){
 void dogsStop(){
 
 }
+#endif
 
 
 
@@ -204,15 +209,15 @@ int ccUpdate(){
 	
 	for(int w=0; w<ccNsCount; w++ ){
 
-		if( strcmp( ccNs[w].fUpdate, "fUpdateLastCmd" ) == 0 ){
-			snprintf( ccNs[w].text, 50, "Last cmd[%s]", line );
-		
-		}else if( strcmp( ccNs[w].fUpdate, "widgetTick" ) == 0 ){
-			widgetTick( &ccNs[w], 0 );
-		
-		}else if( strcmp( ccNs[w].fUpdate, "fUpdateD" ) == 0 ){
-			fUpdateDef( &ccNs[ w ], 0 );
-		
+	if( strcmp( ccNs[w].fUpdate, "fUpdateLastCmd" ) == 0 ){
+		snprintf( ccNs[w].text, 50, "Last cmd[%s]", line );
+
+	//	}else if( strcmp( ccNs[w].fUpdate, "widgetTick" ) == 0 ){
+	//		widgetTick( &ccNs[w], 0 );
+	//	
+	//	}else if( strcmp( ccNs[w].fUpdate, "fUpdateD" ) == 0 ){
+	//		fUpdateDef( &ccNs[ w ], 0 );
+	//	
 		}
 	}
 }
@@ -343,6 +348,8 @@ char tmsg[51200];
 // to get nice time up
 // cat /proc/uptime | awk '{printf "%.2f min.\n", $1/60}'
 
+#ifdef CCANVASTEST
+
 int main( int argc, char *argv[] ){
 	
 
@@ -463,3 +470,7 @@ int main( int argc, char *argv[] ){
 
 	return 0;
 }
+
+#endif
+
+
