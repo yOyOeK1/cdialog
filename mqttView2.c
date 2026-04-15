@@ -78,6 +78,7 @@ char mesBuff[512];
 long int mesLong;
 float mesFloat;
 int colOrg;
+int mqV2_colW = 25;
 void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
 	addDone = false;
@@ -96,7 +97,7 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 			
 			} else if( mqNodes[ q ].postp == 'p' ){
 				colOrg = col;
-				col-= ( 21 + 10 );
+				col-= ( mqV2_colW + 10 );
 				mesFloat = strtof( message->payload, NULL );
 				//printf("as progress got float [%f]\n", mesFloat );
 				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, cPP_asProgress( mesFloat  ) );
@@ -108,7 +109,7 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 			mqNodes[ q ].entryDate = add;
 			printf( "%s\n\t%s", mqNodes[ q ].title, mqNodes[ q ].payload );
 			cc_printf( 1, q, mqNodes[ q ].title );
-			cc_printf( 21, q, mqNodes[ q ].payload );
+			cc_printf( mqV2_colW, q, mqNodes[ q ].payload );
 			ccRender();
 			addDone = true;
 			break;
@@ -195,10 +196,10 @@ void mqtt_publish( char *topic, char *msg ){
 }
 
 int mqIter = 0;
-
-void mqvRender(){
+extern int ccRenderCount;
+void mqv2Render(){
 		//sscanf( mesBuff, "dogLoop(%i)", mqIter++ );
-		snprintf( mesBuff, 512, "dogLoop(%i) ver:%s", mqIter,  MQTTVIEWVER );
+		snprintf( mesBuff, 512, "dogLoop/rend.(%04i/%04i) ver:%s", mqIter, ccRenderCount,  MQTTVIEWVER );
 		cc_printf( 10, row-1, mesBuff );
 		
 		ccRender();
@@ -207,12 +208,12 @@ void mqvRender(){
 void *myThread( void *vargp ){
 
 	sleep( 1 );
-	mqvRender();
+	mqv2Render();
 
 	while( true ){
 		
 		sleep( 10 );
-		mqvRender();		
+		mqv2Render();		
 
 		/*
 		//printf( "iter...%i\n", add );
