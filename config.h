@@ -26,6 +26,20 @@ struct mqttHost mqHosts[] = {
 */
 
 
+char *machineName = "yDell";
+
+
+// at pinebook pro offset is
+// 0
+// at dell yoyo
+// -5
+//
+int TIME_ZONE_OFFSET = 0; //-5 * 60 * 60; // sec
+
+char *mqttHost = "192.168.43.1";
+int mqttPort = 10883;
+char *mqttClientId = "cDialogTest";
+
 struct mqSub{
 	int mqHostId;
 	char topic[512];
@@ -38,16 +52,6 @@ struct mqSub mqSubsN[] = {
 	{-1},
 };
 
-// at pinebook pro offset is
-// 0
-// at dell yoyo
-// -5
-//
-int TIME_ZONE_OFFSET = 0; //-5 * 60 * 60; // sec
-
-char *mqttHost = "192.168.43.1";
-int mqttPort = 10883;
-char *mqttClientId = "cDialogTest";
 
 char *mqTopicPrefix = "and/";
 char *mqSubs[] = {
@@ -76,13 +80,13 @@ struct mqNode {
 	int entryDate;
 };
 struct mqNode mqNodes[] = {
-	{0,	"Battery selected",	"%d",	' ',		"No# %i\n",		"e01Mux/batSel", 		"",	0 },
+	{0,	"🔛 Tesla selected",	"%d",	' ',		"No# %i\n",		"e01Mux/batSel", 		"",	0 },
 	
 	{0,	"🔀 e01Mux switch ...",	"%lf",	't',		"%s\n",			"e01Mux/left", 			"",	0 },
 	//{0,	"🔀 e01Mux switch ...",	"%lf",	' ',		"%.0f sec.\n",		"e01Mux/left", 			"",	0 },
 	
-	{0,	"Tesla No# 0",		"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat0Volt", 	"",	0 },
-	{0,	"Tesla No# 1",		"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat1Volt", 	"",	0 },
+	{0,	/*Tesla */"No# 0",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat0Volt", 	"",	0 },
+	{0,	/*Tesla */"No# 1",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat1Volt", 	"",	0 },
 	{0,	"🔋 House battery",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/homeBatVolt", 	"",	0 },
 	{0,	"🔋 House percent",	"%lf",	'p',		"[%s]\n",			"e01MuxFix/homeBatPerc", 	"",	0 },
 	//{0,	"🔋 House percent",	"%lf",	' ',		"%.1f %%\n",		"e01MuxFix/homeBatPerc", 	"",	0 },
@@ -91,6 +95,3 @@ struct mqNode mqNodes[] = {
 };
 
 
-
-
-char *machineName = "yDell";
