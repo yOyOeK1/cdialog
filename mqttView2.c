@@ -192,20 +192,24 @@ void mqtt_publish( char *topic, char *msg ){
 }
 
 int mqIter = 0;
-void *myThread( void *vargp ){
 
-	sleep( 1 );
-	ccRender();
-
-	while( true ){
-		
-		sleep( 10 );
-		
+void mqvRender(){
 		//sscanf( mesBuff, "dogLoop(%i)", mqIter++ );
 		snprintf( mesBuff, 512, "dogLoop(%i) ver:%s", mqIter,  MQTTVIEWVER );
 		cc_printf( 10, row-1, mesBuff );
 		
 		ccRender();
+}
+
+void *myThread( void *vargp ){
+
+	sleep( 1 );
+	mqvRender();
+
+	while( true ){
+		
+		sleep( 10 );
+		mqvRender();		
 
 		/*
 		//printf( "iter...%i\n", add );
