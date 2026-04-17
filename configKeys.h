@@ -15,6 +15,8 @@ struct keyBind keyBinds[] = {
 	{ 0, "w",	0,/*"cmdh"*/	"%s",			"whoami" },
 	{ 0, "l",	0,/*"cmdh"*/	"load:\n%s",		"cat /proc/loadavg" },
 	{ 0, "o",	0,/*"cmdh"*/	"cpu's online:\n%s",	"cd /sys/devices/system/cpu && grep '1' ./cpu*/online" },
+	{ 0, "\"",	0,/*"cmdh"*/	"brightnes +",		"sudo ~/.viteyss/oven/oMachine/brightness.sh +" },
+	{ 0, ":",	0,/*"cmdh"*/	"brightnes -",		"sudo ~/.viteyss/oven/oMachine/brightness.sh -" },
 	{ 0, "u",	0,/*"cmdh"*/	"uptime:\n%s",		"uptime | awk '{print $1}'" },
 	{ 0, "f",	0,/*"cmdh"*/ 	"%s",			"free -h" },
 	
