@@ -22,7 +22,7 @@ struct keyBind keyBinds[] = {
 	{ 0,    "f",	0,		"%s",			"free -h" },
 	
 	{ 0,    "hh",	0,		"test hh\n\t%s",	"echo HH" },
-	{ 0,    "mp",	1,		"and/ping",		"okok2" },
+	{ 0,    "mp",	1,		"and/test/perc",	"11.11" },
 	
 	{-1}
 };
