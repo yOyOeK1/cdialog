@@ -179,6 +179,7 @@ int ccFree_FB(){
 	free( ccFB );
 }
 
+#ifdef CCANVASTEST
 int ccInit(){
 
 	ccInit_FB();
@@ -201,6 +202,7 @@ int ccInit(){
 
 	return ccNsCount;
 }
+#endif
 
 
 //

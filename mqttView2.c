@@ -2,7 +2,7 @@
 /*
  *
  */
-#define MQTTVIEWVER "2026.0415"
+#define MQTTVIEWVER "2026.0417"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -261,7 +261,7 @@ int main( int argc, char *argv[] ){
 
 	printf("#* ... mqtt View 1  size [ %ix%i ]\n", col, row);
 
-	ccInit();
+	ccInit_FB();
 	cc_clear( chFill );
 
 	pthread_t thread_id;
