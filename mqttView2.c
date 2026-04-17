@@ -91,8 +91,10 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 			//printf("D as i:[%i] d:[%d] f:[%f]\n", mesBuff, mesBuff, mesBuff	);	
 			if( mqNodes[ q ].postp == ' ' ){
 				sscanf( message->payload, mqNodes[ q ].args, &mesBuff );
-				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, *mesBuff );
-			
+				//printf("1[%s]\n", mesBuff );
+				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, mesBuff );
+				//printf("2\n");
+
 			} else if( mqNodes[ q ].postp == 't' ){ // time since
 				mesLong = strtol( message->payload, NULL, 10 );
 				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, cPP_secLeft( mesLong  ) );
