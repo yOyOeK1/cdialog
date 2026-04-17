@@ -43,6 +43,8 @@ char *mqSubs[] = {
 };
 
 struct mqNode mqNodes[] = {
+	{0,	"Temp",			"%lf",	' ',		"%.1f'C\n",		"e01Mux/C", 			"",	0 },
+	{0,	"Humidity",		"%lf",	' ',		"%.0f%%\n",		"e01Mux/humidity", 		"",	0 },
 	{0,	"🔛 Tesla selected",	"%d",	' ',		"No# %i\n",		"e01Mux/batSel", 		"",	0 },
 	
 	{0,	"🔀 e01Mux switch ...",	"%lf",	't',		"%s\n",			"e01Mux/left", 			"",	0 },
@@ -52,10 +54,13 @@ struct mqNode mqNodes[] = {
 	{0,	/*Tesla */" - No# 1",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat1Volt", 	"",	0 },
 	
 	{0,	"🔋 House battery",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/homeBatVolt", 	"",	0 },
-	{0,	"🔋 House percent",	"%lf",	'p',		"[%s]\n",			"e01MuxFix/homeBatPerc", 	"",	0 },
+	{0,	"🔋 House percent",	"%lf",	'p',		"[%s]\n",		"e01MuxFix/homeBatPerc", 	"",	0 },
+	{0,	"🔋 Huawei percent",	"%lf",	'p',		"[%s]\n",		"hu/bat/percent",	 	"",	0 },
 	//{0,	"🔋 House percent",	"%lf",	' ',		"%.1f %%\n",		"e01MuxFix/homeBatPerc", 	"",	0 },
 	
 	{0,	"percent test ",	"%lf",	'p',		"* [%s] as str\n",	"and/test/perc",	 	"",	0 },
+	
+	{0,	"GPS",			"%s",	' ',		"[%s]",			"nex7/gps/ll",		 	"",	0 },
 	
 	{-1}
 };
