@@ -3,7 +3,7 @@
 #
 
 bTarget="ccanvas.test.bin"
-bSrc="cargs.c cmdh.c fileh.c timeh.c ccanvas.c"
+bSrc="ctermh.c cargs.c cmdh.c fileh.c timeh.c ccanvas.c"
 inc="-I/home/yoyo/src/mosquitto-2.0.13/include "
 libsDir="-L/home/yoyo/src/mosquitto-2.0.13/bu/lib "
 libs="-lmosquitto -lrt -lm -lpthread -lcurses -lncurses -lncursesw "

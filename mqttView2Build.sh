@@ -3,7 +3,7 @@
 #
 
 bTarget="mqttView2.test.bin"
-bSrc="ccanvas.c cargs.c cpostprocess.c mqttView2.c"
+bSrc="ctermh.c ccanvas.c cargs.c cpostprocess.c mqttView2.c"
 inc="-I/home/yoyo/src/mosquitto-2.0.13/include "
 libsDir="-L/home/yoyo/src/mosquitto-2.0.13/bu/lib "
 libs="-lmosquitto -lrt -lm -lpthread -lcurses -lncurses -lncursesw "
@@ -27,6 +27,7 @@ fi
 
 echo "#* ... for debugging run"
 echo '# mosquitto_sub -t "and/#" -h "hu" -p 10883 -V mqttv311 -d'
+echo "#"
 echo "#"
 
 #./cMqtt2Bar

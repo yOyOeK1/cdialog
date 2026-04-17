@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "ctermh.h" 
+
 int col = 70;
 int row = 10;
 bool asBar = false;
@@ -23,6 +25,10 @@ int cc_main_argcParse( int argc, char *argv[] ){
 			printf("{ \"version\": 1 }\n[\n[]\n");
 			asBar = true;
 
+		} else if( strcmp( argv[ a ], "-autoSize" ) == 0 ){
+			ctermSize( &col, &row );
+			row-= 2;
+			printf("#* ... autoSize [ %i x %i ]\n", col, row );
 		} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
 			//printf("#* ... -col=\n");
 			sscanf( argv[ a ], "-col=%d", &col );
@@ -33,6 +39,7 @@ int cc_main_argcParse( int argc, char *argv[] ){
 		} else if( strncmp( argv[ a ], "-h", 2) == 0 ){
 			printf("#* ... -h	- this help (external function)\n\n"
 				"-asBar		- to run it as i3bar / str standard and jsonish\n"
+				"-autoSize	- to fit your screen at start. (Full screen)\n"
 				"-row=N		- N rows to set\n"
 				"-col=N		- N cols / lines to set\n"
 				"-chFill=.	- . char to use as filler in clear\n"
