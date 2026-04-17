@@ -12,16 +12,19 @@
 #include <stdbool.h>
 
 
+#ifdef CCANVASTEST
+#include "configKeys.h"
+//#include "config.h"
 #include "cargs.h"
 #include "cmdh.h"
 #include "timeh.h"
 #include "fileh.h"
 
-#ifdef CCANVASTEST
 #include "ccanvas.h"
+#include "ccNode.h"
+struct ccNode ccNs[10];
 #endif
 
-#include "ccNode.h"
 
 
 #include <unistd.h>
@@ -29,7 +32,6 @@
 #include <time.h>
 
 
-struct ccNode ccNs[10];
 int ccNsCount = 0;
 
 //int col = 70;
@@ -40,6 +42,9 @@ extern int col;
 extern int row;
 extern bool asBar;
 extern int chFill;
+
+//extern struct keyBinds[];
+
 
 int CC_NODE_MARGIN = 2;
 int ch = '\n';
@@ -68,19 +73,19 @@ int *fUpdateDef( struct ccNode *cN, int frameNo ){
 
 // Keys Root
 //
-struct keyBind {
-	int parentId;
-	char ch[51];
-	int doWhat;
-	char parser[512];
-	char args[512];
-};
-struct keyBind keyBinds[] = {
-	{ 0, "W",	0,/*"cmdh"*/	"ip's:\n%s",		"ip a | grep 'inet ' | awk '{print $2}'" },
-	{ 0, "w",	0,/*"cmdh"*/	"whoami:[ %s ]",	"whoami" },
-	{ 0, "f",	0,/*"cmdh"*/ 	"%s",	"free -h" },
-	{-1}
-};
+//struct keyBind {
+//	int parentId;
+//	char ch[51];
+//	int doWhat;
+//	char parser[512];
+//	char args[512];
+//};
+//struct keyBind keyBinds[] = {
+//	{ 0, "W",	0,/*"cmdh"*/	"ip's:\n%s",		"ip a | grep 'inet ' | awk '{print $2}'" },
+//	{ 0, "w",	0,/*"cmdh"*/	"whoami:[ %s ]",	"whoami" },
+//	{ 0, "f",	0,/*"cmdh"*/ 	"%s",	"free -h" },
+//	{-1}
+//};
 
 
 
@@ -179,6 +184,12 @@ int ccFree_FB(){
 	free( ccFB );
 }
 
+
+//
+char *cc_getPx( int x, int y ){
+	return &ccFB[ y*col + x ];
+}
+
 #ifdef CCANVASTEST
 int ccInit(){
 
@@ -202,13 +213,6 @@ int ccInit(){
 
 	return ccNsCount;
 }
-#endif
-
-
-//
-char *cc_getPx( int x, int y ){
-	return &ccFB[ y*col + x ];
-}
 
 
 int ccUpdate(){
@@ -229,7 +233,7 @@ int ccUpdate(){
 		}
 	}
 }
-
+#endif
 
 // to clear FB
 int cc_clear( char cBlank ){
@@ -276,6 +280,7 @@ int ccDraw(){
 	int wLen = 0;
 	int c;
 	for(int w=0; w<ccNsCount; w++ ){
+#ifdef CCANVASTEST
 		wLen = strlen( ccNs[w].text );
 		if( asBar == false )
 			printf( "ccDraw cur[%i] node[ %s ](%i)\n"
@@ -310,6 +315,7 @@ int ccDraw(){
 			//printf(" ... cursor (%i)\n", cur);
 		}
 
+#endif
 //		for( c=0; c<wLen ;c++ ){
 //
 //			ccFB[ cur++ ] = ccNs[w].text[ c ];

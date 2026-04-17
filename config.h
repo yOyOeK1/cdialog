@@ -1,6 +1,8 @@
 
 
+#ifndef CCONFIGSET
 //---------------------------------------------------------
+#define CCONFIGSET 
 
 char *machineName = "yDell";
 
@@ -10,13 +12,13 @@ int TIME_ZONE_OFFSET = 0;// sec
 //int TIME_ZONE_OFFSET = -5 * 60 * 60; // sec
 
 
-/* mqSub */
+//--------------------------- Mqtt
 #include "mqNode.h"
-
 
 char *mqttHost = "192.168.43.1";
 int mqttPort = 10883;
 char *mqttClientId = "cDialogTest";
+char *mqTopicPrefix = "and/";
 
 
 struct mqSub mqSubsN[] = {
@@ -25,8 +27,6 @@ struct mqSub mqSubsN[] = {
 	{-1},
 };
 
-
-char *mqTopicPrefix = "and/";
 char *mqSubs[] = {
 	//"#",
 	"e01Mux/batSel", // 🔋 🔀
@@ -50,10 +50,13 @@ struct mqNode mqNodes[] = {
 	
 	{0,	/*Tesla */" - No# 0",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat0Volt", 	"",	0 },
 	{0,	/*Tesla */" - No# 1",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/teslaBat1Volt", 	"",	0 },
+	
 	{0,	"🔋 House battery",	"%lf",	' ',		"%.3f vol.\n",		"e01MuxFix/homeBatVolt", 	"",	0 },
 	{0,	"🔋 House percent",	"%lf",	'p',		"[%s]\n",			"e01MuxFix/homeBatPerc", 	"",	0 },
 	//{0,	"🔋 House percent",	"%lf",	' ',		"%.1f %%\n",		"e01MuxFix/homeBatPerc", 	"",	0 },
+	
 	{0,	"percent test ",	"%lf",	'p',		"* [%s] as str\n",	"and/test/perc",	 	"",	0 },
+	
 	{-1}
 };
 
@@ -66,5 +69,6 @@ struct mqttHost mqHosts[] = {
 };
 
 --- not implemented */
+#endif
 
 
