@@ -1,51 +1,24 @@
 
-/*
-// not implemented
-struct mqttHost{
-	int id;
-	char name[512];
-	char host[512];
-	int port;
-	char clientId[512];
-	bool connected;
-	int mqMosqi;
-	bool dogRun;
-	pthread_t thread_id;
-};
 
-
-
-
-// not implemented
-struct mqttHost mqHosts[] = {
-	{ 1, "hu", "192.168.43.1", 10883, "mqttHost4Hu"  },
-	//{ 2, "ydell", "127.0.0.1", 10883, "mqttHost4ydel"  },
-	{-1}
-};
-
-*/
-
+//---------------------------------------------------------
 
 char *machineName = "yDell";
 
-
 // at pinebook pro offset is
-// 0
+int TIME_ZONE_OFFSET = 0;// sec
 // at dell yoyo
-// -5
-//
-int TIME_ZONE_OFFSET = 0; //-5 * 60 * 60; // sec
+//int TIME_ZONE_OFFSET = -5 * 60 * 60; // sec
+
+
+/* mqSub */
+#include "mqNode.h"
+
 
 char *mqttHost = "192.168.43.1";
 int mqttPort = 10883;
 char *mqttClientId = "cDialogTest";
 
-struct mqSub{
-	int mqHostId;
-	char topic[512];
-	char parser[512];
-	char args[512];
-};
+
 struct mqSub mqSubsN[] = {
 	{ 0, "#", 			"%s", "%t: @[%T]->[%M]" },
 	{ 0, "e01MuxFix/homeBatPerc", 	"%d", "BAT.oiysh.home: %M %"},
@@ -69,16 +42,6 @@ char *mqSubs[] = {
 	0
 };
 
-struct mqNode {
-	int parentId;
-	char title[512];
-	char args[512];
-	char postp;
-	char printAs[512];
-	char topic[512];
-	char payload[1024];
-	int entryDate;
-};
 struct mqNode mqNodes[] = {
 	{0,	"🔛 Tesla selected",	"%d",	' ',		"No# %i\n",		"e01Mux/batSel", 		"",	0 },
 	
@@ -93,5 +56,15 @@ struct mqNode mqNodes[] = {
 	{0,	"percent test ",	"%lf",	'p',		"* [%s] as str\n",	"and/test/perc",	 	"",	0 },
 	{-1}
 };
+
+
+/*// not implemented
+struct mqttHost mqHosts[] = {
+	{ 1, "hu", "192.168.43.1", 10883, "mqttHost4Hu"  },
+	//{ 2, "ydell", "127.0.0.1", 10883, "mqttHost4ydel"  },
+	{-1}
+};
+
+--- not implemented */
 
 
