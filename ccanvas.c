@@ -20,8 +20,8 @@
 #include "timeh.h"
 #include "fileh.h"
 
-#include "ccanvas.h"
 #include "ccNode.h"
+#include "ccanvas.h"
 struct ccNode ccNs[10];
 #endif
 

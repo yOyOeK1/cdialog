@@ -1,4 +1,4 @@
-#include "ccNode.h"
+//#include "ccNode.h"
 
 /* auto header for [ ./ccanvas.c ] */
 
