@@ -435,15 +435,18 @@ int main( int argc, char *argv[] ){
 
 				if( asBar == false ) 
 					printf( "kBin cmp [%s] = [%s]\n", keyBinds[kBin].ch, line );
+
 				if( keyBinds[kBin].parentId == mLevel && 
 					strcmp( line, keyBinds[kBin].ch ) == 0 ){
-
 					printf("OK\n");
+
 					if( keyBinds[kBin].doWhat == 0 ){ // cmd
-						
 						snprintf( tmsg, 512, keyBinds[kBin].parser, cmd_to_chars( keyBinds[kBin].args  ) );
 						cc_printf( 2, 3 , tmsg );
 
+
+					} else if( keyBinds[kBin].doWhat == 1 ){ // mqtt push / publish
+						// TODO mqtt publish
 
 					} else {
 						printf("EE NOT IMPlemented yet doWhat [%i]\n", keyBinds[kBin].doWhat);	
