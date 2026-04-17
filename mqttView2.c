@@ -79,6 +79,8 @@ long int mesLong;
 float mesFloat;
 int colOrg;
 int mqV2_colW = 25;
+int mTop = 1;
+int mLeft = 1;
 void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_message *message)
 {
 	addDone = false;
@@ -91,25 +93,26 @@ void on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_messa
 				sscanf( message->payload, mqNodes[ q ].args, &mesBuff );
 				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, *mesBuff );
 			
-			} else if( mqNodes[ q ].postp == 't' ){
+			} else if( mqNodes[ q ].postp == 't' ){ // time since
 				mesLong = strtol( message->payload, NULL, 10 );
 				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, cPP_secLeft( mesLong  ) );
 			
-			} else if( mqNodes[ q ].postp == 'p' ){
+			} else if( mqNodes[ q ].postp == 'p' ){ // progress bar
 				colOrg = col;
-				col-= ( mqV2_colW + 10 );
+				col-= ( mqV2_colW + 3 );
 				mesFloat = strtof( message->payload, NULL );
 				//printf("as progress got float [%f]\n", mesFloat );
 				snprintf( mqNodes[ q ].payload, 512, mqNodes[ q ].printAs, cPP_asProgress( mesFloat  ) );
 				col = colOrg;
+
 			}
 
 
 			//strcpy( mqNodes[ q ].payload, message->payload );
 			mqNodes[ q ].entryDate = add;
 			printf( "%s\n\t%s", mqNodes[ q ].title, mqNodes[ q ].payload );
-			cc_printf( 1, q, mqNodes[ q ].title );
-			cc_printf( mqV2_colW, q, mqNodes[ q ].payload );
+			cc_printf( mLeft, q+mTop, mqNodes[ q ].title );
+			cc_printf( mqV2_colW, q+mTop, mqNodes[ q ].payload );
 			ccRender();
 			addDone = true;
 			break;
@@ -201,7 +204,7 @@ void mqv2Render(){
 		//sscanf( mesBuff, "dogLoop(%i)", mqIter++ );
 		snprintf( mesBuff, 512, "dogLoop/rend.(%04i/%04i) ver:%s", mqIter, ccRenderCount,  MQTTVIEWVER );
 		cc_printf( 10, row-1, mesBuff );
-		
+		cc_printf( col-strlen( machineName ) - 1 , 0, machineName );
 		ccRender();
 }
 
