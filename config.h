@@ -88,10 +88,11 @@ struct machNode machNs[] = {
 	{4,		true,		0,		"loadavg", 		0,	"cat /proc/loadavg"		},
 	{5,		true,		0,		"hostname", 		0,	"hostname"		},
 	{6,		true,		0,		"mem used", 		0,	"free | grep Mem | awk '{print $3}'"		},
-	{6,		true,		0,		"ps count", 		0,	"ps x | wc -l"		},
-	{6,		true,		0,		"interfaces", 		0,	"ip a | grep -e ': ' -e 'inet ' | awk '{print $2}'"	},
-	{7,		true,		0,		"at start", 		0,	"date"		},
-	{8,		false,		0,		"test none", 		0,	"echo 'none'"		},
+	{7,		true,		0,		"ps count", 		0,	"ps x | wc -l"		},
+	{8,		true,		0,		"interfaces", 		0,	"ip a | grep -e ': ' -e 'inet ' | awk '{print $2}'"	},
+	{9,		true,		0,		"uptime", 		0,	"cat /proc/uptime"	},
+	{10,		true,		0,		"at start", 		0,	"date"		},
+	{11,		false,		0,		"test none", 		0,	"echo 'none'"		},
 	{-1}
 };
 
