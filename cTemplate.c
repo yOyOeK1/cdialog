@@ -1,30 +1,36 @@
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
 #include <stdbool.h>
 
 
-#ifdef CMACHINETEST
-
-#include "cargs.h"
+#ifndef CPPTEST
 
 extern int col;
 extern int row;
 extern bool asBar;
 extern int chFill;
 
+#else
 
+#include "cargs.h"
+extern int col;
+extern int row;
+extern bool asBar;
+extern int chFill;
+
+#endif
+
+
+#ifdef CPPTEST
 int main( int argc, char *argv[] ){
-	
 
 	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
-		
-	if( asBar == false )	
-		printf( "cmachine ... test argc(%i)\n", argc );
-	
 
+
+	printf("c cmachine2 CPPTEST ... START size [ %ix%i ]\n", col, row);
+
+	printf("c cmachine2 CPPTEST ... DONE\n");
 	return 0;
 }
-
 #endif

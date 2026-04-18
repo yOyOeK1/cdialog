@@ -14,6 +14,7 @@ int chFill = '.';
 //extern bool asBar;
 //extern int chFill;
 
+
 int cc_main_argcParse( int argc, char *argv[] ){
        for( int a=0; a<argc ; a++ ){
 		if( strncmp( argv[ a ], "-row=", 5 ) == 0 ){
@@ -37,12 +38,14 @@ int cc_main_argcParse( int argc, char *argv[] ){
 			printf("#* ... -chFill= (%c)\n",chFill );
 			//sscanf( argv[ a ], "-chFill=%c", chFill );
 		} else if( strncmp( argv[ a ], "-h", 2) == 0 ){
-			printf("#* ... -h	- this help (external function)\n\n"
+			printf("#* ... size [ %ix%i ]\n"
+				"#* ... -h	- this help (external function)\n\n"
 				"-asBar		- to run it as i3bar / str standard and jsonish\n"
 				"-autoSize	- to fit your screen at start. (Full screen)\n"
 				"-row=N		- N rows to set\n"
 				"-col=N		- N cols / lines to set\n"
 				"-chFill=.	- . char to use as filler in clear\n"
+				, col, row
 				);
 			return 0;
 		}
