@@ -2,7 +2,7 @@
 
 #ifndef CCONFIGSET
 //---------------------------------------------------------
-#define CCONFIGSET 
+#define CCONFIGSET "1"
 
 char *machineName = "yDell";
 
@@ -58,7 +58,7 @@ struct mqNode mqNodes[] = {
 	{0,	"🔋 Huawei percent",	"%lf",	'p',		"[%s]\n",		"hu/bat/percent",	 	"",	0 },
 	//{0,	"🔋 House percent",	"%lf",	' ',		"%.1f %%\n",		"e01MuxFix/homeBatPerc", 	"",	0 },
 	
-	{0,	"percent test ",	"%lf",	'p',		"* [%f] as str\n",	"and/test/perc",	 	"",	0 },
+	{0,	"percent test ",	"%lf",	'p',		"* [%s] as str\n",	"and/test/perc",	 	"",	0 },
 	{0,	"percent test 2",	"%s",	' ',		"[%s]\n",		"and/test/str",		 	"",	0 },
 	
 	{0,	"GPS",			"%s",	' ',		"[%s]\n",			"nex7/gps/ll",		 	"",	0 },
@@ -66,6 +66,21 @@ struct mqNode mqNodes[] = {
 	{-1}
 };
 
+struct machNode{
+	int id;
+	bool onStart;
+	long everyMs;
+	char name[512];
+	bool isRunning;
+};
+struct plNode{
+};
+
+
+struct machNode machNs[] = {
+	{1,		false,		1000,		"test 1sec iter"		},
+	{-1}
+};
 
 /*// not implemented
 struct mqttHost mqHosts[] = {
