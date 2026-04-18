@@ -71,6 +71,9 @@ struct machNode{
 	bool onStart;
 	long everyMs;
 	char name[512];
+	int typeOf; // 0 - cmd
+	char cmd[512];
+	char result[512];
 	bool isRunning;
 };
 struct plNode{
@@ -78,7 +81,10 @@ struct plNode{
 
 
 struct machNode machNs[] = {
-	{1,		false,		1000,		"test 1sec iter"		},
+//	id		onStart		everyMs		name			typeOf	cmd
+	{1,		true,		0,		"at start", 		0,	"date"		},
+	{2,		true,		1000,		"1sec iter at start", 	0,	"echo 'ping'"		},
+	{3,		false,		0,		"test none", 		0,	"echo 'none'"		},
 	{-1}
 };
 

@@ -3,7 +3,7 @@
 #
 
 bTarget="cmachine2.test.bin"
-bSrc="ctermh.c cargs.c cmachine2.c"
+bSrc="cmdh.c ctermh.c cargs.c cmachine2.c"
 inc=""
 libsDir=""
 libs="-lm"
