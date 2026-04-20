@@ -76,9 +76,6 @@ struct machNode{
 	char result[512];
 	bool isRunning;
 };
-struct plNode{
-};
-
 
 struct machNode machNs[] = {
 //	id		onStart		everyMs		name			typeOf	cmd
@@ -95,6 +92,68 @@ struct machNode machNs[] = {
 	{11,		false,		0,		"test none", 		0,	"echo 'none'"		},
 	{-1}
 };
+
+// -- C NODE NUDDLE FLOW START
+//
+
+// cnnMsg
+struct cnn_Msg{
+	int id;
+	char topic[512];
+	char payload[512];
+	long tStart;
+	long tEnd;
+};
+struct cnn_Msg cnMs[] = {
+	{.id=1,		.topic="and/test/iterNo",	.payload="0"		},
+	{-1}
+};
+
+
+// cnnAtStart
+// id 1
+struct cnn_atStart{
+	int id;
+	bool onStart;
+	char name[512];
+	int msgId;
+};
+struct cnn_atStart cnnAtStarts[] = {
+	/*id		onStart		name*/			
+	{1,		true,		"cnn at start",			1  },
+	{2,		true,		"cnn battery capacity",		-1 },
+	{-1}
+};
+
+// ccPrintf
+// id 2
+struct cnn_Printf{
+	int id;
+	char name[512];
+	char printAs[512];
+	int msgId;
+};
+struct cnn_Printf cnnPrintfs[] = {
+	{1,	"cc print id1",	"%s<OK", -1 },
+	{-1}
+};
+
+// cnnNudle
+struct cnn_Nudle{
+	int id;
+	int srcType;
+	int srcId;
+	int targetType;
+	int targetId;
+};
+struct cnn_Nudle cnnNudles[] = {
+	{1,	1,	1,	2,	1	},
+	{-1}	
+};
+
+
+//
+// -- C NODE NUDDLE FLOW END
 
 /*// not implemented
 struct mqttHost mqHosts[] = {
