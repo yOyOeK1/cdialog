@@ -106,12 +106,14 @@ struct cnn_Msg{
 };
 struct cnn_Msg cnMs[] = {
 	{.id=1,		.topic="and/test/iterNo",	.payload="0"		},
+	{.id=2,		.topic="and/test/iterNo2",	.payload="2"		},
 	{-1}
 };
 
 
 // cnnAtStart
 // id 1
+#define CNNATSTART 1
 struct cnn_atStart{
 	int id;
 	bool onStart;
@@ -121,23 +123,40 @@ struct cnn_atStart{
 struct cnn_atStart cnnAtStarts[] = {
 	/*id		onStart		name*/			
 	{1,		true,		"cnn at start",			1  },
-	{2,		true,		"cnn battery capacity",		-1 },
+	{2,		true,		"cnn battery capacity",		2 },
 	{-1}
 };
 
-// ccPrintf
+// cnnPrintf
 // id 2
+#define CNNPRINTF 2
 struct cnn_Printf{
 	int id;
 	char name[512];
 	char printAs[512];
+	bool doTopic;
 	int msgId;
 };
 struct cnn_Printf cnnPrintfs[] = {
-	{1,	"cc print id1",	"%s<OK", -1 },
+	{1,	"cc print id1",	"%s<OK", true, -1 },
+	{2,	"cc print id2",	"%s<OK(2)", false, -1 },
+	{3,	"cc print id3",	"%s<OK(3)", false, -1 },
 	{-1}
 };
-
+// cnnAdd
+// id 3
+#define CNNADD 3
+struct cnn_Add{
+	int id;
+	char name[512];
+	float add;
+	int msgId;
+};
+struct cnn_Add cnnAdds[] = {
+	{1,	"cc add test 1.1",	1.1, -1 },
+	{2,	"cc add test 3.2",	3.2, -1 },
+	{-1}
+};
 // cnnNudle
 struct cnn_Nudle{
 	int id;
@@ -147,7 +166,11 @@ struct cnn_Nudle{
 	int targetId;
 };
 struct cnn_Nudle cnnNudles[] = {
-	{1,	1,	1,	2,	1	},
+	{1,	1,		1,	2,		1	},
+	{2,	CNNATSTART,	2,	CNNADD,		1	},
+	{3,	CNNADD,		1,	CNNPRINTF,	2	},
+	{4,	CNNPRINTF,	2,	CNNADD,		2	},
+	{5,	CNNADD,		2,	CNNPRINTF,	3	},
 	{-1}	
 };
 
