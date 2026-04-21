@@ -5,6 +5,9 @@
 #include <string.h>
 #include <mosquitto.h>
 
+
+#define CMACHINEVER "2026.0421"
+
 extern int col;
 extern int row;
 extern bool asBar;
@@ -16,7 +19,11 @@ extern int chFill;
 #else
 
 #include "config.h"
+#include "configKeys.h"
+#include "ctermh.h"
+#include "ccanvas.h"
 #include "cargs.h"
+#include "cpostprocess.h"
 
 #endif
 
@@ -187,8 +194,37 @@ void cmInit_atStart(){
 	}
 }
 
+void cmInit_cnCanvass(){
+	for( int c=0; true; c++ ){
+		if( cnCanvass[ c ].id == -1 ) break;
+		printf("#* ... init FB nudle id[%i]\n", cnCanvass[ c ].id);
+		cmiNodeName("CNCANVAS", cnCanvass[ c ].id, cnCanvass[ c ].name );
+		cnCanvass[ c ].pCount = 0;
+		if( cnCanvass[ c ].autoSize == false ){
+			ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, cnCanvass[ c ].col, cnCanvass[ c ].row );
+			cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, cnCanvass[ c ].col, cnCanvass[ c ].row );
+		} else {
+			int mc;
+			int mr;
+			ctermSize( &mc, &mr );
+			ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, mc-3, mr-3 );
+			//cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, mc-3, mr-3 );
+				
+
+		}
+
+	}
+}
+
 void cmInit(){
+
+	//ccInit_FB_nudle( &cnCanvass );
+	//cc_clear( chFill );
+	//cmInit_cnCanvass();
+
 	cmInit_atStart();
+
+	//ccRender();
 
 }
 
@@ -196,6 +232,7 @@ void cmInit(){
 int main( int argc, char *argv[] ){
 	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
 
+	printf("cmachine2 ver[%s]\n", CMACHINEVER );
 	printf("c cmachine2 CPPMACHINE2 ... START size [ %ix%i ]@%s\n", col, row, machineName );
 	for( int p=0; true; p++ ){
 		if( machNs[ p ].id == -1 ) break;
@@ -221,6 +258,7 @@ int main( int argc, char *argv[] ){
 
 
 	printf("c cmachine2 CPPMACHINE2 ... DONE\n");
+	printf("cmachine2 ver[%s]\n", CMACHINEVER );
 	return 0;
 }
 #endif

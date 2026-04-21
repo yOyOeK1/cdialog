@@ -1,4 +1,3 @@
-//#include "ccNode.h"
 
 /* auto header for [ ./ccanvas.c ] */
 
@@ -9,12 +8,15 @@ void *dogTimeLooper( void *vargp );
 void *dogLooper( void *vargp );
 void dogsStart();
 void dogsStop();
+int ccInit_FB_byPointer( char **pts, int dcol, int drow );
 int ccInit_FB();
 int ccFree_FB();
-int ccInit();
 char *cc_getPx( int x, int y );
+char *cc_getPx_byPointer( char **pts, int x, int y);
+int ccInit();
 int ccUpdate();
 int cc_clear( char cBlank );
+int cc_clear_byPointer( char **pts, char chf, int drow, int dcol );
 int cc_printf( int x, int y, char *msg );
 int ccDraw();
 void ccRender();
