@@ -14,6 +14,7 @@ int TIME_ZONE_OFFSET = 0;// sec
 
 //--------------------------- Mqtt
 #include "mqNode.h"
+#include <stdbool.h>
 
 char *mqttHost = "192.168.43.1";
 int mqttPort = 10883;
