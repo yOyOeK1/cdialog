@@ -36,19 +36,48 @@ void cmachine_start_byNode( struct machNode mn ){
 	}
 }
 
-int cm_getAddIndexById( int id ){
-	for( int i=0; true; i++){
-		if( cnnAdds[ i ].id == -1 ) break;
-		if( cnnAdds[ i ].id == id ) return i;
-	}
-	return -1;
-}
-
 
 int cm_getMsgIndexById( int id ){
 	for( int i=0; true; i++){
 		if( cnMs[ i ].id == -1 ) break;
 		if( cnMs[ i ].id == id ) return i;
+	}
+	return -1;
+}
+
+
+int cm_getDivIndexById( int id ){
+	for( int i=0; true; i++){
+		if( cnnDivs[ i ].id == -1 ) break;
+		if( cnnDivs[ i ].id == id ) return i;
+	}
+	return -1;
+}
+
+void cm_div( int id, int msgId ){
+	for( int i=0; true; i++ ){
+		if( cnnDivs[ i ].id == -1 ) break;
+		if( cnnDivs[ i ].id == id ){
+			printf("CM_divs id:%i, \n", id);
+			if( msgId != -1 ){
+				struct cnn_Msg *msg = &cnMs[ cm_getMsgIndexById( msgId ) ];   
+				float fin = atof( msg->payload );
+				fin/= cnnDivs[ i ].divBy;
+				printf("div %s by %f res [%f]\n",  msg->payload, cnnDivs[ i ].divBy, fin );
+				snprintf( msg->payload, 512, "%f", fin );
+
+
+			}
+			break;
+		}
+	}	
+}
+
+
+int cm_getAddIndexById( int id ){
+	for( int i=0; true; i++){
+		if( cnnAdds[ i ].id == -1 ) break;
+		if( cnnAdds[ i ].id == id ) return i;
 	}
 	return -1;
 }
@@ -78,38 +107,62 @@ void cm_printf( int id, int msgId ){
 			printf("CM_PRINTF id:%i, \n", id);
 			if( msgId != -1 ){
 				struct cnn_Msg msg = cnMs[ cm_getMsgIndexById( msgId ) ];
-				if( cnnPrintfs[ i ].doTopic )
-					printf("topic:[%s]\n", msg.topic );
+				if( cnnPrintfs[ i ].doTopic ){
+					printf("* Topic: ... %s\n", msg.topic );
+				}
 				printf( cnnPrintfs[ i ].printAs, msg.payload );
 			}
 			break;
 		}
 	}	
 }
+
+void cmi_dolevel( int level ){
+	level*= 4;
+	level+=2;
+	printf("\n");
+	for( int l=0; l<4; l++ ){
+		printf("-");
+	}
+	printf("|__ ");
+}
+
+
 void cm_doClick( int level, int msgId, int srcType, int srcId ){
 	if( level == 0 )
 		printf("\n ----- \n");
-	printf("\nlevel(%i)", level );
+	printf("\nlevel(%i) ", level );
 	if( msgId != -1 ) printf("#");
 	else printf("0");
 
+	int doClick = false;
 	for( int ni=0; true; ni++ ){
 		if( cnnNudles[ ni ].id == -1 ) break;
 		if( cnnNudles[ ni ].srcType == srcType &&
 			cnnNudles[ ni ].srcId == srcId ){
 
 			printf("GO -> ");
+			cmi_dolevel( level );
 			if( cnnNudles[ ni ].targetType == CNNPRINTF ){
 				cm_printf( cnnNudles[ ni ].targetId, msgId );
-				cm_doClick( level+1, msgId, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
+				doClick = true;
+
+			}else if( cnnNudles[ ni ].targetType == CNNDIV ){
+				cm_div( cnnNudles[ ni ].targetId, msgId );
+				doClick = true;
 
 			}else if( cnnNudles[ ni ].targetType == CNNADD ){
 				cm_add( cnnNudles[ ni ].targetId, msgId );
-				cm_doClick( level+1, msgId, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
+				doClick = true;
 
 			}else{
-				printf("EE not implemented 9898\n");
+				printf("\n# EE not implemented 9898\n");
+				doClick = false;
+			}
 
+			if( doClick ){
+				cm_doClick( level+1, msgId, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
+			}else{
 			}
 
 		}
