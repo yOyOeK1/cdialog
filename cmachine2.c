@@ -3,19 +3,20 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <mosquitto.h>
 
 extern int col;
 extern int row;
 extern bool asBar;
 extern int chFill;
 
-#ifndef CPPTEST
+#ifndef CPPMACHINE
 
 
 #else
 
-#include "cargs.h"
 #include "config.h"
+#include "cargs.h"
 
 #endif
 
@@ -143,7 +144,7 @@ void cm_doClick( int level, int msgId, int srcType, int srcId ){
 		if( cnnNudles[ ni ].srcType == srcType &&
 			cnnNudles[ ni ].srcId == srcId ){
 
-			printf(" |\n |--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
+			printf("\n |\n |--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
 			if( cnnNudles[ ni ].targetType == CNNPRINTF ){
 				cm_printf( cnnNudles[ ni ].targetId, msgId );
 				doClick = true;
@@ -172,23 +173,7 @@ void cm_doClick( int level, int msgId, int srcType, int srcId ){
 
 }
 
-#ifdef CPPTEST
-int main( int argc, char *argv[] ){
-	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
-
-	printf("c cmachine2 CPPTEST ... START size [ %ix%i ]@%s\n", col, row, machineName );
-
-	for( int p=0; true; p++ ){
-		if( machNs[ p ].id == -1 ) break;
-		printf("\n\n*[%i] id[%i] ... onStart[%i] every[%ims] \n\t - %s\n", p, 
-			machNs[ p ].id, machNs[ p ].onStart, machNs[ p ].everyMs, machNs[ p ].name 
-			);
-		if( machNs[ p ].onStart )
-			cmachine_start_byNode( machNs[ p ] );
-	
-	}
-
-	printf("c cmachine2 -- 2 CPPTEST ... DONE\n");
+void cmInit_atStart(){
 	for( int n=0; true; n++ ){
 		if( cnnAtStarts[ n ].id == -1 ) break;
 		if( cnnAtStarts[ n ].onStart ){ 
@@ -200,9 +185,42 @@ int main( int argc, char *argv[] ){
 		}
 		printf("\n");
 	}
-	printf("c cmachine2 -- 2 CPPTEST ... END\n");
+}
 
-	printf("c cmachine2 CPPTEST ... DONE\n");
+void cmInit(){
+	cmInit_atStart();
+
+}
+
+#ifdef CPPMACHINE
+int main( int argc, char *argv[] ){
+	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
+
+	printf("c cmachine2 CPPMACHINE2 ... START size [ %ix%i ]@%s\n", col, row, machineName );
+	for( int p=0; true; p++ ){
+		if( machNs[ p ].id == -1 ) break;
+		printf("\n\n*[%i] id[%i] ... onStart[%i] every[%ims] \n\t - %s\n", p, 
+			machNs[ p ].id, machNs[ p ].onStart, machNs[ p ].everyMs, machNs[ p ].name 
+			);
+		if( machNs[ p ].onStart )
+			cmachine_start_byNode( machNs[ p ] );
+	
+	}
+	printf("c cmachine2 CPPMACHINE2 ... END size [ %ix%i ]@%s\n", col, row, machineName );
+
+
+	printf("c cmachine2 -- 2 CPPMACHINE2 ... DONE .. NUDLE SECTION\n");
+	cmInit();
+	printf("c cmachine2 -- 2 CPPMACHINE2 ... END  .. NUDLE SECTION\n");
+
+
+	printf("c cmachine2 -- 3 CPPMACHINE2 ... START mqtt init \n");
+	//mqttInit();
+	//mqttDoIt();
+	printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");
+
+
+	printf("c cmachine2 CPPMACHINE2 ... DONE\n");
 	return 0;
 }
 #endif
