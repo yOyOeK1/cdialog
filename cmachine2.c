@@ -37,6 +37,11 @@ void cmachine_start_byNode( struct machNode mn ){
 }
 
 
+void cmiNodeName( char *type, int id, char *name ){
+	printf(" |\n |__  %s id[%i][ %s ]\n |\n", type, id, name );
+}
+
+
 int cm_getMsgIndexById( int id ){
 	for( int i=0; true; i++){
 		if( cnMs[ i ].id == -1 ) break;
@@ -58,12 +63,13 @@ void cm_div( int id, int msgId ){
 	for( int i=0; true; i++ ){
 		if( cnnDivs[ i ].id == -1 ) break;
 		if( cnnDivs[ i ].id == id ){
-			printf("CM_divs id:%i, \n", id);
+			//printf("CM_divs id:%i, \n", id);
+			cmiNodeName( "CM_DIVS", id, cnnDivs[ i ].name );
 			if( msgId != -1 ){
 				struct cnn_Msg *msg = &cnMs[ cm_getMsgIndexById( msgId ) ];   
 				float fin = atof( msg->payload );
 				fin/= cnnDivs[ i ].divBy;
-				printf("div %s by %f res [%f]\n",  msg->payload, cnnDivs[ i ].divBy, fin );
+				printf("[DEB] div %s by %f res [%f]\n",  msg->payload, cnnDivs[ i ].divBy, fin );
 				snprintf( msg->payload, 512, "%f", fin );
 
 
@@ -86,12 +92,13 @@ void cm_add( int id, int msgId ){
 	for( int i=0; true; i++ ){
 		if( cnnAdds[ i ].id == -1 ) break;
 		if( cnnAdds[ i ].id == id ){
-			printf("CM_adds id:%i, \n", id);
+			//printf("CM_adds id:%i, \n", id);
+			cmiNodeName( "CM_ADDS", id, cnnAdds[ i ].name );
 			if( msgId != -1 ){
 				struct cnn_Msg *msg = &cnMs[ cm_getMsgIndexById( msgId ) ];   
 				float fin = atof( msg->payload );
 				fin+= cnnAdds[ i ].add;
-				printf("add %f to %s res [%f]\n", cnnAdds[ i ].add, msg->payload, fin );
+				printf("[DEB] add %f to %s res [%f]\n", cnnAdds[ i ].add, msg->payload, fin );
 				snprintf( msg->payload, 512, "%f", fin );
 
 
@@ -104,7 +111,8 @@ void cm_printf( int id, int msgId ){
 	for( int i=0; true; i++ ){
 		if( cnnPrintfs[ i ].id == -1 ) break;
 		if( cnnPrintfs[ i ].id == id ){
-			printf("CM_PRINTF id:%i, \n", id);
+			//printf("CM_PRINTF id:%i, \n", id);
+			cmiNodeName( "CM_PRINTF", id, cnnPrintfs[ i ].name );
 			if( msgId != -1 ){
 				struct cnn_Msg msg = cnMs[ cm_getMsgIndexById( msgId ) ];
 				if( cnnPrintfs[ i ].doTopic ){
@@ -117,23 +125,17 @@ void cm_printf( int id, int msgId ){
 	}	
 }
 
-void cmi_dolevel( int level ){
-	level*= 4;
-	level+=2;
-	printf("\n");
-	for( int l=0; l<4; l++ ){
-		printf("-");
-	}
-	printf("|__ ");
-}
-
 
 void cm_doClick( int level, int msgId, int srcType, int srcId ){
-	if( level == 0 )
-		printf("\n ----- \n");
-	printf("\nlevel(%i) ", level );
-	if( msgId != -1 ) printf("#");
-	else printf("0");
+	if( level == 0 ){
+		printf(" | . . . ");
+		printf(" level(%i) ", level );
+		if( msgId != -1 ) 
+			printf("# With msg id[%i] ", msgId );
+		else 
+			printf("0");
+		printf("\n |\n");
+	}
 
 	int doClick = false;
 	for( int ni=0; true; ni++ ){
@@ -141,8 +143,7 @@ void cm_doClick( int level, int msgId, int srcType, int srcId ){
 		if( cnnNudles[ ni ].srcType == srcType &&
 			cnnNudles[ ni ].srcId == srcId ){
 
-			printf("GO -> ");
-			cmi_dolevel( level );
+			printf(" |\n |--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
 			if( cnnNudles[ ni ].targetType == CNNPRINTF ){
 				cm_printf( cnnNudles[ ni ].targetId, msgId );
 				doClick = true;
@@ -163,12 +164,14 @@ void cm_doClick( int level, int msgId, int srcType, int srcId ){
 			if( doClick ){
 				cm_doClick( level+1, msgId, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
 			}else{
+				printf(" \\ __ ... nudle id[%i] END\n", cnnNudles[ ni ].id );
 			}
 
 		}
 	}
 
 }
+
 #ifdef CPPTEST
 int main( int argc, char *argv[] ){
 	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
@@ -188,9 +191,11 @@ int main( int argc, char *argv[] ){
 	printf("c cmachine2 -- 2 CPPTEST ... DONE\n");
 	for( int n=0; true; n++ ){
 		if( cnnAtStarts[ n ].id == -1 ) break;
-		printf("\n --- nudle id[%i] ", cnnAtStarts[ n ].id );
 		if( cnnAtStarts[ n ].onStart ){ 
+			printf("\n ### AUTOSTART ... START\n |\n");
+			cmiNodeName("CN_ATSTART", cnnAtStarts[ n ].id, cnnAtStarts[ n ].name );
 			cm_doClick( 0, cnnAtStarts[ n ].msgId, CNNATSTART, cnnAtStarts[ n ].id );
+			printf(" | \n \\ ___ ### AUTOSTART ... END\n");
 
 		}
 		printf("\n");
