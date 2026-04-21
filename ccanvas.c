@@ -23,6 +23,11 @@
 #include "ccNode.h"
 #include "ccanvas.h"
 struct ccNode ccNs[10];
+
+#else
+
+//#include "config.h"
+
 #endif
 
 
@@ -172,13 +177,27 @@ void dogsStop(){
 #endif
 
 
+int ccInit_FB_byPointer( char **pts, int dcol, int drow ){
+	ccFBc = (dcol)*drow;
+	*pts = malloc( (ccFBc+1) * sizeof( char ) );
+	if( *pts == NULL ) 
+		printf("EE ccInit error size %i x %i\n", dcol, drow);
+
+//	for( int c=0; c<ccFBc; c++)
+//		pts[ c ] = 'x';
+//	pts[ ccFBc ] = 0;
+//
+	if( asBar == false )
+		printf("#* .. ccFB size [ %i ] for [ %i x %i ] terminal \n", ccFBc, dcol, drow );
+
+
+}
 
 int ccInit_FB(){
-	ccFBc = (col)*row;
-	ccFB = malloc( ccFBc * sizeof( char ) );
-	if( asBar == false )
-		printf("#* .. ccFB size [ %i ] for [ %i x %i ] terminal size\n", ccFBc, col, row );
+	ccInit_FB_byPointer( &ccFB, col, row );
 }
+
+
 
 int ccFree_FB(){
 	free( ccFB );
@@ -189,7 +208,9 @@ int ccFree_FB(){
 char *cc_getPx( int x, int y ){
 	return &ccFB[ y*col + x ];
 }
-
+char *cc_getPx_byPointer( char **pts, int x, int y){
+	return pts[ y*col + x ];
+}
 #ifdef CCANVASTEST
 int ccInit(){
 
@@ -249,6 +270,23 @@ int cc_clear( char cBlank ){
 		}
 	}
 	ccFB[ ccFBc-1 ] = 0;
+	return 0;
+}
+int cc_clear_byPointer( char **pts, char chf, int drow, int dcol ){
+	char *tmpc;
+	int cSize = drow*dcol;
+	printf( "cc_clear by pointer cSize:[%i] as strlen(%i)\n", cSize, strlen( *pts ) );
+	for( int y=0; y<drow; y++ ){
+		for(int x=0; x<=dcol; x++){
+			tmpc = cc_getPx_byPointer( pts, x, y );			
+			if( x == (dcol-1) && drow > 0)
+				*tmpc='\n';
+			else
+				*tmpc = chf;
+
+		}
+	}
+	ccFB[ (dcol)*drow - 1 ] = 0;
 	return 0;
 }
 // 
