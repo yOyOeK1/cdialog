@@ -138,9 +138,9 @@ struct cnn_Printf{
 	int msgId;
 };
 struct cnn_Printf cnnPrintfs[] = {
-	{1,	"cc print id1",	"%s<OK", true, -1 },
-	{2,	"cc print id2",	"%s<OK(2)", false, -1 },
-	{3,	"cc print id3",	"%s<OK(3)", false, -1 },
+	{1,	"cc print id1",	"Printfs test1 : %s<OK", true, -1 },
+	{2,	"cc print id2",	"Printfs test2 :%s<OK(2)", false, -1 },
+	{3,	"cc print id3",	"Printfs test3 :%s<OK(3)", false, -1 },
 	{-1}
 };
 // cnnAdd
@@ -157,6 +157,20 @@ struct cnn_Add cnnAdds[] = {
 	{2,	"cc add test 3.2",	3.2, -1 },
 	{-1}
 };
+// cnnDiv
+// id 4
+#define CNNDIV 4
+struct cnn_Div{
+	int id;
+	char name[512];
+	float divBy;
+	int msgId;
+};
+struct cnn_Div cnnDivs[] = {
+	{1,	"cc div test 1.5",	1.5, -1 },
+	{2,	"cc div test 4.0",	4.0, -1 },
+	{-1}
+};
 // cnnNudle
 struct cnn_Nudle{
 	int id;
@@ -170,7 +184,8 @@ struct cnn_Nudle cnnNudles[] = {
 	{2,	CNNATSTART,	2,	CNNADD,		1	},
 	{3,	CNNADD,		1,	CNNPRINTF,	2	},
 	{4,	CNNPRINTF,	2,	CNNADD,		2	},
-	{5,	CNNADD,		2,	CNNPRINTF,	3	},
+	{5,	CNNADD,		2,	CNNDIV,		1	},
+	{5,	CNNDIV,		1,	CNNPRINTF,	3	},
 	{-1}	
 };
 
