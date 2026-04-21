@@ -30,5 +30,5 @@ else
 	exit 1
 fi
 
-./"$bTarget" $*
+time ./"$bTarget" $*
 
