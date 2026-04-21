@@ -14,8 +14,23 @@
 #include <time.h>
 #include <ncurses.h>
 
+#ifdef CMQTTHTEST
+
 #include "config.h"
 
+#else
+
+extern char *machineName;
+
+extern char *mqttHost;
+extern int mqttPort;
+extern char *mqttClientId;
+extern char *mqTopicPrefix;
+
+//extern struct mqSub mqSubs[];
+
+
+#endif
 
 
 
@@ -35,6 +50,16 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
         //mosquitto_subscribe(mosq, NULL, "#", 0);
         //mosquitto_subscribe(mosq, NULL, "dell/#", 0);
         //mosquitto_subscribe(mosq, NULL, "hu/#", 0);
+#ifdef MQTT_FROM_MQNODES
+	for( int q=0; true; q++ ){
+		if( mqNodes[ q + 1 ].parentId == -1 ) break;
+		printf("mqNode q:[%i]\n\t[ %s ] @ [ %s ]\n", q, mqNodes[ q ].title, mqNodes[ q ].topic );
+		mosquitto_subscribe( mosq, NULL, mqNodes[ q ].topic, 0 );
+
+	}
+#endif 
+
+#ifdef MQTT_FROM_SUBS
 	for( mqSubsCount=0; true; mqSubsCount++ ){
 		if( mqSubs[ mqSubsCount ] == 0 ){
 			mqSubsCount--;
@@ -44,6 +69,7 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
 			mosquitto_subscribe( mosq, NULL, mqSubs[ mqSubsCount ], 0 );
 		}
 	}
+#endif
         printf("mqtth ... subscribed\n");
 	mqHandler = mosq;
 	mqConnection = true;
