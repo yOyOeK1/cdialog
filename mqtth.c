@@ -140,13 +140,13 @@ void mqttInit( ){
 	mosquitto_connect( mqMosqi, mqttHost, mqttPort, 60 );
 
 }
-void mqttInit2(){
+void mqttInit2( void *pts_on_message ){
 	mosquitto_lib_init();
 	for( int c=0; c<MqHostsCount; c++ ){
 		printf("* mqtt init 2 [%s]\n\t%s:%i\n", MqHosts[ c ].name,  MqHosts[ c ].host, MqHosts[ c ].port );
 		MqHosts[ c ].mqMosqi = mosquitto_new( NULL, true, NULL);
 		mosquitto_connect_callback_set( MqHosts[ c ].mqMosqi, on_connect );
-		mosquitto_message_callback_set( MqHosts[ c ].mqMosqi, on_message );
+		mosquitto_message_callback_set( MqHosts[ c ].mqMosqi, ( void (*)(struct mosquitto *, void *, const struct mosquitto_message *) )pts_on_message );
 		mosquitto_connect( MqHosts[ c ].mqMosqi, MqHosts[ c ].host, MqHosts[ c ].port, 60 );
 	}
 }

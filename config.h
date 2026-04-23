@@ -160,6 +160,7 @@ struct cnn_Printf cnnPrintfs[] = {
 	{1,	"cc print id1",	"Printfs test1 : %s<OK", true, -1 },
 	{2,	"cc print id2",	"Printfs test2 :%s<OK(2)", false, -1 },
 	{3,	"cc print id3",	"Printfs test3 :%s<OK(3)", false, -1 },
+	{4,	"ccp mqttres1",	"Printfs :%s <- payload", true, -1 },
 	{-1}
 };
 // cnnAdd
@@ -198,13 +199,17 @@ struct cnn_Nudle{
 	int targetType;
 	int targetId;
 };
+#ifndef CNNMQTTSUB 
+#define CNNMQTTSUB 5
+#endif
 struct cnn_Nudle cnnNudles[] = {
 	{1,	1,		1,	2,		1	},
 	{2,	CNNATSTART,	2,	CNNADD,		1	},
 	{3,	CNNADD,		1,	CNNPRINTF,	2	},
 	{4,	CNNPRINTF,	2,	CNNADD,		2	},
 	{5,	CNNADD,		2,	CNNDIV,		1	},
-	{5,	CNNDIV,		1,	CNNPRINTF,	3	},
+	{6,	CNNDIV,		1,	CNNPRINTF,	3	},
+	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
 	{-1}	
 };
 
