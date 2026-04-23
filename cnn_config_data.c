@@ -1,8 +1,16 @@
 
+#include "mqNode.h"
 #include "cnn_config_data.h"
 
 MqHost MqHosts[] = {
-	{1,	"at hu"		},
-	{2,	"at local"	}
+	{1,	"at hu",	"192.168.43.1",		10883,		"cDialogTest2",		"and/"	},
+	{2,	"at local",	"localhost",		10883,		"cDialogTest2",		"and/"	}
 };
 int MqHostsCount = 2;
+
+
+cnn_mqttSub cnn_MqttSubs[] = {
+	{1,	1,	"and all",	"and/#"		},
+	{2,	1,	"switch left",	"e01Mux/left"	}
+};
+int cnn_MqttSubsCount = 2;

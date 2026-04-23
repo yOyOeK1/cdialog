@@ -20,6 +20,8 @@
 
 #else
 
+#include "cnn_config_data.h"
+
 extern char *machineName;
 
 extern char *mqttHost;
@@ -58,6 +60,17 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
 
 	}
 #endif 
+
+#ifdef MQTT_FROM_MQNODES2
+	int mqHontId = 1;
+	for( int c=0; c<cnn_MqttSubsCount; c++ ){
+		if( cnn_MqttSubs[ c ].mqHostId == mqHontId ){
+			printf("mqNode2 q:[%i]\n\t[ %s ] @ [ %s ]\n", c, cnn_MqttSubs[ c ].name, cnn_MqttSubs[ c ].topic );
+			mosquitto_subscribe( mosq, NULL, cnn_MqttSubs[ c ].topic, 0 );
+		}
+	}
+#endif
+
 
 #ifdef MQTT_FROM_SUBS
 	for( mqSubsCount=0; true; mqSubsCount++ ){
@@ -126,6 +139,25 @@ void mqttInit( ){
 	mosquitto_message_callback_set( mqMosqi, on_message );
 	mosquitto_connect( mqMosqi, mqttHost, mqttPort, 60 );
 
+}
+void mqttInit2(){
+	mosquitto_lib_init();
+	for( int c=0; c<MqHostsCount; c++ ){
+		printf("* mqtt init 2 [%s]\n\t%s:%i\n", MqHosts[ c ].name,  MqHosts[ c ].host, MqHosts[ c ].port );
+		MqHosts[ c ].mqMosqi = mosquitto_new( NULL, true, NULL);
+		mosquitto_connect_callback_set( MqHosts[ c ].mqMosqi, on_connect );
+		mosquitto_message_callback_set( MqHosts[ c ].mqMosqi, on_message );
+		mosquitto_connect( MqHosts[ c ].mqMosqi, MqHosts[ c ].host, MqHosts[ c ].port, 60 );
+	}
+}
+void mqttDoIt2(){
+	for( int c=0; c<MqHostsCount; c++ ){
+		printf("* mqtt do it ... 2 [%s]\n\t%s:%i\n", MqHosts[ c ].name,  MqHosts[ c ].host, MqHosts[ c ].port );
+
+		//mosquitto_loop_forever( MqHosts[ c ].mqMosqi, -1, 1);
+		mosquitto_loop_start( MqHosts[ c ].mqMosqi );
+		if( c == 0 ) break;
+	}
 }
 
 void mqttDoIt( ){

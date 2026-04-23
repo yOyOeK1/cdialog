@@ -23,6 +23,7 @@ extern int chFill;
 #include "config.h"
 #include "configKeys.h"
 #include "ctermh.h"
+#include "mqtth.h"
 #include "ccanvas.h"
 #include "cargs.h"
 #include "cpostprocess.h"
@@ -255,6 +256,9 @@ int main( int argc, char *argv[] ){
 
 	printf("c cmachine2 -- 3 CPPMACHINE2 ... START mqtt init \n"
 		"\t- mqtt hosts:	[ %i ]\n", MqHostsCount );
+	mqttInit2();
+	mqttDoIt2();
+	getchar();
 	//mqttInit();
 	//mqttDoIt();
 	printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");

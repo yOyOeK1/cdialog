@@ -1,4 +1,12 @@
-void mqtt_on_connect( struct mosquitto *mosq, void *obj, int result );
-void mqtt_on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_message *message);
-void mqtt_init();
+
+/* auto header for [ ./mqtth.c ] */
+
+void mqttInit( );
+void mqttInit2();
+void mqttDoIt2();
+void mqttDoIt( );
+void mqttDestroy( );
+void mqtt_publish( char *topic, char *msg );
+void *myThread( void *vargp );
+
 
