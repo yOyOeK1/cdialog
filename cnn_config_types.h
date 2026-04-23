@@ -11,6 +11,48 @@ typedef struct{
 	long tEnd;
 } cnn_Msg;
 
+#define CNNATSTART 1
+typedef struct{
+	int id;
+	bool onStart;
+	char name[512];
+	int msgId;
+} cnn_atStart;
+
+#define CNNPRINTF 2
+typedef struct{
+	int id;
+	char name[512];
+	char printAs[512];
+	bool doTopic;
+	int msgId;
+} cnn_Printf;
+
+#define CNNADD 3
+typedef struct{
+	int id;
+	char name[512];
+	float add;
+	int msgId;
+} cnn_Add;
+
+#define CNNDIV 4
+typedef struct{
+	int id;
+	char name[512];
+	float divBy;
+	int msgId;
+} cnn_Div;
+
+#define CNNMQTTSUB 5
+typedef struct {
+	int id;
+	int mqHostId;
+	char name[512];
+	char topic[512];
+	int entryDate;
+} cnn_mqttSub;
+
 
 #include <mosquitto.h>
 typedef struct {
@@ -26,12 +68,13 @@ typedef struct {
 
 } MqHost;
 
-typedef struct {
+
+typedef struct{
 	int id;
-	int mqHostId;
-	char name[512];
-	char topic[512];
-	int entryDate;
-} cnn_mqttSub;
+	int srcType;
+	int srcId;
+	int targetType;
+	int targetId;
+} cnn_Nudle;
 
 #endif
