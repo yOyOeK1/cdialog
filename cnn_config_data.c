@@ -11,6 +11,7 @@ int MqHostsCount = 2;
 
 cnn_mqttSub cnn_MqttSubs[] = {
 	{1,	1,	"and all",	"and/#"		},
-	{2,	1,	"switch left",	"e01Mux/left"	}
+	{2,	1,	"switch left",	"e01Mux/left"	},
+	{3,	1,	"all",	"e01Mux/#"	}
 };
-int cnn_MqttSubsCount = 2;
+int cnn_MqttSubsCount = 3;
