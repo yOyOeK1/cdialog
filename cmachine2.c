@@ -18,6 +18,8 @@ extern int chFill;
 
 #else
 
+#include "cnn_config_data.h"
+
 #include "config.h"
 #include "configKeys.h"
 #include "ctermh.h"
@@ -251,7 +253,8 @@ int main( int argc, char *argv[] ){
 	printf("c cmachine2 -- 2 CPPMACHINE2 ... END  .. NUDLE SECTION\n");
 
 
-	printf("c cmachine2 -- 3 CPPMACHINE2 ... START mqtt init \n");
+	printf("c cmachine2 -- 3 CPPMACHINE2 ... START mqtt init \n"
+		"\t- mqtt hosts:	[ %i ]\n", MqHostsCount );
 	//mqttInit();
 	//mqttDoIt();
 	printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");
