@@ -231,6 +231,38 @@ void cmInit(){
 
 }
 
+void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_message *message ){
+
+	int sIndex = -1;
+	for( int s=0; s<cnn_MqttSubsCount; s++ ){
+		if( strcmp( cnn_MqttSubs[ s ].topic, message->topic ) == 0 ){
+			sIndex = s;
+		
+			printf("cmachine2 mqtt msg ... index[%i] obj [%i] topic: [%s]\n", sIndex, message->mid, message->topic ); 
+
+			for( int n=0; true; n++ ){
+				if( cnnNudles[ n ].id == -1 ) break;
+
+				if( cnnNudles[ n ].srcType == CNNMQTTSUB &&
+					cnnNudles[ n ].srcId == cnn_MqttSubs[ s ].id ){
+					printf("mqtt got nudle .... n[%i] type[%i] id[%i]\n", n, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId );
+					strcpy( cnMs[0].payload, message->payload );
+					//cm_doClick( 0, 1, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId );
+					cm_doClick( 0, 1, cnnNudles[ n ].srcType, cnnNudles[ n ].srcId );
+
+				}
+
+
+			}
+		} 
+	}
+	if( sIndex == -1 ){
+		printf("cmachine2 mqtt msg ... topic: [%s]\n", message->topic ); 
+	}
+
+
+}	
+
 #ifdef CPPMACHINE
 int main( int argc, char *argv[] ){
 	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
@@ -256,7 +288,7 @@ int main( int argc, char *argv[] ){
 
 	printf("c cmachine2 -- 3 CPPMACHINE2 ... START mqtt init \n"
 		"\t- mqtt hosts:	[ %i ]\n", MqHostsCount );
-	mqttInit2();
+	mqttInit2( &cnn_mqtt_on_message );
 	mqttDoIt2();
 	getchar();
 	//mqttInit();

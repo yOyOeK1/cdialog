@@ -2,7 +2,7 @@
 /* auto header for [ ./mqtth.c ] */
 
 void mqttInit( );
-void mqttInit2();
+void mqttInit2( void *pts_on_message );
 void mqttDoIt2();
 void mqttDoIt( );
 void mqttDestroy( );
