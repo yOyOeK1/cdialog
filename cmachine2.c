@@ -77,7 +77,7 @@ void cm_div( int id, int msgId ){
 			//printf("CM_divs id:%i, \n", id);
 			cmiNodeName( "CM_DIVS", id, cnnDivs[ i ].name );
 			if( msgId != -1 ){
-				struct cnn_Msg *msg = &cnMs[ cm_getMsgIndexById( msgId ) ];   
+				cnn_Msg *msg = &cnMs[ cm_getMsgIndexById( msgId ) ];   
 				float fin = atof( msg->payload );
 				fin/= cnnDivs[ i ].divBy;
 				printf("[DEB] div %s by %f res [%f]\n",  msg->payload, cnnDivs[ i ].divBy, fin );
@@ -106,7 +106,7 @@ void cm_add( int id, int msgId ){
 			//printf("CM_adds id:%i, \n", id);
 			cmiNodeName( "CM_ADDS", id, cnnAdds[ i ].name );
 			if( msgId != -1 ){
-				struct cnn_Msg *msg = &cnMs[ cm_getMsgIndexById( msgId ) ];   
+				cnn_Msg *msg = &cnMs[ cm_getMsgIndexById( msgId ) ];   
 				float fin = atof( msg->payload );
 				fin+= cnnAdds[ i ].add;
 				printf("[DEB] add %f to %s res [%f]\n", cnnAdds[ i ].add, msg->payload, fin );
@@ -125,7 +125,7 @@ void cm_printf( int id, int msgId ){
 			//printf("CM_PRINTF id:%i, \n", id);
 			cmiNodeName( "CM_PRINTF", id, cnnPrintfs[ i ].name );
 			if( msgId != -1 ){
-				struct cnn_Msg msg = cnMs[ cm_getMsgIndexById( msgId ) ];
+				cnn_Msg msg = cnMs[ cm_getMsgIndexById( msgId ) ];
 				if( cnnPrintfs[ i ].doTopic ){
 					printf("* Topic: ... %s\n", msg.topic );
 				}
@@ -290,6 +290,7 @@ int main( int argc, char *argv[] ){
 		"\t- mqtt hosts:	[ %i ]\n", MqHostsCount );
 	mqttInit2( &cnn_mqtt_on_message );
 	mqttDoIt2();
+	printf("Any key to exit ...\n");
 	getchar();
 	//mqttInit();
 	//mqttDoIt();
