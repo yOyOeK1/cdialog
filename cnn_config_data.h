@@ -4,6 +4,9 @@
 
 #include "cnn_config_types.h"
 
+extern cnn_Msg cnMs[];
+extern int cnMsCount;
+
 extern MqHost MqHosts[];
 extern int MqHostsCount;
 

@@ -96,20 +96,6 @@ struct machNode machNs[] = {
 
 // -- C NODE NUDDLE FLOW START
 //
-
-// cnnMsg
-struct cnn_Msg{
-	int id;
-	char topic[512];
-	char payload[512];
-	long tStart;
-	long tEnd;
-};
-struct cnn_Msg cnMs[] = {
-	{.id=1,		.topic="and/test/iterNo",	.payload="0"		},
-	{.id=2,		.topic="and/test/iterNo2",	.payload="2"		},
-	{-1}
-};
 // cnnCanvas
 struct cnn_Canvas{
 	int id;
