@@ -2,6 +2,8 @@
 #ifndef CNN_TYPES_H
 #define CNN_TYPES_H
 
+#include <stdbool.h>
+
 // cnnMsg
 typedef struct{
 	int id;
