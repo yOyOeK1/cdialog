@@ -28,4 +28,10 @@ extern int cnn_MqttSubsCount;
 extern cnn_Nudle cnnNudles[];
 extern int cnnNudlesCount;
 
+extern cnn_KeyMode cnn_KeyModes[];
+extern int cnn_KeyModesCount;
+
+extern cnn_KeyBind cnn_KeyBinds[];
+extern int cnn_KeyBindsCount;
+
 #endif

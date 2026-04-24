@@ -79,4 +79,17 @@ typedef struct{
 	int targetId;
 } cnn_Nudle;
 
+typedef struct{
+	int id;
+	char name[512]; 
+}cnn_KeyMode;
+
+typedef struct{
+	int parentId;
+	char ch[51];
+	int doWhat; 
+	char parser[512];
+	char args[512];
+}cnn_KeyBind;
+
 #endif
