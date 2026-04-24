@@ -1,7 +1,7 @@
 // Keys Root
 
 // now in ccanvas.c file :(
-//
+// move to cnn_config_.... as cnn_KeyBinds ...
 struct keyBind {
 	int parentId;
 	char ch[51];
