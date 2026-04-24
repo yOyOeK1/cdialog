@@ -264,6 +264,22 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 }	
 
 #ifdef CPPMACHINE
+
+char keyIn[512];
+char keyCh;
+int keyNo;
+bool keyCmdOk;
+char *key_getCurrentMode_name(){
+
+	for( int p=0; true; p++ ){
+		if( cnn_KeyModes[ p ].id == -1 ) break;
+		if( cnn_KeyModes[ p ].id == cnn_KeyModeNow )
+			return cnn_KeyModes[ p ].name;
+	}
+	return "NaN";
+}
+
+
 int main( int argc, char *argv[] ){
 	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
 
@@ -290,8 +306,42 @@ int main( int argc, char *argv[] ){
 		"\t- mqtt hosts:	[ %i ]\n", MqHostsCount );
 	mqttInit2( &cnn_mqtt_on_message );
 	mqttDoIt2();
-	printf("Any key to exit ...\n");
-	getchar();
+
+	keyNo = 0;
+	keyCmdOk = false;
+	while( true ){
+		printf("Any key to exit ...\n");
+		keyCh = getchar();
+	
+
+		if ( keyCh == '\n' ){
+			keyCmdOk = true;
+			keyIn[ keyNo ] = 0;
+		} else {
+			keyIn[ keyNo++ ] = keyCh;
+		}
+
+
+		printf("keys [%s]\n", keyIn );
+
+
+		if( keyCmdOk ){
+			printf("CMD@[%i:%s] [%s] (%i)\n", cnn_KeyModeNow, key_getCurrentMode_name(), keyIn, keyNo );
+			
+			if( keyNo == 1 && keyIn[0] == 'q' ){
+				printf("Exit by q\n");
+				break;
+			}else if( keyNo == 2 && keyIn[0] == 'm' ){
+				sscanf( keyIn, "m%li",  &cnn_KeyModeNow );
+				printf("Mode switch ...\n");
+			}  	
+
+			keyCmdOk = false;
+			keyNo = 0;
+
+		}
+	}
+	
 	//mqttInit();
 	//mqttDoIt();
 	printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");
