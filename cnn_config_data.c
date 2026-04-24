@@ -62,6 +62,8 @@ cnn_Nudle cnnNudles[] = {
 	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
 	{-1}	
 };
+
+int cnn_KeyModeNow = 0;
 cnn_KeyMode cnn_KeyModes[] = {
 	{0,	"root"		},
 	{1,	"main"		},
@@ -70,6 +72,7 @@ cnn_KeyMode cnn_KeyModes[] = {
 	{4,	"main4"		},
 	{-1}
 };
+
 cnn_KeyBind cnn_KeyBinds[] = {
 	/*	key,	cmdh,			*/	
 	{ 0, 	"?",	0,		"help\n%s",		"cat ./configKeys.h | grep -e \"^\t{ 0,\"" },
