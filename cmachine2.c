@@ -238,15 +238,16 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 		if( strcmp( cnn_MqttSubs[ s ].topic, message->topic ) == 0 ){
 			sIndex = s;
 		
-			printf("cmachine2 mqtt msg ... index[%i] obj [%i] topic: [%s]\n", sIndex, message->mid, message->topic ); 
+			printf(" * cmachine2 mqtt msg ... index[%i] obj [%i]\n * _ topic: [%s] %s\n", sIndex, message->mid, message->topic, message->payload ); 
 
 			for( int n=0; true; n++ ){
 				if( cnnNudles[ n ].id == -1 ) break;
 
 				if( cnnNudles[ n ].srcType == CNNMQTTSUB &&
 					cnnNudles[ n ].srcId == cnn_MqttSubs[ s ].id ){
-					printf("mqtt got nudle .... n[%i] type[%i] id[%i] msgId[%i]\n", n, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId, cnn_MqttSubs[ s ].msgId );
+					printf(" */ mqtt got nudle .... n[%i] type[%i] id[%i] msgId[%i]\n", n, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId, cnn_MqttSubs[ s ].msgId );
 					int msgIndex = cm_getMsgIndexById( cnn_MqttSubs[ s ].msgId  );
+					strcpy( cnMs[ msgIndex  ].topic, message->topic );
 					strcpy( cnMs[ msgIndex  ].payload, message->payload );
 					//cm_doClick( 0, 1, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId );
 					cmiNodeName("CNNMQTTSUB", cnn_MqttSubs[ s ].id, cnn_MqttSubs[ s ].name );
@@ -256,10 +257,11 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 
 
 			}
+			printf(" | \n \\ ___ ### CNNMQTTSUB ... END\n");
 		} 
 	}
 	if( sIndex == -1 ){
-		printf("cmachine2 mqtt msg ... topic: [%s]\n", message->topic ); 
+		printf(" * cmachine2 mqtt msg ... topic: [%s]\n *\t[ %s ]\n", message->topic, message->payload ); 
 	}
 
 
