@@ -154,7 +154,7 @@ void cm_doClick( int level, int msgId, int srcType, int srcId ){
 		if( cnnNudles[ ni ].srcType == srcType &&
 			cnnNudles[ ni ].srcId == srcId ){
 
-			printf("\n |\n |--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
+			printf(" |\n |--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
 			if( cnnNudles[ ni ].targetType == CNNPRINTF ){
 				cm_printf( cnnNudles[ ni ].targetId, msgId );
 				doClick = true;
@@ -249,6 +249,7 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 					int msgIndex = cm_getMsgIndexById( cnn_MqttSubs[ s ].msgId  );
 					strcpy( cnMs[ msgIndex  ].payload, message->payload );
 					//cm_doClick( 0, 1, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId );
+					cmiNodeName("CNNMQTTSUB", cnn_MqttSubs[ s ].id, cnn_MqttSubs[ s ].name );
 					cm_doClick( 0, cnn_MqttSubs[ s ].msgId, cnnNudles[ n ].srcType, cnnNudles[ n ].srcId );
 
 				}
