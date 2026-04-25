@@ -5,6 +5,8 @@
 cnn_Msg cnMs[] = {
 	{.id=1,		.topic="and/test/iterNo",	.payload="0"		},
 	{.id=2,		.topic="and/test/iterNo2",	.payload="2"		},
+	{.id=3,		.topic="e01Mux/left org",	.payload="1234567890"	},
+	{.id=4,		.topic="e01Mux/humidity org",	.payload="1234567890"	},
 	{-1}
 };
 
@@ -15,6 +17,7 @@ cnn_atStart cnnAtStarts[] = {
 	{-1}
 };
 
+// ... mqtt connection ... START 
 MqHost MqHosts[] = {
 	{1,	"at hu",	"192.168.43.1",		10883,		"cDialogTest2",		"and/"	},
 	{2,	"at local",	"localhost",		10883,		"cDialogTest2",		"and/"	}
@@ -25,16 +28,19 @@ int MqHostsCount = 2;
 #define CNNMQTTSUB 5
 cnn_mqttSub cnn_MqttSubs[] = {
 	{1,	1,	"and all",		"and/#"		},
-	{2,	1,	"switch left",		"e01Mux/left"	},
-	{3,	1,	"all",			"e01Mux/#"	}
+	{2,	1,	"switch left",		"e01Mux/left",		3	},
+	{3,	1,	"all",			"e01Mux/#"	},
+	{4,	1,	"humidity",		"e01Mux/humidity",	4	},
 };
-int cnn_MqttSubsCount = 3;
+int cnn_MqttSubsCount = 4;
+// ... mqtt connection ... END
 
 cnn_Printf cnnPrintfs[] = {
-	{1,	"cc print id1",	"Printfs test1 : %s<OK", true, -1 },
-	{2,	"cc print id2",	"Printfs test2 :%s<OK(2)", false, -1 },
-	{3,	"cc print id3",	"Printfs test3 :%s<OK(3)", false, -1 },
-	{4,	"ccp mqttres1",	"Printfs :%s <- payload", true, -1 },
+	{1,	"cc print id1",		"Printfs test1 : %s<OK", 	true, -1 },
+	{2,	"cc print id2",		"Printfs test2 :%s<OK(2)", 	false, -1 },
+	{3,	"cc print id3",		"Printfs test3 :%s<OK(3)", 	false, -1 },
+	{4,	"ccp mqttres1",		"Printfs :%s <- payload\n", 	true, -1 },
+	{5,	"cprin_humidity",	"%s %% :)\n", 			true, -1 },
 	{-1}
 };
 // cnnAdd
@@ -60,6 +66,7 @@ cnn_Nudle cnnNudles[] = {
 	{5,	CNNADD,		2,	CNNDIV,		1	},
 	{6,	CNNDIV,		1,	CNNPRINTF,	3	},
 	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
+	{8,	CNNMQTTSUB,	4,	CNNPRINTF,	5	},
 	{-1}	
 };
 

@@ -65,7 +65,7 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
 	int mqHontId = 1;
 	for( int c=0; c<cnn_MqttSubsCount; c++ ){
 		if( cnn_MqttSubs[ c ].mqHostId == mqHontId ){
-			printf("mqNode2 q:[%i]\n\t[ %s ] @ [ %s ]\n", c, cnn_MqttSubs[ c ].name, cnn_MqttSubs[ c ].topic );
+			printf("mqNode2 ... cnn_MqttSubs ... c:[%i]\n - id[%i] [ %s ] @ [ %s ]\n", c, cnn_MqttSubs[ c ].id, cnn_MqttSubs[ c ].name, cnn_MqttSubs[ c ].topic );
 			mosquitto_subscribe( mosq, NULL, cnn_MqttSubs[ c ].topic, 0 );
 		}
 	}

@@ -245,10 +245,11 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 
 				if( cnnNudles[ n ].srcType == CNNMQTTSUB &&
 					cnnNudles[ n ].srcId == cnn_MqttSubs[ s ].id ){
-					printf("mqtt got nudle .... n[%i] type[%i] id[%i]\n", n, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId );
-					strcpy( cnMs[0].payload, message->payload );
+					printf("mqtt got nudle .... n[%i] type[%i] id[%i] msgId[%i]\n", n, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId, cnn_MqttSubs[ s ].msgId );
+					int msgIndex = cm_getMsgIndexById( cnn_MqttSubs[ s ].msgId  );
+					strcpy( cnMs[ msgIndex  ].payload, message->payload );
 					//cm_doClick( 0, 1, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId );
-					cm_doClick( 0, 1, cnnNudles[ n ].srcType, cnnNudles[ n ].srcId );
+					cm_doClick( 0, cnn_MqttSubs[ s ].msgId, cnnNudles[ n ].srcType, cnnNudles[ n ].srcId );
 
 				}
 
