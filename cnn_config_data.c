@@ -9,7 +9,7 @@ cnn_Msg cnMs[] = {
 	{.id=1,		.topic="and/test/iterNo",	.payload="0"		},
 	{.id=2,		.topic="and/test/iterNo2",	.payload="2"		},
 	{.id=3,		.topic="e01Mux/left org",	.payload="1234567890"	},
-	{.id=4,		.topic="e01Mux/humidity org",	.payload="1234567890"	},
+	{.id=4,		.topic="e01Mux/humidity org"},
 	{-1}
 };
 
