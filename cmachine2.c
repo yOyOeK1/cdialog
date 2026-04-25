@@ -6,7 +6,7 @@
 #include <mosquitto.h>
 
 
-#define CMACHINEVER "2026.0421"
+#define CMACHINEVER "2026.0425"
 
 extern int col;
 extern int row;
@@ -349,7 +349,8 @@ int main( int argc, char *argv[] ){
 
 
 	printf("c cmachine2 CPPMACHINE2 ... DONE\n");
-	printf("cmachine2 ver[%s]\n", CMACHINEVER );
+	printf("cnn_Version	[%s]\n", cnn_Version );
+	printf("cmachine2 ver	[%s]\n", CMACHINEVER );
 	return 0;
 }
 #endif

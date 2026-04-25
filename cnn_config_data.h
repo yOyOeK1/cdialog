@@ -4,6 +4,8 @@
 
 #include "cnn_config_types.h"
 
+extern char *cnn_Version;
+
 extern cnn_Msg cnMs[];
 extern int cnMsCount;
 

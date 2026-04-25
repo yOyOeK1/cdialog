@@ -2,6 +2,9 @@
 #include "mqNode.h"
 #include "cnn_config_data.h"
 
+char *cnn_Version = "260425_tt10";
+
+
 cnn_Msg cnMs[] = {
 	{.id=1,		.topic="and/test/iterNo",	.payload="0"		},
 	{.id=2,		.topic="and/test/iterNo2",	.payload="2"		},
