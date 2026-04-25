@@ -52,6 +52,7 @@ typedef struct {
 	int mqHostId;
 	char name[512];
 	char topic[512];
+	int msgId;
 	int entryDate;
 } cnn_mqttSub;
 
