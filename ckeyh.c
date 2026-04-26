@@ -9,11 +9,16 @@
 
 #include "cnn_config_data.h"
 
+extern int col;
+extern int row;
+extern bool asBar;
+extern int chFill;
 
 char keyIn[512];
 char keyCh;
 int keyNo;
 bool keyCmdOk;
+//char keyLine[512] = "-";
 
 char *key_getCurrentMode_name(){
 
@@ -24,6 +29,37 @@ char *key_getCurrentMode_name(){
 	}
 	return "NaN";
 }
+
+bool key_chk_KeyBinds(  ){
+	for( int kBin=0; true; kBin++ ){
+		if( cnn_KeyBinds[kBin].id == -1 ) break;
+
+		if( asBar == false ) 
+			printf( "kBin cmp [%s] = [%s]\n", cnn_KeyBinds[kBin].ch, keyIn );
+
+		if( cnn_KeyBinds[kBin].parentId == cnn_KeyModeNow && 
+			strcmp( keyIn, cnn_KeyBinds[kBin].ch ) == 0 ){
+			printf("OK\n");
+
+			/*if( cnn_KeyBinds[kBin].doWhat == 0 ){ // cmd
+				snprintf( tmsg, 512, cnn_KeyBinds[kBin].parser, cmd_to_chars( cnn_KeyBinds[kBin].args  ) );
+				cc_printf( 2, 3 , tmsg );
+
+
+			} else */if( cnn_KeyBinds[kBin].doWhat == 1 ){ // mqtt push / publish
+				// TODO mqtt publish
+
+			} else {
+				printf("EE NOT IMPlemented yet doWhat [%i]\n", cnn_KeyBinds[kBin].doWhat);	
+			}
+			break;
+		}
+	}
+	return false;
+}
+
+
+
 
 int keyBindDoIt(){
 	keyNo = 0;
@@ -45,7 +81,11 @@ int keyBindDoIt(){
 			if( keyNo == 1 && keyIn[0] == 'q' ){
 				printf("Exit by q\n");
 				break;
-			}else if( keyNo == 2 && keyIn[0] == 'm' ){
+
+			} else if( key_chk_KeyBinds() == true ) {
+				printf("---- KEYBINDS .... END\n");
+			
+			} else if( keyNo == 2 && keyIn[0] == 'm' ){
 				sscanf( keyIn, "m%li",  &cnn_KeyModeNow );
 				printf("Mode switch ...[%i:%s]\n", cnn_KeyModeNow, key_getCurrentMode_name() );
 			}  	
