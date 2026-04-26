@@ -31,15 +31,18 @@ char *key_getCurrentMode_name(){
 }
 
 bool key_chk_KeyBinds(  ){
+	if( asBar == false ) 
+		printf( " k ... keyBin " );
+
 	for( int kBin=0; true; kBin++ ){
 		if( cnn_KeyBinds[kBin].id == -1 ) break;
 
 		if( asBar == false ) 
-			printf( "kBin cmp [%s] = [%s]\n", cnn_KeyBinds[kBin].ch, keyIn );
+			printf( " [%s] ", cnn_KeyBinds[kBin].ch );
 
 		if( cnn_KeyBinds[kBin].parentId == cnn_KeyModeNow && 
 			strcmp( keyIn, cnn_KeyBinds[kBin].ch ) == 0 ){
-			printf("OK\n");
+			printf("\n k OK keyBind id[%i]\n k ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
 
 			/*if( cnn_KeyBinds[kBin].doWhat == 0 ){ // cmd
 				snprintf( tmsg, 512, cnn_KeyBinds[kBin].parser, cmd_to_chars( cnn_KeyBinds[kBin].args  ) );
@@ -55,6 +58,7 @@ bool key_chk_KeyBinds(  ){
 			break;
 		}
 	}
+	printf("\n");
 	return false;
 }
 
@@ -64,13 +68,14 @@ bool key_chk_KeyBinds(  ){
 int keyBindDoIt(){
 	keyNo = 0;
 	keyCmdOk = false;
+	printf("[q] key to exit ...\n");
 	while( true ){
-		printf("[q] key to exit ...\n");
 		keyCh = getchar();
 
 		if ( keyCh == '\n' ){
 			keyCmdOk = true;
 			keyIn[ keyNo ] = 0;
+			printf("[q] key to exit ...\n");
 		} else {
 			keyIn[ keyNo++ ] = keyCh;
 		}
