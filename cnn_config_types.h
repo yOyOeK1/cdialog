@@ -71,6 +71,14 @@ typedef struct {
 
 } MqHost;
 
+#define CNNCMD 6
+typedef struct {
+	int id;
+	char name[512];
+	char cmd[512];
+
+} cnn_Cmd;
+
 
 typedef struct{
 	int id;
@@ -88,6 +96,7 @@ typedef struct{
 #define CNKEY_CMD 0
 #define CNKEY_MQTTPUSH 1
 #define CNKEY_NUDLE 2
+#define CNNKEYBIND 7
 typedef struct{
 	int id;
 	int parentId;
@@ -95,6 +104,7 @@ typedef struct{
 	int workType; 
 	char parser[512];
 	char args[512];
+	int msgId;
 }cnn_KeyBind;
 
 #endif

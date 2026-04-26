@@ -9,6 +9,8 @@
 
 #include "cnn_config_data.h"
 
+#include "cmachine2.h"
+
 extern int col;
 extern int row;
 extern bool asBar;
@@ -30,7 +32,7 @@ char *key_getCurrentMode_name(){
 	return "NaN";
 }
 
-bool key_chk_KeyBinds(  ){
+int key_chk_KeyBinds(  ){
 	if( asBar == false ) 
 		printf( " * keyBin parentId[%i] ", cnn_KeyModeNow );
 
@@ -40,7 +42,12 @@ bool key_chk_KeyBinds(  ){
 			if( asBar == false ) 
 				printf( "[%s] ", cnn_KeyBinds[kBin].keys );
 			if( strcmp( keyIn, cnn_KeyBinds[kBin].keys ) == 0 ){
-				printf("\n * OK keyBind id[%i]\n ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
+				cmiNodeName("CNNKEYBIND", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].keys );
+				printf(" | OK keyBind id[%i]\n | ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
+
+				//cm_doClick( 0, 0/*cnn_KeyBinds[kBin].msgId*/, CNNKEYBIND, cnn_KeyBinds[kBin].id );
+				cm_doClick( 0, cnn_KeyBinds[kBin].msgId, CNNKEYBIND, cnn_KeyBinds[kBin].id );
+
 
 				/*if( cnn_KeyBinds[kBin].doWhat == 0 ){ // cmd
 					snprintf( tmsg, 512, cnn_KeyBinds[kBin].parser, cmd_to_chars( cnn_KeyBinds[kBin].args  ) );
@@ -58,15 +65,37 @@ bool key_chk_KeyBinds(  ){
 		}
 	}
 	printf("\n");
-	return false;
+	return -1;
 }
 
+void cnn_keyBind_on_OK( int kbId ){
+	//
+	//for( int n=0; true; n++ ){
+	//	if( cnnNudles[ n ].id == -1 ) break;
+        //
+	//	if( cnnNudles[ n ].srcType == CNNKEYBIND &&
+	//		cnnNudles[ n ].srcId == cnn_KeyBinds[ s ].id ){
+	//		printf(" */ cmd got nudle .... n[%i] type[%i] id[%i] msgId[%i]\n", n, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId, cnnCmds[ s ].msgId );
+	//		int msgIndex = cm_getMsgIndexById( cnnCmds[ s ].msgId  );
+	//		strcpy( cnMs[ msgIndex  ].topic, message->topic );
+	//		strcpy( cnMs[ msgIndex  ].payload, message->payload );
+	//		//cm_doClick( 0, 1, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId );
+	//		cmiNodeName("CNNCMD", cnnCmds[ s ].id, cnnCmds[ s ].name ); 
+	//		cm_doClick( 0, cnnCmds[ s ].msgId, cnnNudles[ n ].srcType, cnnNudles[ n ].srcId );
+        //
+	//	}
+        //
+        //
+	//}
+	printf(" | \n \\ ___ ### CNNCMD ... END\n");
+}
 
-
+int keyBindIdLast;
 
 int keyBindDoIt(){
 	keyNo = 0;
 	keyCmdOk = false;
+	keyBindIdLast = -1;
 	printf("[q] key to exit ...\n");
 	while( true ){
 		keyCh = getchar();
@@ -82,11 +111,12 @@ int keyBindDoIt(){
 		if( keyCmdOk ){
 			printf("CMD@[%i:%s] [%s] (%i)\n", cnn_KeyModeNow, key_getCurrentMode_name(), keyIn, keyNo );
 			
+			keyBindIdLast = key_chk_KeyBinds();
 			if( keyNo == 1 && keyIn[0] == 'q' ){
 				printf("Exit by q\n");
 				break;
 
-			} else if( key_chk_KeyBinds() == true ) {
+			} else if( keyBindIdLast != -1 ) {
 				printf("---- KEYBINDS .... END\n");
 			
 			} else if( keyNo == 2 && keyIn[0] == 'm' ){
@@ -96,10 +126,11 @@ int keyBindDoIt(){
 
 			keyCmdOk = false;
 			keyNo = 0;
+			keyBindIdLast = -1;
 
 		}
 	}
 
-return 1;
+	return -1;
 }
 

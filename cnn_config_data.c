@@ -10,6 +10,7 @@ cnn_Msg cnMs[] = {
 	{.id=2,		.topic="and/test/iterNo2",	.payload="2"		},
 	{.id=3,		.topic="e01Mux/left org",	.payload="1234567890"	},
 	{.id=4,		.topic="e01Mux/humidity org"},
+	{.id=5,		.topic="and/as/key/bind/test",	.payload="In as payload from key bind test." },
 	{-1}
 };
 
@@ -60,6 +61,16 @@ cnn_Div cnnDivs[] = {
 	{2,	"cc div test 4.0",	4.0, -1 },
 	{-1}
 };
+// cnn_MqttSub
+// id 5
+//
+// cnnCmd
+// id 6
+cnn_Cmd cnnCmds[] = {
+	{ 1,	"echo test",		"echo 'Hello from cnnCmds[0] :)'"	},
+	{ -1 }
+};
+int cnnCmdsCount = 1;
 
 cnn_Nudle cnnNudles[] = {
 	{1,	1,		1,	2,		1	},
@@ -70,6 +81,8 @@ cnn_Nudle cnnNudles[] = {
 	{6,	CNNDIV,		1,	CNNPRINTF,	3	},
 	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
 	{8,	CNNMQTTSUB,	4,	CNNPRINTF,	5	},
+	//{9,	CNNKEYBIND,	8,	CNNCMD,		1	},
+	{9,	CNNKEYBIND,	8,	CNNPRINTF,	5	},
 	{-1}	
 };
 
@@ -92,7 +105,7 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	{ 5,	 0,	       "o",	0,		"cpu's online:\n%s",	"cd /sys/devices/system/cpu && grep '1' ./cpu*/online" },
 	{ 6,	 0,	       "\"",	0,		"brightnes +",		"sudo ~/.viteyss/oven/oMachine/brightness.sh +" },
 	{ 7,	 0,	       ":",	0,		"brightnes -",		"sudo ~/.viteyss/oven/oMachine/brightness.sh -" },
-	{ 8,	 0,	       "u",	0,		"uptime:\n%s",		"uptime | awk '{print $1}'" },
+	{ 8,	 0,	       "u",	0,		"uptime:\n%s",		"uptime | awk '{print $1}'",	5  },
 	{ 9,	 0,	       "f",	0,		"%s",			"free -h" },
 	
 	{ 10,	 0,	       "hh",	0,		"test hh\n\t%s",	"echo HH" },
