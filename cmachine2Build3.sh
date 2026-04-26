@@ -3,7 +3,7 @@
 #
 
 bTarget="cmachine2.test.bin"
-bSrc="cnn_config_data.c cmdh.c ctermh.c ccanvas.c cargs.c cpostprocess.c mqtth.c cmachine2.c"
+bSrc="cnn_config_data.c ckeyh.c cmdh.c ctermh.c ccanvas.c cargs.c cpostprocess.c mqtth.c cmachine2.c"
 inc=""
 libsDir=""
 libs="-lm"
