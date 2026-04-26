@@ -86,6 +86,7 @@ typedef struct{
 }cnn_KeyMode;
 
 typedef struct{
+	int id;
 	int parentId;
 	char ch[51];
 	int doWhat; 
