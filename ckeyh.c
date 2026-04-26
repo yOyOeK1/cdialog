@@ -32,17 +32,17 @@ char *key_getCurrentMode_name(){
 
 bool key_chk_KeyBinds(  ){
 	if( asBar == false ) 
-		printf( " k ... keyBin " );
+		printf( " * keyBin " );
 
 	for( int kBin=0; true; kBin++ ){
 		if( cnn_KeyBinds[kBin].id == -1 ) break;
 
 		if( asBar == false ) 
-			printf( " [%s] ", cnn_KeyBinds[kBin].ch );
+			printf( "[%s] ", cnn_KeyBinds[kBin].ch );
 
 		if( cnn_KeyBinds[kBin].parentId == cnn_KeyModeNow && 
 			strcmp( keyIn, cnn_KeyBinds[kBin].ch ) == 0 ){
-			printf("\n k OK keyBind id[%i]\n k ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
+			printf("\n * OK keyBind id[%i]\n ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
 
 			/*if( cnn_KeyBinds[kBin].doWhat == 0 ){ // cmd
 				snprintf( tmsg, 512, cnn_KeyBinds[kBin].parser, cmd_to_chars( cnn_KeyBinds[kBin].args  ) );

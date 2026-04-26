@@ -239,7 +239,7 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 		if( strcmp( cnn_MqttSubs[ s ].topic, message->topic ) == 0 ){
 			sIndex = s;
 		
-			printf(" * cmachine2 mqtt msg ... index[%i] obj [%i]\n * _ topic: [%s] %s\n", sIndex, message->mid, message->topic, message->payload ); 
+			printf(" * OK cm2 mqtt msg ... index[%i] obj [%i]\n * _ topic: [%s] %s\n", sIndex, message->mid, message->topic, message->payload ); 
 
 			for( int n=0; true; n++ ){
 				if( cnnNudles[ n ].id == -1 ) break;
@@ -262,7 +262,7 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 		} 
 	}
 	if( sIndex == -1 ){
-		printf(" * cmachine2 mqtt msg ... topic: [%s]\n *\t[ %s ]\n", message->topic, message->payload ); 
+		printf(" * cm2 mqtt msg ... topic: [%s]\n *\t[ %s ]\n", message->topic, message->payload ); 
 	}
 
 
