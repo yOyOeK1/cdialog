@@ -137,6 +137,22 @@ void cm_printf( int id, int msgId ){
 	}	
 }
 
+void cm_cmd( int cmdId, int msgId ){
+	for( int i=0; true; i++ ){
+		if( cnnCmds[ i ].id == -1 ) break;
+		if( cnnCmds[ i ].id == cmdId ){
+			cmiNodeName( "CM_CMD", cmdId, cnnCmds[ i ].name );
+			if( msgId != -1 ){
+				cnn_Msg *msg = &cnMs[ cm_getMsgIndexById( msgId ) ];
+				printf(" | ...... cmd START ---\\ \n");
+				strcpy( msg->payload, cmd_to_chars( cnnCmds[ i ].cmd ) );
+				printf(" | ...... cmd END -----/\n");
+				//printf( cnnPrintfs[ i ].printAs, msg.payload );
+			}
+			break;
+		}
+	}	
+}
 
 void cm_doClick( int level, int msgId, int srcType, int srcId ){
 	if( level == 0 ){
@@ -166,6 +182,10 @@ void cm_doClick( int level, int msgId, int srcType, int srcId ){
 
 			}else if( cnnNudles[ ni ].targetType == CNNADD ){
 				cm_add( cnnNudles[ ni ].targetId, msgId );
+				doClick = true;
+
+			}else if( cnnNudles[ ni ].targetType == CNNCMD ){
+				cm_cmd( cnnNudles[ ni ].targetId, msgId );
 				doClick = true;
 
 			}else{

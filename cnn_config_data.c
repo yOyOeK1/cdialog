@@ -2,7 +2,7 @@
 #include "mqNode.h"
 #include "cnn_config_data.h"
 
-char *cnn_Version = "260425_tt10";
+char *cnn_Version = "260426_tt11";
 
 
 cnn_Msg cnMs[] = {
@@ -81,8 +81,9 @@ cnn_Nudle cnnNudles[] = {
 	{6,	CNNDIV,		1,	CNNPRINTF,	3	},
 	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
 	{8,	CNNMQTTSUB,	4,	CNNPRINTF,	5	},
-	//{9,	CNNKEYBIND,	8,	CNNCMD,		1	},
 	{9,	CNNKEYBIND,	8,	CNNPRINTF,	5	},
+	{10,	CNNKEYBIND,	12,	CNNCMD,		1	},
+	{11,	CNNCMD,		1,	CNNPRINTF,	5	},
 	{-1}	
 };
 
@@ -110,6 +111,7 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	
 	{ 10,	 0,	       "hh",	0,		"test hh\n\t%s",	"echo HH" },
 	{ 11,	 0,	       "mp",	1,		"and/test/perc",	"11.11" },
+	{ 12,	 0,	       "c",	0,		"cmd tint",		"",	5  },
 	
 	{-1}
 };
