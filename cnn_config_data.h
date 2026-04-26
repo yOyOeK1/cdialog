@@ -27,6 +27,9 @@ extern int MqHostsCount;
 extern cnn_mqttSub cnn_MqttSubs[];
 extern int cnn_MqttSubsCount;
 
+extern cnn_Cmd cnnCmds[];
+extern int cnnCmdsCount;
+
 extern cnn_Nudle cnnNudles[];
 extern int cnnNudlesCount;
 
