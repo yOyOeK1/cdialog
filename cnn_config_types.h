@@ -85,11 +85,14 @@ typedef struct{
 	char name[512]; 
 }cnn_KeyMode;
 
+#define CNKEY_CMD 0
+#define CNKEY_MQTTPUSH 1
+#define CNKEY_NUDLE 2
 typedef struct{
 	int id;
 	int parentId;
-	char ch[51];
-	int doWhat; 
+	char keys[51];
+	int workType; 
 	char parser[512];
 	char args[512];
 }cnn_KeyBind;

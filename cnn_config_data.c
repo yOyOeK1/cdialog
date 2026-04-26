@@ -84,7 +84,7 @@ cnn_KeyMode cnn_KeyModes[] = {
 };
 
 cnn_KeyBind cnn_KeyBinds[] = {
-	/*id,	parentId,	key,	cmdh,			*/	
+	/*id,	parentId,	keys,	cmdh,			*/	
 	{ 1,	 0,		"?",	0,		"help\n%s",		"cat ./configKeys.h | grep -e \"^\t{ 0,\"" },
 	{ 2,	 0,		"W",	0,		"ip's:\n%s",		"ip a | grep 'inet ' | awk '{print $2}'" },
 	{ 3,	 0,	       "w",	0,		"%s",			"whoami" },
