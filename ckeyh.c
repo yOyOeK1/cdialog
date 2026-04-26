@@ -32,30 +32,29 @@ char *key_getCurrentMode_name(){
 
 bool key_chk_KeyBinds(  ){
 	if( asBar == false ) 
-		printf( " * keyBin " );
+		printf( " * keyBin parentId[%i] ", cnn_KeyModeNow );
 
 	for( int kBin=0; true; kBin++ ){
 		if( cnn_KeyBinds[kBin].id == -1 ) break;
+		if( cnn_KeyBinds[kBin].parentId == cnn_KeyModeNow ){
+			if( asBar == false ) 
+				printf( "[%s] ", cnn_KeyBinds[kBin].keys );
+			if( strcmp( keyIn, cnn_KeyBinds[kBin].keys ) == 0 ){
+				printf("\n * OK keyBind id[%i]\n ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
 
-		if( asBar == false ) 
-			printf( "[%s] ", cnn_KeyBinds[kBin].ch );
-
-		if( cnn_KeyBinds[kBin].parentId == cnn_KeyModeNow && 
-			strcmp( keyIn, cnn_KeyBinds[kBin].ch ) == 0 ){
-			printf("\n * OK keyBind id[%i]\n ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
-
-			/*if( cnn_KeyBinds[kBin].doWhat == 0 ){ // cmd
-				snprintf( tmsg, 512, cnn_KeyBinds[kBin].parser, cmd_to_chars( cnn_KeyBinds[kBin].args  ) );
-				cc_printf( 2, 3 , tmsg );
+				/*if( cnn_KeyBinds[kBin].doWhat == 0 ){ // cmd
+					snprintf( tmsg, 512, cnn_KeyBinds[kBin].parser, cmd_to_chars( cnn_KeyBinds[kBin].args  ) );
+					cc_printf( 2, 3 , tmsg );
 
 
-			} else */if( cnn_KeyBinds[kBin].doWhat == 1 ){ // mqtt push / publish
-				// TODO mqtt publish
+				} else */if( cnn_KeyBinds[kBin].workType == CNKEY_MQTTPUSH ){ // mqtt push / publish
+					// TODO mqtt publish
 
-			} else {
-				printf("EE NOT IMPlemented yet doWhat [%i]\n", cnn_KeyBinds[kBin].doWhat);	
+				} else {
+					printf("EE NOT IMPlemented yet workType [%i]\n", cnn_KeyBinds[kBin].workType );	
+				}
+				break;
 			}
-			break;
 		}
 	}
 	printf("\n");
