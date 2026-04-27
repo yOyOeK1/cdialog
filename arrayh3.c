@@ -62,6 +62,16 @@ int arh_getIndex( arhArray *apts, int id ){
 	return -1;
 }
 
+void arh_dump( arhArray ar0 ){
+	printf( "arh dump array [%s]\n count[%i] nextId[%i]\n", ar0.name, ar0.count, ar0.nextId );
+
+	for( int p=0; p<ar0.count; p++ ){
+		printf(" - (%i) id[%i] -> [%i]\n", p, ar0.ids[ p ], ar0.items[ p ] );
+
+	}
+	printf("arh dump array ... END\n");
+}
+
 #ifdef CPPARRAYH
 
 arhArray ar0;
@@ -84,6 +94,34 @@ int main(){
 	printf("ar0.items[4] [%s] ... as char* with id[%i]/[%i]\n", (char *)ar0.items[4], ar0.ids[4], sId  );
 	int arId2 = arh_getIndex( &ar0, 2 );
 	printf("ar0.items by id 2 [%i] index [%i]\n", ar0.items[ arId2 ], arId2 );
+	
+	arh_dump( ar0 );
+
 	return 0;
 }
 #endif
+
+/* as example 
+//int main() {
+//    // 1. Definition of a string
+//    char *myString = "Hello, C World!";
+//    printf("Original String: %s\n", myString);
+//    printf("Original Address: %p\n\n", (void*)myString);
+//
+//    // 2. Getting pointer and passing/storing it as an integer
+//    // We cast the pointer to uintptr_t (an integer type)
+//    uintptr_t pointerAsInt = (uintptr_t)myString;
+//    printf("Pointer stored as Integer: %lu\n", (unsigned long)pointerAsInt);
+//
+//    // 3. Getting back the string from the integer
+//    // We cast the integer back to a char pointer
+//    char *recoveredString = (char*)pointerAsInt;
+//
+//    printf("Recovered String: %s\n", recoveredString);
+//    printf("Recovered Address: %p\n", (void*)recoveredString);
+//
+//    return 0;
+//}
+*/
+
+
