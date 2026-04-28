@@ -154,13 +154,24 @@ void cm_cmd( int cmdId, int msgId ){
 	}	
 }
 
+
+cnn_Msg cm_msgClone( int msgId ){
+	cnn_Msg msg = cnMs[ cm_getMsgIndexById( msgId ) ];
+	cnn_Msg tr = {};//{ .id=-1, .topic="t", .payload="abc" };
+	strcpy( tr.topic, msg.topic );
+	strcpy( tr.payload, msg.payload );
+	return tr;
+}
+
 void cm_doClick( int level, int msgId, int srcType, int srcId ){
 	if( level == 0 ){
 		printf(" | . . . ");
-		printf(" level(%i) ", level );
-		if( msgId != -1 ) 
-			printf("# With msg id[%i] ", msgId );
-		else 
+		printf(" level(%i) srcType[%i] srcId[%i] ", level, srcType, srcId );
+		if( msgId != -1 ){
+			cnn_Msg msgT = cm_msgClone( msgId );
+			printf("# With msg id[%i]", msgId );
+			printf("# msg [%s] payload [%s]\n", msgT.topic, msgT.payload );
+		}else 
 			printf("0");
 		printf("\n |\n");
 	}
