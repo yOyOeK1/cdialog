@@ -188,6 +188,19 @@ void mqtt_publish( char *topic, char *msg ){
 
 }
 
+void mqtth_publish_byHea( struct mosquitto *mqH, char *topic, char *msg ){
+//struct mosquitto *mqHandler;
+	if( mqConnection ){
+	    rc = mosquitto_publish( mqH , NULL, topic, strlen( msg ), msg, 1, false);
+	    if (rc != MOSQ_ERR_SUCCESS) {
+		fprintf(stderr, "Error publishing: %s\n", mosquitto_strerror(rc));
+	    }
+	} else {
+	    printf("#* ... waiting for connection to mqtt ...\n");
+	}
+
+}
+
 int mqIter = 0;
 void *myThread( void *vargp ){
 

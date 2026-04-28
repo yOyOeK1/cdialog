@@ -46,7 +46,8 @@ int key_chk_KeyBinds(  ){
 				printf(" | OK keyBind id[%i]\n | ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
 
 				//cm_doClick( 0, 0/*cnn_KeyBinds[kBin].msgId*/, CNNKEYBIND, cnn_KeyBinds[kBin].id );
-				cm_doClick( 0, cnn_KeyBinds[kBin].msgId, CNNKEYBIND, cnn_KeyBinds[kBin].id );
+				cnn_Msg msgT;
+				cm_doClick( 0, cnn_KeyBinds[kBin].msgId, msgT, CNNKEYBIND, cnn_KeyBinds[kBin].id );
 
 
 				/*if( cnn_KeyBinds[kBin].doWhat == 0 ){ // cmd

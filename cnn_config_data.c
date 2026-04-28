@@ -40,12 +40,12 @@ int cnn_MqttSubsCount = 4;
 // ... mqtt connection ... END
 
 cnn_Printf cnnPrintfs[] = {
-	{1,	"cc print id1",		"Printfs test1 : %s<OK", 	true, -1 },
-	{2,	"cc print id2",		"Printfs test2 :%s<OK(2)", 	false, -1 },
-	{3,	"cc print id3",		"Printfs test3 :%s<OK(3)", 	false, -1 },
-	{4,	"ccp mqttres1",		"Printfs :%s <- payload\n", 	true, -1 },
-	{5,	"cprin_humidity",	"%s %% :)\n", 			true, -1 },
-	{6,	"For from printf to pts",	"%s pts test \n", 			true, -1 },
+	{1,	"cc print id1",		"Printfs test1 : %s<OK", 		true, -1 },
+	{2,	"cc print id2",		"Printfs test2 :%s<OK(2)", 		false, -1 },
+	{3,	"cc print id3",		"Printfs test3 :%s<OK( 4.200 ...)", 	false, -1 },
+	{4,	"ccp mqttres1",		"Printfs :%s <- payload\n", 		true, -1 },
+	{5,	"cprin_humidity",	"%s %% :)\n", 				true, -1 },
+	{6,	"For from printf to pts",	"%s pts test \n", 		true, -1 },
 	{-1}
 };
 // cnnAdd
@@ -73,6 +73,16 @@ cnn_Cmd cnnCmds[] = {
 };
 int cnnCmdsCount = 1;
 
+//
+// cnn_MqttPub
+// id 8
+cnn_MqttPub cnn_MqttPubs[] = {
+	{ 1,	1,	"mqtt public hu at" },
+	{ -1}
+};
+int cnn_MqttPubsCount = 1;
+
+
 #include <stdio.h>
 void cmn_test0( int id, int msgPts ){
 	printf("cmn_test0 id[%i] msgPts[%i]\n", id, msgPts );
@@ -91,6 +101,7 @@ cnn_Nudle cnnNudles[] = {
 	{10,	CNNKEYBIND,	12,	CNNCMD,		1	},
 	{11,	CNNCMD,		1,	CNNPRINTF,	5	},
 	{12,	CNNKEYBIND,	13,	CNNPRINTF,	6	},
+	{13,	CNNPRINTF,	6,	CNNMQTTPUB,	1	},
 //	{13,	CNNPRINTF,	6,	(int)cmn_test0_pts,	1	},
 	{-1}	
 };
