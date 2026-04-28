@@ -9,6 +9,8 @@ void cm_div( int id, int msgId );
 int cm_getAddIndexById( int id );
 void cm_add( int id, int msgId );
 void cm_printf( int id, int msgId );
+void cm_cmd( int cmdId, int msgId );
+cnn_Msg cm_msgClone( int msgId );
 void cm_doClick( int level, int msgId, int srcType, int srcId );
 void cmInit_atStart();
 void cmInit_cnCanvass();
