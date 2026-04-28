@@ -80,6 +80,13 @@ typedef struct {
 } cnn_Cmd;
 
 
+#define CNNMQTTPUB 8
+typedef struct{
+	int id;
+	int mqHostId;
+	char name[512];
+} cnn_MqttPub;
+
 typedef struct{
 	int id;
 	int srcType;
@@ -106,5 +113,6 @@ typedef struct{
 	char args[512];
 	int msgId;
 }cnn_KeyBind;
+
 
 #endif
