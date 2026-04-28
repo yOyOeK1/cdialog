@@ -30,6 +30,11 @@ extern int cnn_MqttSubsCount;
 extern cnn_Cmd cnnCmds[];
 extern int cnnCmdsCount;
 
+
+
+void cmn_test0( int id, int msgPts );
+
+
 extern cnn_Nudle cnnNudles[];
 extern int cnnNudlesCount;
 

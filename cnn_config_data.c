@@ -45,6 +45,7 @@ cnn_Printf cnnPrintfs[] = {
 	{3,	"cc print id3",		"Printfs test3 :%s<OK(3)", 	false, -1 },
 	{4,	"ccp mqttres1",		"Printfs :%s <- payload\n", 	true, -1 },
 	{5,	"cprin_humidity",	"%s %% :)\n", 			true, -1 },
+	{6,	"For from printf to pts",	"%s pts test \n", 			true, -1 },
 	{-1}
 };
 // cnnAdd
@@ -72,6 +73,11 @@ cnn_Cmd cnnCmds[] = {
 };
 int cnnCmdsCount = 1;
 
+#include <stdio.h>
+void cmn_test0( int id, int msgPts ){
+	printf("cmn_test0 id[%i] msgPts[%i]\n", id, msgPts );
+}
+const int *cmn_test0_pts;
 cnn_Nudle cnnNudles[] = {
 	{1,	1,		1,	2,		1	},
 	{2,	CNNATSTART,	2,	CNNADD,		1	},
@@ -84,6 +90,8 @@ cnn_Nudle cnnNudles[] = {
 	{9,	CNNKEYBIND,	8,	CNNPRINTF,	5	},
 	{10,	CNNKEYBIND,	12,	CNNCMD,		1	},
 	{11,	CNNCMD,		1,	CNNPRINTF,	5	},
+	{12,	CNNKEYBIND,	13,	CNNPRINTF,	6	},
+//	{13,	CNNPRINTF,	6,	(int)cmn_test0_pts,	1	},
 	{-1}	
 };
 
@@ -112,6 +120,7 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	{ 10,	 0,	       "hh",	0,		"test hh\n\t%s",	"echo HH" },
 	{ 11,	 0,	       "mp",	1,		"and/test/perc",	"11.11" },
 	{ 12,	 0,	       "c",	0,		"cmd tint",		"",	5  },
+	{ 13,	 0,	       "p",	0,		"pts test as func",	"",	5  },
 	
 	{-1}
 };
