@@ -163,7 +163,8 @@ void cm_mqttPub( int mqttPubId, cnn_Msg *msgT ){
 					cnn_MqttPubs[ i ].mqHostId, msgT->topic, msgT->payload );
 
 				if( mqConnected ){
-					mqtth_publish_byHea( mqHea, "and/ping", "abc" );
+					//mqtth_publish_byHea( mqHea, "and/ping", "abc" );
+					mqtth_publish_byHea( mqHea, msgT->topic, msgT->payload );
 				} else {
 					printf("[DEB EE] mqtt not connected yet\n");
 				}
@@ -196,7 +197,7 @@ void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 			printf(" | . . .  With msg id[%i]\n", msgId );
 			cnn_Msg msgT = cm_msgClone( msgId );
 			msgClone = true;
-			printf("# msgT [%s] payload [%s]\n", msgT.topic, msgT.payload );
+//			printf("# msgT [%s] payload [%s]\n", msgT.topic, msgT.payload );
 //			strcpy( msgT.payload, "abc text mode test");
 //			printf("# msgT [%s] payload [%s]\n", msgT->topic, msgT.payload );
 		} else { 
