@@ -177,22 +177,31 @@ void dogsStop(){
 #endif
 
 
+// ----------------------------------------------
+char *cc_getPx( int x, int y ){
+	return &ccFB[ y*col + x ];
+}
+char *cc_getPx_byPointer( char *pts, int x, int y, int icol){
+	return &pts[ y*icol + x ];
+
+	//char tr = pts[ y*icol + x ];
+	//printf("by pointer got [%c]\n", tr);
+	//return tr;
+}
+
 int ccInit_FB_byPointer( char **pts, int dcol, int drow ){
-	ccFBc = (dcol)*drow;
-	*pts = malloc( (ccFBc+1) * sizeof( char ) );
+	ccFBc = dcol*drow;
+	*pts = (char *)malloc( (ccFBc+1) * sizeof( char ) );
 	if( *pts == NULL ) 
 		printf("EE ccInit error size %i x %i\n", dcol, drow);
 
-//	for( int c=0; c<ccFBc; c++)
-//		pts[ c ] = 'x';
-//	pts[ ccFBc ] = 0;
-//
 	if( asBar == false )
 		printf("#* .. ccFB size [ %i ] for [ %i x %i ] terminal \n", ccFBc, dcol, drow );
 
-
+	memset( *pts, 'x', ccFBc );
+	(*pts)[ ccFBc ] = 0;
+	printf("[DEB ccInit FB byP] after init len(%i)\n", strlen( *pts ) );
 }
-
 int ccInit_FB(){
 	ccInit_FB_byPointer( &ccFB, col, row );
 }
@@ -204,13 +213,6 @@ int ccFree_FB(){
 }
 
 
-//
-char *cc_getPx( int x, int y ){
-	return &ccFB[ y*col + x ];
-}
-char *cc_getPx_byPointer( char **pts, int x, int y){
-	return pts[ y*col + x ];
-}
 #ifdef CCANVASTEST
 int ccInit(){
 
@@ -257,37 +259,27 @@ int ccUpdate(){
 #endif
 
 // to clear FB
-int cc_clear( char cBlank ){
-	char *tmpc;
-	for( int y=0; y<row; y++ ){
-		for(int x=0; x<=col; x++){
-			tmpc = cc_getPx( x, y );			
-			if( x == (col-1) && row > 0)
-				*tmpc='\n';
-			else
-				*tmpc = cBlank;
-
-		}
-	}
-	ccFB[ ccFBc-1 ] = 0;
-	return 0;
-}
-int cc_clear_byPointer( char **pts, char chf, int drow, int dcol ){
+int cc_clear_byPointer( char **pts, char chf, int dcol, int drow ){
 	char *tmpc;
 	int cSize = drow*dcol;
-	printf( "cc_clear by pointer cSize:[%i] as strlen(%i)\n", cSize, strlen( *pts ) );
+	printf( "[DEB cc_clear by pointer] cSize:[%i] as strlen(%i)\n", cSize, strlen( *pts ) );
 	for( int y=0; y<drow; y++ ){
 		for(int x=0; x<=dcol; x++){
-			tmpc = cc_getPx_byPointer( pts, x, y );			
+			//resBuf = cc_getPx_byPointer( pts, x, y );					     //tmpc = resBuf[0]; 
+			tmpc = cc_getPx_byPointer( (char *)(*pts), x, y, dcol  );
 			if( x == (dcol-1) && drow > 0)
 				*tmpc='\n';
 			else
-				*tmpc = chf;
+				*tmpc=chf;
+				//snprintf( tmpc, 1, "%s", chf );
 
 		}
 	}
-	ccFB[ (dcol)*drow - 1 ] = 0;
+	(*pts)[ cSize - 1 ] = 0;
 	return 0;
+}
+int cc_clear( char cBlank ){
+	return cc_clear_byPointer( &ccFB, cBlank, col, row );
 }
 // 
 int cc_printf( int x, int y, char *msg ){
@@ -388,6 +380,11 @@ void ccRender(){
 	}
 
 	ccRenderCount++;
+}
+
+void ccRender_byId( int cId ){
+	
+
 }
 
 char tmsg[51200];
