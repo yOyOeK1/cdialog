@@ -121,7 +121,7 @@ int keyBindDoIt(){
 				printf("---- KEYBINDS .... END\n");
 			
 			} else if( keyNo == 2 && keyIn[0] == 'm' ){
-				sscanf( keyIn, "m%li",  &cnn_KeyModeNow );
+				sscanf( keyIn, "m%i",  &cnn_KeyModeNow );
 				printf("Mode switch ...[%i:%s]\n", cnn_KeyModeNow, key_getCurrentMode_name() );
 			}  	
 

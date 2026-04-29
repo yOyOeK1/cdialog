@@ -200,7 +200,7 @@ int ccInit_FB_byPointer( char **pts, int dcol, int drow ){
 
 	memset( *pts, 'x', ccFBc );
 	(*pts)[ ccFBc ] = 0;
-	printf("[DEB ccInit FB byP] after init len(%i)\n", strlen( *pts ) );
+	printf("[DEB ccInit FB byP] after init len(%zu)\n", strlen( *pts ) );
 }
 int ccInit_FB(){
 	ccInit_FB_byPointer( &ccFB, col, row );
@@ -262,7 +262,7 @@ int ccUpdate(){
 int cc_clear_byPointer( char **pts, char chf, int dcol, int drow ){
 	char *tmpc;
 	int cSize = drow*dcol;
-	printf( "[DEB cc_clear by pointer] cSize:[%i] as strlen(%i)\n", cSize, strlen( *pts ) );
+	printf( "[DEB cc_clear by pointer] cSize:[%d] as strlen(%d)\n", cSize, strlen( *pts ) );
 	for( int y=0; y<drow; y++ ){
 		for(int x=0; x<=dcol; x++){
 			//resBuf = cc_getPx_byPointer( pts, x, y );					     //tmpc = resBuf[0]; 
