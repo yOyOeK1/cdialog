@@ -187,6 +187,33 @@ cnn_Msg cm_msgClone( int msgId ){
 	return tr;
 }
 
+bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
+	if( nType == CNNPRINTF ){
+		cm_printf( nId, msgT);
+		return true;
+
+	}else if( nType == CNNDIV ){
+		cm_div( nId, msgT );
+		return true;
+
+	}else if( nType == CNNADD ){
+		cm_add( nId, msgT );
+		return true;
+
+	}else if( nType == CNNCMD ){
+		cm_cmd( nId, msgT );
+		return true;
+
+	}else if( nType == CNNMQTTPUB ){
+		cm_mqttPub( nId, msgT );
+		return true;
+
+	}else{
+		printf("\n# EE not implemented 9898\n");
+		return false;
+	}
+}
+
 void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 	bool msgClone = false;
 	cnn_Msg msgT;
@@ -217,30 +244,7 @@ void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 			cnnNudles[ ni ].srcId == srcId ){
 
 			printf(" |\n |--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
-			if( cnnNudles[ ni ].targetType == CNNPRINTF ){
-				cm_printf( cnnNudles[ ni ].targetId, &msgT);
-				doClick = true;
-
-			}else if( cnnNudles[ ni ].targetType == CNNDIV ){
-				cm_div( cnnNudles[ ni ].targetId, &msgT );
-				doClick = true;
-
-			}else if( cnnNudles[ ni ].targetType == CNNADD ){
-				cm_add( cnnNudles[ ni ].targetId, &msgT );
-				doClick = true;
-
-			}else if( cnnNudles[ ni ].targetType == CNNCMD ){
-				cm_cmd( cnnNudles[ ni ].targetId, &msgT );
-				doClick = true;
-
-			}else if( cnnNudles[ ni ].targetType == CNNMQTTPUB ){
-				cm_mqttPub( cnnNudles[ ni ].targetId, &msgT );
-				doClick = true;
-
-			}else{
-				printf("\n# EE not implemented 9898\n");
-				doClick = false;
-			}
+			doClick = cm_doWorkAt( &msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
 
 			if( doClick ){
 				cm_doClick( level+1, msgId, msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
