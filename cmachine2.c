@@ -281,11 +281,22 @@ void cmInit_cnCanvass(){
 			int mr;
 			ctermSize( &mc, &mr );
 			ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, mc-3, mr-3 );
-			//cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, mc-3, mr-3 );
+			cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, mc-3, mr-3 );
 				
 
 		}
 
+	}
+}
+void cmCanvasRender( int cId ){
+	for( int c=0; true; c++ ){
+		if( cnCanvass[ c ].id == -1 ) break;
+		if( cnCanvass[ c ].id == cId ){
+			printf("#* ... render FB nudle id[%i]\n", cnCanvass[ c ].id );
+			printf("render ---\n%s\n", cnCanvass[ c ].ccFB );
+			break;
+		}
+		
 	}
 }
 
@@ -339,12 +350,7 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 
 }	
 
-#ifdef CPPMACHINE
-int main( int argc, char *argv[] ){
-	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
-
-	printf("cmachine2 ver[%s]\n", CMACHINEVER );
-	printf("c cmachine2 CPPMACHINE2 ... START size [ %ix%i ]@%s\n", col, row, machineName );
+void cmInit_machNs(){
 	for( int p=0; true; p++ ){
 		if( machNs[ p ].id == -1 ) break;
 		printf("\n\n*[%i] id[%i] ... onStart[%i] every[%ims] \n\t - %s\n", p, 
@@ -354,25 +360,43 @@ int main( int argc, char *argv[] ){
 			cmachine_start_byNode( machNs[ p ] );
 	
 	}
-	printf("c cmachine2 CPPMACHINE2 ... END size [ %ix%i ]@%s\n", col, row, machineName );
+}
+
+#ifdef CPPMACHINE
+int main( int argc, char *argv[] ){
+	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
+
+	printf("cmachine2 ver[%s]\n", CMACHINEVER );
+
+	if(0){
+		printf("c cmachine2 CPPMACHINE2 ... START size [ %ix%i ]@%s\n", col, row, machineName );
+		cmInit_machNs();
+		printf("c cmachine2 CPPMACHINE2 ... END size [ %ix%i ]@%s\n", col, row, machineName );
 
 
-	printf("c cmachine2 -- 2 CPPMACHINE2 ... DONE .. NUDLE SECTION\n");
-	cmInit();
-	printf("c cmachine2 -- 2 CPPMACHINE2 ... END  .. NUDLE SECTION\n");
+		printf("c cmachine2 -- 2 CPPMACHINE2 ... DONE .. NUDLE SECTION\n");
+		cmInit_atStart();
+		printf("c cmachine2 -- 2 CPPMACHINE2 ... END  .. NUDLE SECTION\n");
 
 
-	printf("c cmachine2 -- 3 CPPMACHINE2 ... START mqtt init \n"
-		"\t- mqtt hosts:	[ %i ]\n", MqHostsCount );
-	mqttInit2( &cnn_mqtt_on_message );
-	mqttDoIt2();
+		printf("c cmachine2 -- 3 CPPMACHINE2 ... START mqtt init \n"
+			"\t- mqtt hosts:	[ %i ]\n", MqHostsCount );
+		mqttInit2( &cnn_mqtt_on_message );
+		mqttDoIt2();
+		printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");
+		
 
-	keyBindDoIt();
-	
+
+		printf("c cmachine2 -- 4 CPPKEYBIND... START\n");
+		keyBindDoIt();
+		printf("c cmachine2 -- 4 CPPKEYBIND... END\n");
+
 	//mqttInit();
 	//mqttDoIt();
-	printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");
+	}
 
+	cmInit_cnCanvass();
+	cmCanvasRender( 2 );
 
 	printf("c cmachine2 CPPMACHINE2 ... DONE\n");
 	printf("cnn_Version	[%s]\n", cnn_Version );
