@@ -7,7 +7,7 @@ echo "
 "
 
 bat "$fLook" | \
-	grep -e "^cn" -e "^cm" -e "^struct" -e "^void" -e "^int" -e "^char" | \
+	grep -e "^cn" -e "^cm" -e "^struct" -e "^void" -e "^bool" -e "^int" -e "^char" | \
 	grep -v 'int main' | grep '){' | tr '{' ';' | \
 	bat --style=plain --language c
 echo "

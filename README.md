@@ -50,6 +50,7 @@ Current a.k.a. sceenshot of app running:
 
 ### TODO / FIX / KNOWN bugs
 
+[ ] mqtth when init2 for nudles can send only after receaving first mesage. then it get's it's mqHeader struct 
 [ ] ccanvas don't do correct unicode characters :(
 
 
