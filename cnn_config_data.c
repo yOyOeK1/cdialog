@@ -46,6 +46,7 @@ cnn_Printf cnnPrintfs[] = {
 	{4,	"ccp mqttres1",		"Printfs :%s <- payload\n", 		true, -1 },
 	{5,	"cprin_humidity",	"%s %% :)\n", 				true, -1 },
 	{6,	"For from printf to pts",	"%s pts test \n", 		true, -1 },
+	{7,	"Uptime test1",		" | . . .   [ %s min. up ]\n", 			true, -1 },
 	{-1}
 };
 // cnnAdd
@@ -60,6 +61,7 @@ cnn_Add cnnAdds[] = {
 cnn_Div cnnDivs[] = {
 	{1,	"cc div test 1.5",	1.5, -1 },
 	{2,	"cc div test 4.0",	4.0, -1 },
+	{3,	"by 60.00",		60.0, -1 },
 	{-1}
 };
 // cnn_MqttSub
@@ -69,9 +71,10 @@ cnn_Div cnnDivs[] = {
 // id 6
 cnn_Cmd cnnCmds[] = {
 	{ 1,	"echo test",		"echo 'Hello from cnnCmds[0] :)'"	},
+	{ 2,	"cat uptime",		"cat /proc/uptime"	},
 	{ -1 }
 };
-int cnnCmdsCount = 1;
+int cnnCmdsCount = 2;
 
 //
 // cnn_MqttPub
@@ -97,12 +100,15 @@ cnn_Nudle cnnNudles[] = {
 	{6,	CNNDIV,		1,	CNNPRINTF,	3	},
 	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
 	{8,	CNNMQTTSUB,	4,	CNNPRINTF,	5	},
-	{9,	CNNKEYBIND,	8,	CNNPRINTF,	5	},
-	{10,	CNNKEYBIND,	12,	CNNCMD,		1	},
-	{11,	CNNCMD,		1,	CNNPRINTF,	5	},
-	{12,	CNNKEYBIND,	13,	CNNPRINTF,	6	},
-	{13,	CNNPRINTF,	6,	CNNMQTTPUB,	1	},
-//	{13,	CNNPRINTF,	6,	(int)cmn_test0_pts,	1	},
+	{9,	CNNKEYBIND,	8,	CNNCMD,		2	},
+	{10,	CNNCMD,		2,	CNNDIV,		3	},
+	{11,	CNNDIV,		3,	CNNPRINTF,	7	},
+
+	{12,	CNNKEYBIND,	12,	CNNCMD,		1	},
+	{13,	CNNCMD,		1,	CNNPRINTF,	5	},
+	{14,	CNNKEYBIND,	13,	CNNPRINTF,	6	},
+	{15,	CNNPRINTF,	6,	CNNMQTTPUB,	1	},
+//	{15,	CNNPRINTF,	6,	(int)cmn_test0_pts,	1	},
 	{-1}	
 };
 

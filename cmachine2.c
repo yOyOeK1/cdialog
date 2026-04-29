@@ -218,22 +218,17 @@ void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 	bool msgClone = false;
 	cnn_Msg msgT;
 	if( level == 0 ){
-		printf(" | . . . ");
-		printf(" level(%i) srcType[%i] srcId[%i] \n", level, srcType, srcId );
+		printf(" | . . . "
+			" level(%i) srcType[%i] srcId[%i] \n", level, srcType, srcId );
 		if( msgId != -1 ){
 			printf(" | . . .  With msg id[%i]\n", msgId );
-			cnn_Msg msgT = cm_msgClone( msgId );
+			msgT = cm_msgClone( msgId );
 			msgClone = true;
-//			printf("# msgT [%s] payload [%s]\n", msgT.topic, msgT.payload );
-//			strcpy( msgT.payload, "abc text mode test");
-//			printf("# msgT [%s] payload [%s]\n", msgT->topic, msgT.payload );
 		} else { 
-			printf("0");
-			printf("# msgT [%s] payload [%s]\n", msgT.topic, msgT.payload );
+			printf("# msgT blank topic [%s] payload [%s]\n", msgT.topic, msgT.payload );
 		}
-		printf("\n |\n");
 	} else {
-		printf(" | . . .  reuse msgT\n");
+		printf(" | . . . msgT reuse\n");
 		msgT = msgTp;
 	}
 
@@ -243,7 +238,7 @@ void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 		if( cnnNudles[ ni ].srcType == srcType &&
 			cnnNudles[ ni ].srcId == srcId ){
 
-			printf(" |\n |--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
+			printf(" |\n |\n *--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
 			doClick = cm_doWorkAt( &msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
 
 			if( doClick ){
