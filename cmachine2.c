@@ -368,10 +368,10 @@ int main( int argc, char *argv[] ){
 
 	printf("cmachine2 ver[%s]\n", CMACHINEVER );
 
-	if(0){
-		printf("c cmachine2 CPPMACHINE2 ... START size [ %ix%i ]@%s\n", col, row, machineName );
-		cmInit_machNs();
-		printf("c cmachine2 CPPMACHINE2 ... END size [ %ix%i ]@%s\n", col, row, machineName );
+	if(1){
+	//	printf("c cmachine2 CPPMACHINE2 ... START size [ %ix%i ]@%s\n", col, row, machineName );
+	//	cmInit_machNs();
+	//	printf("c cmachine2 CPPMACHINE2 ... END size [ %ix%i ]@%s\n", col, row, machineName );
 
 
 		printf("c cmachine2 -- 2 CPPMACHINE2 ... DONE .. NUDLE SECTION\n");
@@ -386,6 +386,8 @@ int main( int argc, char *argv[] ){
 		printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");
 		
 
+		cmInit_cnCanvass();
+		cmCanvasRender( 2 );
 
 		printf("c cmachine2 -- 4 CPPKEYBIND... START\n");
 		keyBindDoIt();
@@ -395,8 +397,6 @@ int main( int argc, char *argv[] ){
 	//mqttDoIt();
 	}
 
-	cmInit_cnCanvass();
-	cmCanvasRender( 2 );
 
 	printf("c cmachine2 CPPMACHINE2 ... DONE\n");
 	printf("cnn_Version	[%s]\n", cnn_Version );
