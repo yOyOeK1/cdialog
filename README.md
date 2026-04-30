@@ -47,6 +47,32 @@ Current a.k.a. sceenshot of app running:
 ![](./examples/screenshot_mqttView2_2504.png)
 
 
+### cmachine2
+
+Current work is at this file. It's semi node-red a.k.a. c language / hardcoded set of tools. Instade of nice interactive ui interface hosted by node-red. In this case it is puzzle of id and define types of `nodes` / workers. Same like in node-red flow of event:
+./cnn_config_types.h:#define CNNATSTART 1
+./cnn_config_types.h:#define CNNMQTTSUB 5
+./cnn_config_types.h:#define CNNKEYBIND 7
+
+builds clone of message with
+topic and payload
+
+Then sends it over `nudle` to `node`. 
+
+For now some types of `node`s implemended with status:
+
+./cnn_config_types.h:#define CNNADD 3
+./cnn_config_types.h:#define CNNDIV 4
+./cnn_config_types.h:#define CNNCMD 6
+./cnn_config_types.h:#define CNNPRINTF 2
+./cnn_config_types.h:#define CNNMQTTPUB 8
+[TODO]./cnn_config_types.h:#define CNNCANVCLEAR 9
+./cnn_config_types.h:#define CNNCANVPRINTF 10
+
+`cnn_config*` files are to set what you want to build. Now it's a bOnaNzA one big test. I'm thinking to use 
+`#define VARIABLES` as main switching mechanizm to decide what to build as binarry.
+
+
 
 ### TODO / FIX / KNOWN bugs
 
