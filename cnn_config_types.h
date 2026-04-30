@@ -87,6 +87,22 @@ typedef struct{
 	char name[512];
 } cnn_MqttPub;
 
+#define CNNCANVCLEAR 9
+typedef struct{
+	int id;
+	char name[512];
+	char chf;
+} cnn_CanvClear;
+
+#define CNNCANVPRINTF 10
+typedef struct{
+	int id;
+	char name[512];
+	int canvId;
+	int x;
+	int y;
+} cnn_CanvPrintf;
+
 typedef struct{
 	int id;
 	int srcType;

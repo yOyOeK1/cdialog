@@ -54,7 +54,7 @@ void cmiNodeName( char *type, int id, char *name ){
 }
 
 
-int cm_getMsgIndexById( int id ){
+int cm_msg_getIndex_byId( int id ){
 	for( int i=0; true; i++){
 		if( cnMs[ i ].id == -1 ) break;
 		if( cnMs[ i ].id == id ) return i;
@@ -62,124 +62,8 @@ int cm_getMsgIndexById( int id ){
 	return -1;
 }
 
-
-int cm_getDivIndexById( int id ){
-	for( int i=0; true; i++){
-		if( cnnDivs[ i ].id == -1 ) break;
-		if( cnnDivs[ i ].id == id ) return i;
-	}
-	return -1;
-}
-
-void cm_div( int id, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnnDivs[ i ].id == -1 ) break;
-		if( cnnDivs[ i ].id == id ){
-			//printf("CM_divs id:%i, \n", id);
-			cmiNodeName( "CM_DIVS", id, cnnDivs[ i ].name );
-			if( 1 /* msgId != -1*/ ){
-				float fin = atof( msgT->payload );
-				fin/= cnnDivs[ i ].divBy;
-				printf("[DEB] div %s by %f res [%f]\n",  msgT->payload, cnnDivs[ i ].divBy, fin );
-				snprintf( msgT->payload, 512, "%f", fin );
-			}
-			break;
-		}
-	}	
-}
-
-
-int cm_getAddIndexById( int id ){
-	for( int i=0; true; i++){
-		if( cnnAdds[ i ].id == -1 ) break;
-		if( cnnAdds[ i ].id == id ) return i;
-	}
-	return -1;
-}
-
-void cm_add( int id, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnnAdds[ i ].id == -1 ) break;
-		if( cnnAdds[ i ].id == id ){
-			//printf("CM_adds id:%i, \n", id);
-			cmiNodeName( "CM_ADDS", id, cnnAdds[ i ].name );
-			if( 1 /* msgId != -1 */ ){
-				float fin = atof( msgT->payload );
-				fin+= cnnAdds[ i ].add;
-				printf("[DEB] add %f to %s res [%f]\n", cnnAdds[ i ].add, msgT->payload, fin );
-				snprintf( msgT->payload, 512, "%f", fin );
-
-
-			}
-			break;
-		}
-	}	
-}
-void cm_printf( int id, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnnPrintfs[ i ].id == -1 ) break;
-		if( cnnPrintfs[ i ].id == id ){
-			//printf("CM_PRINTF id:%i, \n", id);
-			cmiNodeName( "CM_PRINTF", id, cnnPrintfs[ i ].name );
-			if( 1 /*msgId != -1*/ ){
-				if( cnnPrintfs[ i ].doTopic ){
-					printf("* Topic: ... %s\n", msgT->topic );
-				}
-				printf( cnnPrintfs[ i ].printAs, msgT->payload );
-			}
-			break;
-		}
-	}	
-}
-
-void cm_cmd( int cmdId, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnnCmds[ i ].id == -1 ) break;
-		if( cnnCmds[ i ].id == cmdId ){
-			cmiNodeName( "CM_CMD", cmdId, cnnCmds[ i ].name );
-			if( 1 /*msgId != -1*/ ){
-				printf(" | ...... cmd START ---\\ \n");
-				strcpy( msgT->payload, cmd_to_chars( cnnCmds[ i ].cmd ) );
-				printf(" | ...... cmd END -----/\n");
-				//printf( cnnPrintfs[ i ].printAs, msg.payload );
-			}
-			break;
-		}
-	}	
-}
-struct mosquitto *mqHea;
-bool mqConnected = false;
-void cm_mqttPub( int mqttPubId, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnn_MqttPubs[ i ].id == -1 ) break;
-		if( cnn_MqttPubs[ i ].id == mqttPubId ){
-			cmiNodeName( "CM_MQTT_PUB", mqttPubId, cnn_MqttPubs[ i ].name );
-			if( 1 /*msgId != -1*/ ){
-				printf(" | ...... mqtt pub START ---\\ \n"
-					" | ...		mqtt host id	[%i]\n"
-					" | ... 	topic 	[%s]\n"
-					" | ... 	payload	[%s]\n"
-					" |\n",
-					cnn_MqttPubs[ i ].mqHostId, msgT->topic, msgT->payload );
-
-				if( mqConnected ){
-					//mqtth_publish_byHea( mqHea, "and/ping", "abc" );
-					mqtth_publish_byHea( mqHea, msgT->topic, msgT->payload );
-				} else {
-					printf("[DEB EE] mqtt not connected yet\n");
-				}
-
-				printf(" | ...... mqtt pub  END -----/\n");
-				//printf( cnnPrintfs[ i ].printAs, msg.payload );
-			}
-			break;
-		}
-	}	
-}
-
-
 cnn_Msg cm_msgClone( int msgId ){
-	cnn_Msg msg = cnMs[ cm_getMsgIndexById( msgId ) ];
+	cnn_Msg msg = cnMs[ cm_msg_getIndex_byId( msgId ) ];
 	cnn_Msg tr = {};//{ .id=-1, .topic="t", .payload="abc" };
 	strcpy( tr.topic, msg.topic );
 	strcpy( tr.payload, msg.payload );
@@ -187,6 +71,136 @@ cnn_Msg cm_msgClone( int msgId ){
 	return tr;
 }
 
+
+void cm_div( int id, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnnDivs[ i ].id == -1 ) break;
+		if( cnnDivs[ i ].id == id ){
+			cmiNodeName( "CM_DIVS", id, cnnDivs[ i ].name );
+			float fin = atof( msgT->payload );
+			fin/= cnnDivs[ i ].divBy;
+			printf("[DEB] div %s by %f res [%f]\n",  msgT->payload, cnnDivs[ i ].divBy, fin );
+			snprintf( msgT->payload, 512, "%f", fin );
+			break;
+		}
+	}	
+}
+
+void cm_add( int id, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnnAdds[ i ].id == -1 ) break;
+		if( cnnAdds[ i ].id == id ){
+			cmiNodeName( "CM_ADDS", id, cnnAdds[ i ].name );
+			float fin = atof( msgT->payload );
+			fin+= cnnAdds[ i ].add;
+			printf("[DEB] add %f to %s res [%f]\n", cnnAdds[ i ].add, msgT->payload, fin );
+			snprintf( msgT->payload, 512, "%f", fin );
+			break;
+		}
+	}	
+}
+
+void cm_printf( int id, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnnPrintfs[ i ].id == -1 ) break;
+		if( cnnPrintfs[ i ].id == id ){
+			cmiNodeName( "CM_PRINTF", id, cnnPrintfs[ i ].name );
+			if( cnnPrintfs[ i ].doTopic ){
+				printf("* Topic: ... %s\n", msgT->topic );
+			}
+			printf( cnnPrintfs[ i ].printAs, msgT->payload );
+			break;
+		}
+	}	
+}
+// CNNCMD 6 
+void cm_cmd( int cmdId, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnnCmds[ i ].id == -1 ) break;
+		if( cnnCmds[ i ].id == cmdId ){
+			cmiNodeName( "CM_CMD", cmdId, cnnCmds[ i ].name );
+			printf(" | ...... cmd START ---\\ \n");
+			strcpy( msgT->payload, cmd_to_chars( cnnCmds[ i ].cmd ) );
+			printf(" | ...... cmd END -----/\n");
+			//printf( cnnPrintfs[ i ].printAs, msg.payload );
+			break;
+		}
+	}	
+}
+
+// CNNMQTTPUB 8
+struct mosquitto *mqHea;
+bool mqConnected = false;
+void cm_mqttPub( int mqttPubId, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnn_MqttPubs[ i ].id == -1 ) break;
+		if( cnn_MqttPubs[ i ].id == mqttPubId ){
+			cmiNodeName( "CM_MQTT_PUB", mqttPubId, cnn_MqttPubs[ i ].name );
+			printf(" | ...... mqtt pub START ---\\ \n"
+				" | ...		mqtt host id	[%i]\n"
+				" | ... 	topic 	[%s]\n"
+				" | ... 	payload	[%s]\n"
+				" |\n",
+				cnn_MqttPubs[ i ].mqHostId, msgT->topic, msgT->payload );
+
+			if( mqConnected ){
+				//mqtth_publish_byHea( mqHea, "and/ping", "abc" );
+				mqtth_publish_byHea( mqHea, msgT->topic, msgT->payload );
+			} else {
+				printf("[DEB EE] mqtt not connected yet\n");
+			}
+
+			printf(" | ...... mqtt pub  END -----/\n");
+			//printf( cnnPrintfs[ i ].printAs, msg.payload );
+			break;
+		}
+	}	
+}
+
+// CNNCANVCLEAR 9
+void cm_CanvClear_byId( int ccId ){
+	for( int c=0; true; c++ ){
+		if( cnCanvass[ c ].id == -1 ) break;
+		if( cnCanvass[ c ].id == ccId ){
+			cmiNodeName("CNCANVCLEAR", cnCanvass[ c ].id, cnCanvass[ c ].name );
+			if( cnCanvass[ c ].autoSize == false ){
+				//ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, cnCanvass[ c ].col, cnCanvass[ c ].row );
+				cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, cnCanvass[ c ].col, cnCanvass[ c ].row );
+			} else {
+				int mc;
+				int mr;
+				ctermSize( &mc, &mr );
+				ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, mc-3, mr-3 );
+				cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, mc-3, mr-3 );
+			}
+			break;
+		}
+
+	}
+
+}
+void cm_CanvClear( int ccId, cnn_Msg *msgT ){
+	cm_CanvClear_byId( ccId );
+}
+
+// CNNCANVPRINTF 10
+void cm_CanvPrintf( int ccpId, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnn_CanvPrintfs[ i ].id == -1 ) break;
+		if( cnn_CanvPrintfs[ i ].id == ccpId ){
+			cmiNodeName( "CM_CANVPRINTF", ccpId, cnn_CanvPrintfs[ i ].name );
+			//printf( cnnPrintfs[ i ].printAs, msg.payload );
+			// TODO get canvas
+			
+			// cc_printf on it
+			
+			break;
+		}
+	}
+
+}
+
+// ------------------------------
 bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 	if( nType == CNNPRINTF ){
 		cm_printf( nId, msgT);
@@ -206,6 +220,14 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 
 	}else if( nType == CNNMQTTPUB ){
 		cm_mqttPub( nId, msgT );
+		return true;
+
+	}else if( nType == CNNCANVCLEAR ){
+		cm_CanvClear( nId, msgT );
+		return true;
+		
+	}else if( nType == CNNCANVPRINTF ){
+		cm_CanvPrintf( nId, msgT );
 		return true;
 
 	}else{
@@ -252,7 +274,7 @@ void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 
 }
 
-void cmInit_atStart(){
+void cmInit_cnnAtStart(){
 	for( int n=0; true; n++ ){
 		if( cnnAtStarts[ n ].id == -1 ) break;
 		if( cnnAtStarts[ n ].onStart ){ 
@@ -266,6 +288,7 @@ void cmInit_atStart(){
 		printf("\n");
 	}
 }
+
 
 void cmInit_cnCanvass(){
 	for( int c=0; true; c++ ){
@@ -282,10 +305,7 @@ void cmInit_cnCanvass(){
 			ctermSize( &mc, &mr );
 			ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, mc-3, mr-3 );
 			cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, mc-3, mr-3 );
-				
-
 		}
-
 	}
 }
 void cmCanvasRender( int cId ){
@@ -306,7 +326,7 @@ void cmInit(){
 	//cc_clear( chFill );
 	//cmInit_cnCanvass();
 
-	cmInit_atStart();
+	cmInit_cnnAtStart();
 
 	//ccRender();
 
@@ -328,7 +348,7 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 				if( cnnNudles[ n ].srcType == CNNMQTTSUB &&
 					cnnNudles[ n ].srcId == cnn_MqttSubs[ s ].id ){
 					printf(" */ mqtt got nudle .... n[%i] type[%i] id[%i] msgId[%i]\n", n, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId, cnn_MqttSubs[ s ].msgId );
-					int msgIndex = cm_getMsgIndexById( cnn_MqttSubs[ s ].msgId  );
+					int msgIndex = cm_msg_getIndex_byId( cnn_MqttSubs[ s ].msgId  );
 					strcpy( cnMs[ msgIndex  ].topic, message->topic );
 					strcpy( cnMs[ msgIndex  ].payload, message->payload );
 					//cm_doClick( 0, 1, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId );
@@ -361,6 +381,10 @@ void cmInit_machNs(){
 	
 	}
 }
+void cmInit_mqtt(){
+	mqttInit2( &cnn_mqtt_on_message );
+	mqttDoIt2();
+}
 
 #ifdef CPPMACHINE
 int main( int argc, char *argv[] ){
@@ -375,14 +399,13 @@ int main( int argc, char *argv[] ){
 
 
 		printf("c cmachine2 -- 2 CPPMACHINE2 ... DONE .. NUDLE SECTION\n");
-		cmInit_atStart();
+		cmInit_cnnAtStart();
 		printf("c cmachine2 -- 2 CPPMACHINE2 ... END  .. NUDLE SECTION\n");
 
 
 		printf("c cmachine2 -- 3 CPPMACHINE2 ... START mqtt init \n"
 			"\t- mqtt hosts:	[ %i ]\n", MqHostsCount );
-		mqttInit2( &cnn_mqtt_on_message );
-		mqttDoIt2();
+		cmInit_mqtt();
 		printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");
 		
 

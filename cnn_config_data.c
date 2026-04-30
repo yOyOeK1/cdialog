@@ -29,7 +29,6 @@ MqHost MqHosts[] = {
 int MqHostsCount = 2;
 
 
-#define CNNMQTTSUB 5
 cnn_mqttSub cnn_MqttSubs[] = {
 	{1,	1,	"and all",		"and/#"		},
 	{2,	1,	"switch left",		"e01Mux/left",		3	},
@@ -85,6 +84,23 @@ cnn_MqttPub cnn_MqttPubs[] = {
 };
 int cnn_MqttPubsCount = 1;
 
+//
+// cnn_CanvClear
+// id 9
+cnn_CanvClear cnn_CanvClears[] = {
+	{ 1,	"clean for test1", 	'-' 	},
+	{ -1 }
+};
+int cnn_CanvClearsCount = 1;
+
+//
+// cnn_CanvPrintf
+// id 10
+cnn_CanvPrintf cnn_CanvPrintfs[] = {
+	{ 1,	"cc printf", 	1,	1,	1  },
+	{ -1 }
+};
+int cnn_CanvPrintfsCount = 1;
 
 #include <stdio.h>
 void cmn_test0( int id, int msgPts ){
@@ -109,6 +125,9 @@ cnn_Nudle cnnNudles[] = {
 	{14,	CNNKEYBIND,	13,	CNNPRINTF,	6	},
 	{15,	CNNPRINTF,	6,	CNNMQTTPUB,	1	},
 //	{15,	CNNPRINTF,	6,	(int)cmn_test0_pts,	1	},
+
+	{16,	CNNKEYBIND,	3,	CNNCANVPRINTF,	1	},
+
 	{-1}	
 };
 
