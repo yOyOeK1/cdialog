@@ -20,6 +20,7 @@ extern int chFill;
 
 #include "cnn_config_data.h"
 
+
 #include "config.h"
 #include "configKeys.h"
 #include "ctermh.h"
@@ -162,7 +163,7 @@ void cm_CanvClear_byId( int ccId ){
 	for( int c=0; true; c++ ){
 		if( cnCanvass[ c ].id == -1 ) break;
 		if( cnCanvass[ c ].id == ccId ){
-			cmiNodeName("CNCANVCLEAR", cnCanvass[ c ].id, cnCanvass[ c ].name );
+			cmiNodeName("CNCANVCLEAR 2", cnCanvass[ c ].id, cnCanvass[ c ].name );
 			if( cnCanvass[ c ].autoSize == false ){
 				//ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, cnCanvass[ c ].col, cnCanvass[ c ].row );
 				cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, cnCanvass[ c ].col, cnCanvass[ c ].row );
@@ -180,9 +181,65 @@ void cm_CanvClear_byId( int ccId ){
 
 }
 void cm_CanvClear( int ccId, cnn_Msg *msgT ){
-	cm_CanvClear_byId( ccId );
+	for( int i=0; true; i++ ){
+		if( cnn_CanvClears[ i ].id == -1 ) break;
+		if( cnn_CanvClears[ i ].id == ccId ){
+			cmiNodeName( "CM_CANVCLEARS 1", ccId, cnn_CanvClears[ i ].name );
+			cm_CanvClear_byId(  cnn_CanvClears[ i ].canvId );
+			break;
+		}
+	}
 }
 
+int cmCanvPrintf( int ccId, int x, int y, char *msg ){
+    int i,ic,iOffset = 0, yColXI;
+    int ccFBc = 11;
+    int cols,rows;
+    char *ccFB;		  
+
+	for( int c=0; true ;c++ ){
+		if( cnCanvass[ c ].id == -1 ) break;
+		if( cnCanvass[ c ].id == ccId ){
+
+			cols = cnCanvass[ c ].col;
+			rows = cnCanvass[ c ].row;
+			ccFBc =  cols * rows;
+			ccFB = cnCanvass[ c ].ccFB;
+
+
+					    
+			    for( i=0,ic=strlen(msg); i<ic; i++){
+				yColXI = y*cols+ x + i;
+				if( ccFB[ yColXI + iOffset ] == '\n' ){
+				    iOffset++;
+				}
+
+				if( (  yColXI + iOffset ) > ccFBc-2 ){
+				    ccFB[ ccFBc-1 ] = 0;
+				    return ccFBc;
+				}
+
+				if( msg[i] == '\n' ){
+				    y++;
+				    iOffset = -i - 1;
+				}else {
+				    ccFB[ yColXI + iOffset ] = msg[ i ];
+				}
+			    }
+
+
+
+
+
+			break;
+		}
+
+	}
+
+
+    return 0;
+
+}
 // CNNCANVPRINTF 10
 void cm_CanvPrintf( int ccpId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
@@ -191,13 +248,39 @@ void cm_CanvPrintf( int ccpId, cnn_Msg *msgT ){
 			cmiNodeName( "CM_CANVPRINTF", ccpId, cnn_CanvPrintfs[ i ].name );
 			//printf( cnnPrintfs[ i ].printAs, msg.payload );
 			// TODO get canvas
-			
+			cmCanvPrintf( cnn_CanvPrintfs[ i ].canvId, 
+				cnn_CanvPrintfs[ i ].x, cnn_CanvPrintfs[ i ].y, 
+				msgT->payload 
+				);
 			// cc_printf on it
 			
 			break;
 		}
 	}
 
+}
+
+void cmCanvasRender( int cId ){
+	for( int c=0; true; c++ ){
+		if( cnCanvass[ c ].id == -1 ) break;
+		if( cnCanvass[ c ].id == cId ){
+			printf("#* ... render FB nudle id[%i]\n", cnCanvass[ c ].id );
+			printf("render ---\n%s\n", cnCanvass[ c ].ccFB );
+			break;
+		}
+		
+	}
+}
+// CNNCANVRENDER 11
+void cm_CanvRender( int ccrId, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnn_CanvRenders[ i ].id == -1 ) break;
+		if( cnn_CanvRenders[ i ].id == ccrId ){
+			cmiNodeName( "CM_CANVRENDER", ccrId, cnn_CanvRenders[ i ].name );
+			cmCanvasRender( cnn_CanvRenders[ i ].canvId );
+			break;
+		}
+	}
 }
 
 // ------------------------------
@@ -228,6 +311,10 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 		
 	}else if( nType == CNNCANVPRINTF ){
 		cm_CanvPrintf( nId, msgT );
+		return true;
+
+	}else if( nType == CNNCANVRENDER ){
+		cm_CanvRender( nId, msgT );
 		return true;
 
 	}else{
@@ -306,17 +393,6 @@ void cmInit_cnCanvass(){
 			ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, mc-3, mr-3 );
 			cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, mc-3, mr-3 );
 		}
-	}
-}
-void cmCanvasRender( int cId ){
-	for( int c=0; true; c++ ){
-		if( cnCanvass[ c ].id == -1 ) break;
-		if( cnCanvass[ c ].id == cId ){
-			printf("#* ... render FB nudle id[%i]\n", cnCanvass[ c ].id );
-			printf("render ---\n%s\n", cnCanvass[ c ].ccFB );
-			break;
-		}
-		
 	}
 }
 
