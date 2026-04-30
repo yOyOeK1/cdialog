@@ -92,6 +92,7 @@ typedef struct{
 	int id;
 	char name[512];
 	char chf;
+	int canvId;
 } cnn_CanvClear;
 
 #define CNNCANVPRINTF 10
@@ -102,6 +103,14 @@ typedef struct{
 	int x;
 	int y;
 } cnn_CanvPrintf;
+
+#define CNNCANVRENDER 11
+typedef struct{
+	int id;
+	char name[512];
+	int canvId;
+	unsigned int count;
+} cnn_CanvRender;
 
 typedef struct{
 	int id;

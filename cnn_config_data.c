@@ -88,7 +88,8 @@ int cnn_MqttPubsCount = 1;
 // cnn_CanvClear
 // id 9
 cnn_CanvClear cnn_CanvClears[] = {
-	{ 1,	"clean for test1", 	'-' 	},
+	/*id,	name,			chFill	canvId	 */
+	{ 1,	"clean for test1", 	'-', 	2 	},
 	{ -1 }
 };
 int cnn_CanvClearsCount = 1;
@@ -97,10 +98,19 @@ int cnn_CanvClearsCount = 1;
 // cnn_CanvPrintf
 // id 10
 cnn_CanvPrintf cnn_CanvPrintfs[] = {
-	{ 1,	"cc printf", 	1,	1,	1  },
+	/*id,	name,		canvId,	x,	y	*/
+	{ 1,	"cc printf", 	2,	1,	1  },
 	{ -1 }
 };
 int cnn_CanvPrintfsCount = 1;
+
+// cnn_CanvRender
+// id 11
+cnn_CanvRender cnn_CanvRenders[] = {
+	{ 1,	"Make test render of canv id 2", 	2 	},
+	{ -1 }
+};
+int cnn_CanvRendersCount = 1;
 
 #include <stdio.h>
 void cmn_test0( int id, int msgPts ){
@@ -128,16 +138,22 @@ cnn_Nudle cnnNudles[] = {
 
 	{16,	CNNKEYBIND,	3,	CNNCANVPRINTF,	1	},
 
+
+	{17,	CNNKEYBIND,	14,	CNNCANVRENDER,	1	},
+	{18,	CNNKEYBIND,	15,	CNNCANVCLEAR,	1	},
+	{18,	CNNKEYBIND,	16,	CNNCANVPRINTF,	1	},
+
 	{-1}	
 };
 
-int cnn_KeyModeNow = 0;
+int cnn_KeyModeNow = 5;
 cnn_KeyMode cnn_KeyModes[] = {
 	{0,	"root"		},
 	{1,	"main"		},
 	{2,	"help"		},
 	{3,	"main3"		},
 	{4,	"main4"		},
+	{5,	"DEB_canvas"	},
 	{-1}
 };
 
@@ -157,6 +173,10 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	{ 11,	 0,	       "mp",	1,		"and/test/perc",	"11.11" },
 	{ 12,	 0,	       "c",	0,		"cmd tint",		"",	5  },
 	{ 13,	 0,	       "p",	0,		"pts test as func",	"",	5  },
+	
+	{ 14,	 5,	       "r",	0,		"test render",		"",	5  },
+	{ 15,	 5,	       "c",	0,		"test clear",		"",	5  },
+	{ 16,	 5,	       "p",	0,		"test printf",		"",	5  },
 	
 	{-1}
 };
