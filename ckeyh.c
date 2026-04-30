@@ -91,6 +91,34 @@ void cnn_keyBind_on_OK( int kbId ){
 	printf(" | \n \\ ___ ### CNNCMD ... END\n");
 }
 
+void keyPrintf_helpForCurrentMode(){
+	printf("--------------------------------\n"
+		" help / legend \n\n"
+		);
+	int p,pNo;
+	
+	printf(" ## key modes \n");
+	pNo = 1;
+	for( p=0; true; p++ ){
+		if( cnn_KeyModes[ p ].id == -1 ) break;
+		printf(" %i.	%c[%i] [%s]\n", pNo++,
+			(cnn_KeyModes[ p ].id == cnn_KeyModeNow ? '@' : ' '),
+			cnn_KeyModes[ p ].id, cnn_KeyModes[ p ].name );
+	}
+	printf(" ## key at this mode \n");
+
+	pNo = 1;
+	for( p=0; true; p++ ){
+		if( cnn_KeyBinds[ p ].id == -1 ) break;
+
+		if( cnn_KeyBinds[ p ].parentId == cnn_KeyModeNow ){
+			printf(" %i.	 [%s]	- %s\n", pNo++, cnn_KeyBinds[ p ].keys, cnn_KeyBinds[ p ].parser );
+		}
+	}
+
+	printf("\n----------------------------\n");
+}
+
 int keyBindIdLast;
 
 int keyBindDoIt(){
@@ -116,6 +144,9 @@ int keyBindDoIt(){
 			if( keyNo == 1 && keyIn[0] == 'q' ){
 				printf("Exit by q\n");
 				break;
+
+			} else if( keyNo == 1 && keyIn[0] == '?' ){
+				keyPrintf_helpForCurrentMode();
 
 			} else if( keyBindIdLast != -1 ) {
 				printf("---- KEYBINDS .... END\n");
