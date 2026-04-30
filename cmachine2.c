@@ -489,6 +489,16 @@ int main( int argc, char *argv[] ){
 
 	printf("cmachine2 ver[%s]\n", CMACHINEVER );
 
+	// pointer function ? START
+	printf("pts to cm_Printf [%p] as int[%i]\n", cm_printf,(int)cm_printf );
+	void (*cmf)(int, cnn_Msg * );
+	cmf = &cm_printf;
+	cnn_Msg msgt = { -1, "and/testHot123", "pay989898" };
+	cmf( 1, &msgt );
+
+	return 0;
+	// pointer function ? END 
+
 	if(1){
 	//	printf("c cmachine2 CPPMACHINE2 ... START size [ %ix%i ]@%s\n", col, row, machineName );
 	//	cmInit_machNs();
