@@ -81,6 +81,58 @@ char *cPP_secLeft( long secL ){
 	return tr;
 }
 
+char *cPP_asCompass( long mag ){
+	char *tr = (char *)malloc( 361*sizeof( char) );
+	int c;
+	for( c=0; c<360; c++ ){
+		if( (c%10) == 0 )
+			tr[ c ] = '|';
+		else if( (c%5) == 0 )
+			tr[ c ] = ',';
+		else 
+			tr[ c ] = '.';
+	}
+	tr[360] = 0;
+	int ang = 0;
+	tr[ ang ] = 'N';
+	ang+=44;
+	tr[ ang++] = 'N'; tr[ang] = 'E';
+	ang=90;
+	tr[ang] = 'E';
+	ang+=44;
+	tr[ang++] = 'E'; tr[ang] = 'S';
+	ang = 180;
+	tr[ang] = 'S';
+	ang+=44;
+	tr[ang++] = 'S';	tr[ang] = 'W';
+	ang = 270;
+	tr[ang] = 'W';
+	ang+=44;
+	tr[ang++] = 'W';	tr[ang] = 'N';
+
+	int ci = (int)mag;
+	//printf("asCompass [%i] \n%s\n", ci, tr );
+
+	char *trt = (char *)malloc( (col+1)*sizeof(char) );
+	trt[col+1] = 0;
+	int cNo = 0;
+	int colH = col / 2;
+	for( c=ci-colH; c<ci+colH; c++ ){
+		//printf("c[%i]\n", c);
+		trt[cNo++] = tr[ ((c+360)%360) ];	
+	}
+	//printf("asCompass [%i] \n%s\n", ci, trt );
+	char *magStr = malloc( 4*sizeof(char) );
+	snprintf( magStr, 4, "%03i", ci );
+	
+	trt[ colH-1 ] = magStr[0];
+	trt[ colH ] = magStr[1];
+	trt[ colH+1 ] = magStr[2];
+
+	return trt;
+}
+
+
 #ifdef CPPTEST
 int main( int argc, char *argv[] ){
 
@@ -103,6 +155,14 @@ int main( int argc, char *argv[] ){
 	printf("progress ... 99.99 is \n\t%s\n", cPP_asProgress( 99.99 ) );
 	printf("progress ... 100.00 is \n\t%s\n", cPP_asProgress( 100.00 ) );
 
+
+	printf("compass ... 10.00 is \n\t%s\n", cPP_asCompass( 10.00 ) );
+	printf("compass ... 100.00 is \n\t%s\n", cPP_asCompass( 100.00 ) );
+	long angg = 0.00;
+	for( int a=0; a<360; a+=12){
+		printf("compass ... %i is \n\t%s\n", angg, cPP_asCompass( angg ) );
+		angg+= 12.31;
+	}
 
 	printf("c postprocess CPPTEST ... DONE\n");
 	return 0;
