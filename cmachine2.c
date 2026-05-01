@@ -297,8 +297,21 @@ void cm_TimeSince( int tsId, cnn_Msg *msgT ){
 		}
 	}
 }
-// CNNPROGRESSBARA 13
-
+// CNNPROGRESSBAR 13
+void cm_ProgressBar( int pId, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnn_ProgressBars[ i ].id == -1 ) break;
+		if( cnn_ProgressBars[ i ].id == pId ){
+			cmiNodeName( "CM_PROGRESSBAR", pId, cnn_ProgressBars[ i ].name );
+			long int mesLong = strtol( msgT->payload, NULL, 10 );
+			col = cnn_ProgressBars[ i ].width;
+			snprintf( msgT->payload, 512, 
+				cnn_ProgressBars[ i ].printAs, cPP_asProgress( mesLong ) 
+				);
+			break;
+		}
+	}
+}
 
 // ------------------------------
 bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
@@ -336,6 +349,10 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 
 	}else if( nType == CNNTIMESINCE ){
 		cm_TimeSince( nId, msgT );
+		return true;
+
+	}else if( nType == CNNPROGRESSBAR ){
+		cm_ProgressBar( nId, msgT );
 		return true;
 
 	}else{
@@ -503,7 +520,9 @@ int main( int argc, char *argv[] ){
 		cm_add( 1, &msgt );
 		cm_TimeSince( 1, &msgt );
 		cm_printf( 1, &msgt );
-
+		strcpy( msgt.payload, "90 % :)" );
+		cm_ProgressBar( 1, &msgt );
+		cm_printf( 1, &msgt );
 		return 0;
 		// pointer function ? END 
 	}

@@ -11,6 +11,7 @@ cnn_Msg cnMs[] = {
 	{.id=3,		.topic="e01Mux/left org",	.payload="1234567890"	},
 	{.id=4,		.topic="e01Mux/humidity org"},
 	{.id=5,		.topic="and/as/key/bind/test",	.payload="In as payload from key bind test." },
+	{.id=6,		.topic="and/as/progress",	.payload="18.11" },
 	{-1}
 };
 
@@ -18,6 +19,7 @@ cnn_atStart cnnAtStarts[] = {
 	/*id		onStart		name*/			
 	{1,		true,		"cnn at start",			1  },
 	{2,		true,		"cnn battery capacity",		2 },
+	{3,		true,		"cnn debug / test",		6 },
 	{-1}
 };
 
@@ -130,6 +132,14 @@ cnn_TimeSince cnn_TimeSinces[] = {
 };
 int cnn_TimeSincesCount = 1;
 
+// cnn_ProgressBar
+// id 13
+cnn_ProgressBar cnn_ProgressBars[] = {
+	{ 1,	"test progress mini",	20,	"%lf",	"\n | . . . test progress mini ...\n | [%s]\n |"	},
+	{ -1 }
+};
+int cnn_ProgressBarsCount = 1;
+
 #include <stdio.h>
 void cmn_test0( int id, int msgPts ){
 	printf("cmn_test0 id[%i] msgPts[%i]\n", id, msgPts );
@@ -163,6 +173,9 @@ cnn_Nudle cnnNudles[] = {
 
 	{19,	CNNCMD,		2,	CNNTIMESINCE,	1	},
 	{20,	CNNTIMESINCE,	1,	CNNPRINTF,	5	},
+
+	{21,	CNNATSTART,	3,	CNNPROGRESSBAR,	1	},
+	{22,	CNNPROGRESSBAR,	1,	CNNPRINTF,	1	},
 
 	{-1}	
 };

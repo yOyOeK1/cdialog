@@ -133,6 +133,15 @@ typedef struct{
 	char printAs[512];
 } cnn_TimeSince;
 
+#define CNNPROGRESSBAR 13
+typedef struct{
+	int id;
+	char name[512];
+	int width;
+	char parseArg[512];
+	char printAs[512];
+} cnn_ProgressBar;
+
 typedef struct{
 	int id;
 	int srcType;
