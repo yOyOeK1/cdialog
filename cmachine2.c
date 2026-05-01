@@ -312,6 +312,21 @@ void cm_ProgressBar( int pId, cnn_Msg *msgT ){
 		}
 	}
 }
+// CNNASCOMPAS 14
+void cm_Compas( int nId, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnn_Compass[ i ].id == -1 ) break;
+		if( cnn_Compass[ i ].id == nId ){
+			cmiNodeName( "CM_COMPASS", nId, cnn_Compass[ i ].name );
+			long int mesLong = strtol( msgT->payload, NULL, 10 );
+			col = cnn_Compass[ i ].width;
+			snprintf( msgT->payload, 512, 
+				cnn_Compass[ i ].printAs, cPP_asCompass( mesLong ) 
+				);
+			break;
+		}
+	}
+}
 
 // ------------------------------
 bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
@@ -353,6 +368,10 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 
 	}else if( nType == CNNPROGRESSBAR ){
 		cm_ProgressBar( nId, msgT );
+		return true;
+
+	}else if( nType == CNNCOMPAS ){
+		cm_Compas( nId, msgT );
 		return true;
 
 	}else{

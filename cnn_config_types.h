@@ -142,6 +142,15 @@ typedef struct{
 	char printAs[512];
 } cnn_ProgressBar;
 
+#define CNNCOMPAS 14
+typedef struct{
+	int id;
+	char name[512];
+	int width;
+	char parseArg[512];
+	char printAs[512];
+} cnn_Compas;
+
 typedef struct{
 	int id;
 	int srcType;

@@ -48,6 +48,9 @@ extern int cnn_TimeSincesCount;
 extern cnn_ProgressBar cnn_ProgressBars[];
 extern int cnn_ProgressBarCount;
 
+extern cnn_Compas cnn_Compass[];
+extern int cnn_CompassCount;
+
 extern cnn_Cmd cnnCmds[];
 extern int cnnCmdsCount;
 

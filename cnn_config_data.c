@@ -143,6 +143,14 @@ cnn_ProgressBar cnn_ProgressBars[] = {
 };
 int cnn_ProgressBarsCount = 1;
 
+// cnn_Compas
+// id 14
+cnn_Compas cnn_Compass[] = {
+	{ 1,	"test compassmini",	37,	"%lf",	"\n | . . . test compass mini ...\n | [%s]\n |"	},
+	{ -1 }
+};
+int cnn_CompassCount = 1;
+
 #include <stdio.h>
 void cmn_test0( int id, int msgPts ){
 	printf("cmn_test0 id[%i] msgPts[%i]\n", id, msgPts );
@@ -180,8 +188,11 @@ cnn_Nudle cnnNudles[] = {
 	{21,	CNNATSTART,	3,	CNNPROGRESSBAR,	1	},
 	{22,	CNNPROGRESSBAR,	1,	CNNPRINTF,	1	},
 
-	{23,	CNNMQTTSUB,	5,	CNNDIV,		4	},
-	{23,	CNNDIV,		4,	CNNPROGRESSBAR,	1	},
+	{23,	CNNMQTTSUB,	5,	CNNCOMPAS,	1	},
+	//{23,	CNNDIV,		4,	CNNPROGRESSBAR,	1	},
+	//{23,	CNNDIV,		4,	CNNCOMPAS,	1	},
+	{24,	CNNCOMPAS,	1,	CNNPRINTF,	1	},
+
 	//{23,	CNNMQTTSUB,	5,	CNNPROGRESSBAR,	1	},
 
 	{-1}	
