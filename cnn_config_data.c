@@ -12,6 +12,7 @@ cnn_Msg cnMs[] = {
 	{.id=4,		.topic="e01Mux/humidity org"},
 	{.id=5,		.topic="and/as/key/bind/test",	.payload="In as payload from key bind test." },
 	{.id=6,		.topic="and/as/progress",	.payload="18.11" },
+	{.id=7,		.topic="and/test/mag",		.payload="" },
 	{-1}
 };
 
@@ -36,8 +37,9 @@ cnn_mqttSub cnn_MqttSubs[] = {
 	{2,	1,	"switch left",		"e01Mux/left",		3	},
 	{3,	1,	"all",			"e01Mux/#"	},
 	{4,	1,	"humidity",		"e01Mux/humidity",	4	},
+	{5,	1,	"magnetometer",		"and/mag",		7	},
 };
-int cnn_MqttSubsCount = 4;
+int cnn_MqttSubsCount = 5;
 // ... mqtt connection ... END
 
 cnn_Printf cnnPrintfs[] = {
@@ -63,6 +65,7 @@ cnn_Div cnnDivs[] = {
 	{1,	"cc div test 1.5",	1.5, -1 },
 	{2,	"cc div test 4.0",	4.0, -1 },
 	{3,	"by 60.00",		60.0, -1 },
+	{4,	"by 3.60",		3.6, -1 },
 	{-1}
 };
 // cnn_MqttSub
@@ -176,6 +179,10 @@ cnn_Nudle cnnNudles[] = {
 
 	{21,	CNNATSTART,	3,	CNNPROGRESSBAR,	1	},
 	{22,	CNNPROGRESSBAR,	1,	CNNPRINTF,	1	},
+
+	{23,	CNNMQTTSUB,	5,	CNNDIV,		4	},
+	{23,	CNNDIV,		4,	CNNPROGRESSBAR,	1	},
+	//{23,	CNNMQTTSUB,	5,	CNNPROGRESSBAR,	1	},
 
 	{-1}	
 };
