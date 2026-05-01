@@ -88,9 +88,9 @@ char *cPP_asCompass( long mag ){
 		if( (c%10) == 0 )
 			tr[ c ] = '|';
 		else if( (c%5) == 0 )
-			tr[ c ] = ',';
-		else 
 			tr[ c ] = '.';
+		else 
+			tr[ c ] = ' ';
 	}
 	tr[360] = 0;
 	int ang = 0;
@@ -117,7 +117,8 @@ char *cPP_asCompass( long mag ){
 	trt[col+1] = 0;
 	int cNo = 0;
 	int colH = col / 2;
-	for( c=ci-colH; c<ci+colH; c++ ){
+	int colHRest = col - colH;
+	for( c=ci-colH; c<ci+colHRest; c++ ){
 		//printf("c[%i]\n", c);
 		trt[cNo++] = tr[ ((c+360)%360) ];	
 	}

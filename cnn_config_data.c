@@ -146,7 +146,7 @@ int cnn_ProgressBarsCount = 1;
 // cnn_Compas
 // id 14
 cnn_Compas cnn_Compass[] = {
-	{ 1,	"test compassmini",	37,	"%lf",	"\n | . . . test compass mini ...\n | [%s]\n |"	},
+	{ 1,	"test compassmini",	50,	"%lf",	"\n | . . . test compass mini ...\n | [%s]\n |"	},
 	{ -1 }
 };
 int cnn_CompassCount = 1;
