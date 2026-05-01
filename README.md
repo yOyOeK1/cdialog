@@ -54,10 +54,12 @@ Current work is at this file. It's semi node-red a.k.a. c language / hardcoded s
 ./cnn_config_types.h:#define CNNMQTTSUB 5
 ./cnn_config_types.h:#define CNNKEYBIND 7
 
-builds clone of message with
-topic and payload
+all of them should have `cnn_Msg` define as there default values on event. 
+- CNNMQTTSUB payload is populated with message comming from subscription.
 
-Then sends it over `nudle` to `node`. 
+then it builds clone of message with
+topic and payload
+sends it over to `nudle` to `node`. 
 
 For now some types of `node`s implemended with status:
 
@@ -66,8 +68,11 @@ For now some types of `node`s implemended with status:
 ./cnn_config_types.h:#define CNNCMD 6
 ./cnn_config_types.h:#define CNNPRINTF 2
 ./cnn_config_types.h:#define CNNMQTTPUB 8
-[TODO]./cnn_config_types.h:#define CNNCANVCLEAR 9
+./cnn_config_types.h:#define CNNCANVCLEAR 9
 ./cnn_config_types.h:#define CNNCANVPRINTF 10
+./cnn_config_types.h:#define CNNCANVRENDER 11
+./cnn_config_types.h:#define CNNTIMESINCE 12
+./cnn_config_types.h:#define CNNPROGRESSBAR 13
 
 `cnn_config*` files are to set what you want to build. Now it's a bOnaNzA one big test. I'm thinking to use 
 `#define VARIABLES` as main switching mechanizm to decide what to build as binarry.
