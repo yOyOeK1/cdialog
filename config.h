@@ -97,23 +97,23 @@ struct machNode machNs[] = {
 // -- C NODE NUDDLE FLOW START
 //
 // cnnCanvas
-struct cnn_Canvas{
-	int id;
-	char name[512];
-	bool autoSize;
-	int col;
-	int row;
-	char ch;
-	char *ccFB;
-	int pCount;
-};
-struct cnn_Canvas cnCanvass[] = {
-	{1,	"debug",	false,	10,	40,	'1'	},
-	{2,	"small canvas",	false,	30,	5,	'2'	},
-	{3,	"auto canvas",	true,	0,	0,	'3'	},
-	{4,	"top banner",	false,	40,	40,	' '	},
-	{-1}
-};
+//struct cnn_Canvas{
+//	int id;
+//	char name[512];
+//	bool autoSize;
+//	int col;
+//	int row;
+//	char ch;
+//	char *ccFB;
+//	int pCount;
+//};
+//struct cnn_Canvas cnCanvass[] = {
+//	{1,	"debug",	false,	10,	40,	'1'	},
+//	{2,	"small canvas",	false,	30,	5,	'2'	},
+//	{3,	"auto canvas",	true,	0,	0,	'3'	},
+//	{4,	"top banner",	false,	40,	40,	' '	},
+//	{-1}
+//};
 
 
 // cnnAtStart

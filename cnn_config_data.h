@@ -30,6 +30,9 @@ extern int cnn_MqttSubsCount;
 extern cnn_MqttPub cnn_MqttPubs[];
 extern int cnn_MqttPubsCount;
 
+extern cnn_Canvas cnn_Canvass[];
+extern int cnn_CanvassCount;
+
 extern cnn_CanvClear cnn_CanvClears[];
 extern int cnn_CanvClearsCount;
 

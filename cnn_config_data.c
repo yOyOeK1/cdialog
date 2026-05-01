@@ -84,6 +84,15 @@ cnn_MqttPub cnn_MqttPubs[] = {
 };
 int cnn_MqttPubsCount = 1;
 
+cnn_Canvas cnn_Canvass[] = {
+	{1,	"debug",	false,	10,	40,	'1'	},
+	{2,	"small canvas",	false,	30,	5,	'2'	},
+	{3,	"auto canvas",	true,	0,	0,	'3'	},
+	{4,	"top banner",	false,	40,	40,	' '	},
+	{-1}
+};
+int cnn_CanvassCount = 4;
+
 //
 // cnn_CanvClear
 // id 9

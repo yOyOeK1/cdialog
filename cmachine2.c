@@ -161,18 +161,18 @@ void cm_mqttPub( int mqttPubId, cnn_Msg *msgT ){
 // CNNCANVCLEAR 9
 void cm_CanvClear_byId( int ccId ){
 	for( int c=0; true; c++ ){
-		if( cnCanvass[ c ].id == -1 ) break;
-		if( cnCanvass[ c ].id == ccId ){
-			cmiNodeName("CNCANVCLEAR 2", cnCanvass[ c ].id, cnCanvass[ c ].name );
-			if( cnCanvass[ c ].autoSize == false ){
-				//ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, cnCanvass[ c ].col, cnCanvass[ c ].row );
-				cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, cnCanvass[ c ].col, cnCanvass[ c ].row );
+		if( cnn_Canvass[ c ].id == -1 ) break;
+		if( cnn_Canvass[ c ].id == ccId ){
+			cmiNodeName("CNCANVCLEAR 2", cnn_Canvass[ c ].id, cnn_Canvass[ c ].name );
+			if( cnn_Canvass[ c ].autoSize == false ){
+				//ccInit_FB_byPointer( &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].col, cnn_Canvass[ c ].row );
+				cc_clear_byPointer(  &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].ch, cnn_Canvass[ c ].col, cnn_Canvass[ c ].row );
 			} else {
 				int mc;
 				int mr;
 				ctermSize( &mc, &mr );
-				ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, mc-3, mr-3 );
-				cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, mc-3, mr-3 );
+				ccInit_FB_byPointer( &cnn_Canvass[ c ].ccFB, mc-3, mr-3 );
+				cc_clear_byPointer(  &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].ch, mc-3, mr-3 );
 			}
 			break;
 		}
@@ -198,13 +198,13 @@ int cmCanvPrintf( int ccId, int x, int y, char *msg ){
     char *ccFB;		  
 
 	for( int c=0; true ;c++ ){
-		if( cnCanvass[ c ].id == -1 ) break;
-		if( cnCanvass[ c ].id == ccId ){
+		if( cnn_Canvass[ c ].id == -1 ) break;
+		if( cnn_Canvass[ c ].id == ccId ){
 
-			cols = cnCanvass[ c ].col;
-			rows = cnCanvass[ c ].row;
+			cols = cnn_Canvass[ c ].col;
+			rows = cnn_Canvass[ c ].row;
 			ccFBc =  cols * rows;
-			ccFB = cnCanvass[ c ].ccFB;
+			ccFB = cnn_Canvass[ c ].ccFB;
 
 
 					    
@@ -262,10 +262,10 @@ void cm_CanvPrintf( int ccpId, cnn_Msg *msgT ){
 
 void cmCanvasRender( int cId ){
 	for( int c=0; true; c++ ){
-		if( cnCanvass[ c ].id == -1 ) break;
-		if( cnCanvass[ c ].id == cId ){
-			printf("#* ... render FB nudle id[%i]\n", cnCanvass[ c ].id );
-			printf("render ---\n%s\n", cnCanvass[ c ].ccFB );
+		if( cnn_Canvass[ c ].id == -1 ) break;
+		if( cnn_Canvass[ c ].id == cId ){
+			printf("#* ... render FB nudle id[%i]\n", cnn_Canvass[ c ].id );
+			printf("render --- (%i)\n%s\n", cnn_Canvass[ c ].pCount++, cnn_Canvass[ c ].ccFB );
 			break;
 		}
 		
@@ -400,26 +400,28 @@ void cmInit_cnnAtStart(){
 
 void cmInit_cnCanvass(){
 	for( int c=0; true; c++ ){
-		if( cnCanvass[ c ].id == -1 ) break;
-		printf("#* ... init FB nudle id[%i]\n", cnCanvass[ c ].id);
-		cmiNodeName("CNCANVAS", cnCanvass[ c ].id, cnCanvass[ c ].name );
-		cnCanvass[ c ].pCount = 0;
-		if( cnCanvass[ c ].autoSize == false ){
-			ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, cnCanvass[ c ].col, cnCanvass[ c ].row );
-			cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, cnCanvass[ c ].col, cnCanvass[ c ].row );
+		if( cnn_Canvass[ c ].id == -1 ) break;
+		printf("#* ... init FB nudle id[%i]\n", cnn_Canvass[ c ].id);
+		cmiNodeName("CNCANVAS", cnn_Canvass[ c ].id, cnn_Canvass[ c ].name );
+		cnn_Canvass[ c ].pCount = 0;
+		if( cnn_Canvass[ c ].autoSize == false ){
+			ccInit_FB_byPointer( &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].col, cnn_Canvass[ c ].row );
+			cc_clear_byPointer(  &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].ch, cnn_Canvass[ c ].col, cnn_Canvass[ c ].row );
 		} else {
 			int mc;
 			int mr;
 			ctermSize( &mc, &mr );
-			ccInit_FB_byPointer( &cnCanvass[ c ].ccFB, mc-3, mr-3 );
-			cc_clear_byPointer(  &cnCanvass[ c ].ccFB, cnCanvass[ c ].ch, mc-3, mr-3 );
+			cnn_Canvass[ c ].col = mc-3;
+			cnn_Canvass[ c ].row = mr-3;
+			ccInit_FB_byPointer( &cnn_Canvass[ c ].ccFB, mc-3, mr-3 );
+			cc_clear_byPointer(  &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].ch, mc-3, mr-3 );
 		}
 	}
 }
 
 void cmInit(){
 
-	//ccInit_FB_nudle( &cnCanvass );
+	//ccInit_FB_nudle( &cnn_Canvass );
 	//cc_clear( chFill );
 	//cmInit_cnCanvass();
 
@@ -489,15 +491,22 @@ int main( int argc, char *argv[] ){
 
 	printf("cmachine2 ver[%s]\n", CMACHINEVER );
 
-	// pointer function ? START
-	printf("pts to cm_Printf [%p] as int[%i]\n", cm_printf,(int)cm_printf );
-	void (*cmf)(int, cnn_Msg * );
-	cmf = &cm_printf;
-	cnn_Msg msgt = { -1, "and/testHot123", "pay989898" };
-	cmf( 1, &msgt );
+	if( 0 ){
+		// pointer function ? START
+		printf("pts to cm_Printf [%p] as int[%i]\n", cm_printf,(int)cm_printf );
+		void (*cmf)(int, cnn_Msg * );
+		cnn_Msg msgt = { -1, "and/testHot123", "989898" };
+		cmf = &cm_printf;
+		cmf( 1, &msgt );
+		cmf = &cm_div;
+		cmf( 1, &msgt );
+		cm_add( 1, &msgt );
+		cm_TimeSince( 1, &msgt );
+		cm_printf( 1, &msgt );
 
-	return 0;
-	// pointer function ? END 
+		return 0;
+		// pointer function ? END 
+	}
 
 	if(1){
 	//	printf("c cmachine2 CPPMACHINE2 ... START size [ %ix%i ]@%s\n", col, row, machineName );

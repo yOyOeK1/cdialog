@@ -87,6 +87,19 @@ typedef struct{
 	char name[512];
 } cnn_MqttPub;
 
+
+// cnn_Canvas
+typedef struct{
+	int id;
+	char name[512];
+	bool autoSize;
+	int col;
+	int row;
+	char ch;
+	char *ccFB;
+	int pCount;
+} cnn_Canvas;
+
 #define CNNCANVCLEAR 9
 typedef struct{
 	int id;
