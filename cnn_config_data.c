@@ -166,26 +166,26 @@ int cnn_CompassCount = 1;
 #include "cmachine2.h"
 cnn_Hash cnn_Hashs[] = {
 	{ 1,	"At start",		CNNATSTART, 	false,	0	},
-	{ 2,	"mqtt sub",		CNNMQTTSUB,	false,	0	},
-	{ 3,	"key bind",		CNNKEYBIND,	false,	0 	},
+	{ 5,	"mqtt sub",		CNNMQTTSUB,	false,	0	},
+	{ 7,	"key bind",		CNNKEYBIND,	false,	0 	},
 	
-	{ 4,	"Printf",		CNNPRINTF,	true,	&cm_printf 	},
-	{ 5,	"Cmd",			CNNCMD,		true,	&cm_cmd 	},
-	{ 6,	"mqtt publish",		CNNMQTTPUB,	true,	&cm_mqttPub 	},
+	{ 2,	"Printf",		CNNPRINTF,	true,	&cm_printf 	},
+	{ 6,	"Cmd",			CNNCMD,		true,	&cm_cmd 	},
+	{ 8,	"mqtt publish",		CNNMQTTPUB,	true,	&cm_mqttPub 	},
 
 	{ 3,	"Add",			CNNADD,		true,	&cm_add		},
-	{ 3,	"Divide",		CNNDIV,		true,	&cm_div 	},
-	{ 3,	"as Time since",	CNNTIMESINCE,	true,	&cm_TimeSince 	},
-	{ 3,	"as Progress bar",	CNNPROGRESSBAR,	true,	&cm_ProgressBar 	},
-	{ 3,	"as Compas",		CNNCOMPAS,	true,	&cm_Compas 	},
+	{ 4,	"Divide",		CNNDIV,		true,	&cm_div 	},
+	{ 12,	"as Time since",	CNNTIMESINCE,	true,	&cm_TimeSince 	},
+	{ 13,	"as Progress bar",	CNNPROGRESSBAR,	true,	&cm_ProgressBar 	},
+	{ 14,	"as Compas",		CNNCOMPAS,	true,	&cm_Compas 	},
 
-	{ 3,	"Canvas clear",		CNNCANVCLEAR,	true,	&cm_CanvClear 	},
-	{ 3,	"Canvas printf",	CNNCANVPRINTF,	true,	&cm_CanvPrintf 	},
-	{ 3,	"Canvas render",	CNNCANVRENDER,	true,	&cm_CanvRender 	},
+	{ 9,	"Canvas clear",		CNNCANVCLEAR,	true,	&cm_CanvClear 	},
+	{ 10,	"Canvas printf",	CNNCANVPRINTF,	true,	&cm_CanvPrintf 	},
+	{ 11,	"Canvas render",	CNNCANVRENDER,	true,	&cm_CanvRender 	},
 
 	{ -1 }
 }; 
-int cnn_HashsCount = 1;
+int cnn_HashsCount = 14;
 
 void cnn_config_init(){
 	printf("# cnn config init ....\n");
