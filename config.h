@@ -67,32 +67,7 @@ struct mqNode mqNodes[] = {
 	{-1}
 };
 
-struct machNode{
-	int id;
-	bool onStart;
-	long everyMs;
-	char name[512];
-	int typeOf; // 0 - cmd
-	char cmd[512];
-	char result[512];
-	bool isRunning;
-};
 
-struct machNode machNs[] = {
-//	id		onStart		everyMs		name			typeOf	cmd
-	{1,		true,		0,		"at start", 		0,	"date"		},
-	{2,		true,		1000,		"1sec iter at start", 	0,	"echo 'ping'"		},
-	{3,		true,		0,		"battery capacity", 	0,	"cat /sys/class/power_supply/*/capacity"		},
-	{4,		true,		0,		"loadavg", 		0,	"cat /proc/loadavg"		},
-	{5,		true,		0,		"hostname", 		0,	"hostname"		},
-	{6,		true,		0,		"mem used", 		0,	"free | grep Mem | awk '{print $3}'"		},
-	{7,		true,		0,		"ps count", 		0,	"ps x | wc -l"		},
-	{8,		true,		0,		"interfaces", 		0,	"ip a | grep -e ': ' -e 'inet ' | awk '{print $2}'"	},
-	{9,		true,		0,		"uptime", 		0,	"cat /proc/uptime"	},
-	{10,		true,		0,		"at start", 		0,	"date"		},
-	{11,		false,		0,		"test none", 		0,	"echo 'none'"		},
-	{-1}
-};
 
 // -- C NODE NUDDLE FLOW START
 //

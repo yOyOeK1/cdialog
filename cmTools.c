@@ -1,8 +1,22 @@
 
 #include <stdio.h>
+#include <string.h>
 
 #include "cnn_config_data.h"
+#include "cmdh.h"
 
+void cmt_start_byNode( machNode mn ){
+	printf("\t* start by id ... %i\n", mn.id );	
+
+	if( mn.typeOf == 0 ){ // cmd
+		mn.isRunning = true;
+		strcpy( mn.result, cmd_to_chars( mn.cmd ) );
+		printf( "\t* ... result [ %s ]\n", mn.result );
+
+	}else{
+		printf("\tEE type not implemented [%i]\n", mn.typeOf );
+	}
+}
 
 void cmt_NodeName( char *type, int id, char *name ){
 	printf(" |\n |__  %s id[%i][ %s ]\n |\n", type, id, name );

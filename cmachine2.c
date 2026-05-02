@@ -38,19 +38,6 @@ extern int chFill;
 
 char cmachBuff[512];
 
-void cmachine_start_byNode( struct machNode mn ){
-	printf("\t* start by id ... %i\n", mn.id );	
-
-	if( mn.typeOf == 0 ){ // cmd
-		mn.isRunning = true;
-		strcpy( mn.result, cmd_to_chars( mn.cmd ) );
-		printf( "\t* ... result [ %s ]\n", mn.result );
-
-	}else{
-		printf("\tEE type not implemented [%i]\n", mn.typeOf );
-	}
-}
-
 
 
 int cm_msg_getIndex_byId( int id ){
@@ -416,27 +403,6 @@ void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 
 }
 
-void cmInit_cnCanvass(){
-	for( int c=0; true; c++ ){
-		if( cnn_Canvass[ c ].id == -1 ) break;
-		printf("#* ... init FB nudle id[%i]\n", cnn_Canvass[ c ].id);
-		cmt_NodeName("CNCANVAS", cnn_Canvass[ c ].id, cnn_Canvass[ c ].name );
-		cnn_Canvass[ c ].pCount = 0;
-		if( cnn_Canvass[ c ].autoSize == false ){
-			ccInit_FB_byPointer( &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].col, cnn_Canvass[ c ].row );
-			cc_clear_byPointer(  &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].ch, cnn_Canvass[ c ].col, cnn_Canvass[ c ].row );
-		} else {
-			int mc;
-			int mr;
-			ctermSize( &mc, &mr );
-			cnn_Canvass[ c ].col = mc-3;
-			cnn_Canvass[ c ].row = mr-3;
-			ccInit_FB_byPointer( &cnn_Canvass[ c ].ccFB, mc-3, mr-3 );
-			cc_clear_byPointer(  &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].ch, mc-3, mr-3 );
-		}
-	}
-}
-
 void cmInit(){
 
 	//ccInit_FB_nudle( &cnn_Canvass );
@@ -490,17 +456,6 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 
 }	
 
-void cmInit_machNs(){
-	for( int p=0; true; p++ ){
-		if( machNs[ p ].id == -1 ) break;
-		printf("\n\n*[%i] id[%i] ... onStart[%i] every[%ims] \n\t - %s\n", p, 
-			machNs[ p ].id, machNs[ p ].onStart, machNs[ p ].everyMs, machNs[ p ].name 
-			);
-		if( machNs[ p ].onStart )
-			cmachine_start_byNode( machNs[ p ] );
-	
-	}
-}
 void cmInit_mqtt(){
 	mqttInit2( &cnn_mqtt_on_message );
 	mqttDoIt2();

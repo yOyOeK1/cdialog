@@ -13,6 +13,18 @@ typedef struct{
 	long tEnd;
 } cnn_Msg;
 
+
+typedef struct{
+	int id;
+	bool onStart;
+	long everyMs;
+	char name[512];
+	int typeOf; // 0 - cmd
+	char cmd[512];
+	char result[512];
+	bool isRunning;
+} machNode;
+
 #define CNNATSTART 1
 typedef struct{
 	int id;

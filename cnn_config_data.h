@@ -11,6 +11,9 @@ extern char *cnn_Version;
 extern cnn_Msg cnMs[];
 extern int cnMsCount;
 
+
+extern machNode machNs[];
+
 extern cnn_atStart cnnAtStarts[];
 extern int cnnAtStartsCount;
 
