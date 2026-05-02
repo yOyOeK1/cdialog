@@ -86,6 +86,51 @@ void cm_add( int id, cnn_Msg *msgT ){
 	}	
 }
 
+// CNNTIMESINCE 12
+void cm_TimeSince( int tsId, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnn_TimeSinces[ i ].id == -1 ) break;
+		if( cnn_TimeSinces[ i ].id == tsId ){
+			cmt_NodeName( "CM_TIMESINCE", tsId, cnn_TimeSinces[ i ].name );
+			long int mesLong = strtol( msgT->payload, NULL, 10 );
+			snprintf( msgT->payload, 512, 
+				cnn_TimeSinces[ i ].printAs, cPP_secLeft( mesLong ) 
+				);
+			break;
+		}
+	}
+}
+// CNNPROGRESSBAR 13
+void cm_ProgressBar( int pId, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnn_ProgressBars[ i ].id == -1 ) break;
+		if( cnn_ProgressBars[ i ].id == pId ){
+			cmt_NodeName( "CM_PROGRESSBAR", pId, cnn_ProgressBars[ i ].name );
+			long int mesLong = strtol( msgT->payload, NULL, 10 );
+			col = cnn_ProgressBars[ i ].width;
+			snprintf( msgT->payload, 512, 
+				cnn_ProgressBars[ i ].printAs, cPP_asProgress( mesLong ) 
+				);
+			break;
+		}
+	}
+}
+// CNNASCOMPAS 14
+void cm_Compas( int nId, cnn_Msg *msgT ){
+	for( int i=0; true; i++ ){
+		if( cnn_Compass[ i ].id == -1 ) break;
+		if( cnn_Compass[ i ].id == nId ){
+			cmt_NodeName( "CM_COMPASS", nId, cnn_Compass[ i ].name );
+			long int mesLong = strtol( msgT->payload, NULL, 10 );
+			col = cnn_Compass[ i ].width;
+			snprintf( msgT->payload, 512, 
+				cnn_Compass[ i ].printAs, cPP_asCompass( mesLong ) 
+				);
+			break;
+		}
+	}
+}
+
 void cm_printf( int id, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnnPrintfs[ i ].id == -1 ) break;
@@ -263,51 +308,6 @@ void cm_CanvRender( int ccrId, cnn_Msg *msgT ){
 		if( cnn_CanvRenders[ i ].id == ccrId ){
 			cmt_NodeName( "CM_CANVRENDER", ccrId, cnn_CanvRenders[ i ].name );
 			cmCanvasRender( cnn_CanvRenders[ i ].canvId );
-			break;
-		}
-	}
-}
-
-// CNNTIMESINCE 12
-void cm_TimeSince( int tsId, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnn_TimeSinces[ i ].id == -1 ) break;
-		if( cnn_TimeSinces[ i ].id == tsId ){
-			cmt_NodeName( "CM_TIMESINCE", tsId, cnn_TimeSinces[ i ].name );
-			long int mesLong = strtol( msgT->payload, NULL, 10 );
-			snprintf( msgT->payload, 512, 
-				cnn_TimeSinces[ i ].printAs, cPP_secLeft( mesLong ) 
-				);
-			break;
-		}
-	}
-}
-// CNNPROGRESSBAR 13
-void cm_ProgressBar( int pId, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnn_ProgressBars[ i ].id == -1 ) break;
-		if( cnn_ProgressBars[ i ].id == pId ){
-			cmt_NodeName( "CM_PROGRESSBAR", pId, cnn_ProgressBars[ i ].name );
-			long int mesLong = strtol( msgT->payload, NULL, 10 );
-			col = cnn_ProgressBars[ i ].width;
-			snprintf( msgT->payload, 512, 
-				cnn_ProgressBars[ i ].printAs, cPP_asProgress( mesLong ) 
-				);
-			break;
-		}
-	}
-}
-// CNNASCOMPAS 14
-void cm_Compas( int nId, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnn_Compass[ i ].id == -1 ) break;
-		if( cnn_Compass[ i ].id == nId ){
-			cmt_NodeName( "CM_COMPASS", nId, cnn_Compass[ i ].name );
-			long int mesLong = strtol( msgT->payload, NULL, 10 );
-			col = cnn_Compass[ i ].width;
-			snprintf( msgT->payload, 512, 
-				cnn_Compass[ i ].printAs, cPP_asCompass( mesLong ) 
-				);
 			break;
 		}
 	}
