@@ -4,7 +4,11 @@
 #include "cnn_config_data.h"
 
 
-void cmt_hashsDump(){
+void cmt_NodeName( char *type, int id, char *name ){
+	printf(" |\n |__  %s id[%i][ %s ]\n |\n", type, id, name );
+}
+
+void cmt_hashsDump( ){
 	printf("cnn_Hashs ... START\n");
 	printf("## h |id | N |Ntyp|    *fpts       | name \n" );
 	for( int h=0; true; h++ ){

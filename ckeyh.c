@@ -9,6 +9,7 @@
 
 #include "cnn_config_data.h"
 
+#include "cmTools.h"
 #include "cmachine2.h"
 
 extern int col;
@@ -42,7 +43,7 @@ int key_chk_KeyBinds(  ){
 			if( asBar == false ) 
 				printf( "[%s] ", cnn_KeyBinds[kBin].keys );
 			if( strcmp( keyIn, cnn_KeyBinds[kBin].keys ) == 0 ){
-				cmiNodeName("CNNKEYBIND", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].keys );
+				cmt_NodeName("CNNKEYBIND", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].keys );
 				printf(" | OK keyBind id[%i]\n | ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
 
 				//cm_doClick( 0, 0/*cnn_KeyBinds[kBin].msgId*/, CNNKEYBIND, cnn_KeyBinds[kBin].id );
@@ -81,7 +82,7 @@ void cnn_keyBind_on_OK( int kbId ){
 	//		strcpy( cnMs[ msgIndex  ].topic, message->topic );
 	//		strcpy( cnMs[ msgIndex  ].payload, message->payload );
 	//		//cm_doClick( 0, 1, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId );
-	//		cmiNodeName("CNNCMD", cnnCmds[ s ].id, cnnCmds[ s ].name ); 
+	//		cmt_NodeName("CNNCMD", cnnCmds[ s ].id, cnnCmds[ s ].name ); 
 	//		cm_doClick( 0, cnnCmds[ s ].msgId, cnnNudles[ n ].srcType, cnnNudles[ n ].srcId );
         //
 	//	}

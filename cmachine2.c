@@ -24,6 +24,7 @@ extern int chFill;
 #include "config.h"
 //#include "configKeys.h"
 #include "cmTools.h"
+#include "cmInits.h"
 #include "ctermh.h"
 #include "ckeyh.h"
 #include "mqtth.h"
@@ -51,10 +52,6 @@ void cmachine_start_byNode( struct machNode mn ){
 }
 
 
-void cmiNodeName( char *type, int id, char *name ){
-	printf(" |\n |__  %s id[%i][ %s ]\n |\n", type, id, name );
-}
-
 
 int cm_msg_getIndex_byId( int id ){
 	for( int i=0; true; i++){
@@ -78,7 +75,7 @@ void cm_div( int id, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnnDivs[ i ].id == -1 ) break;
 		if( cnnDivs[ i ].id == id ){
-			cmiNodeName( "CM_DIVS", id, cnnDivs[ i ].name );
+			cmt_NodeName( "CM_DIVS", id, cnnDivs[ i ].name );
 			float fin = atof( msgT->payload );
 			fin/= cnnDivs[ i ].divBy;
 			printf("[DEB] div %s by %f res [%f]\n",  msgT->payload, cnnDivs[ i ].divBy, fin );
@@ -92,7 +89,7 @@ void cm_add( int id, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnnAdds[ i ].id == -1 ) break;
 		if( cnnAdds[ i ].id == id ){
-			cmiNodeName( "CM_ADDS", id, cnnAdds[ i ].name );
+			cmt_NodeName( "CM_ADDS", id, cnnAdds[ i ].name );
 			float fin = atof( msgT->payload );
 			fin+= cnnAdds[ i ].add;
 			printf("[DEB] add %f to %s res [%f]\n", cnnAdds[ i ].add, msgT->payload, fin );
@@ -106,7 +103,7 @@ void cm_printf( int id, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnnPrintfs[ i ].id == -1 ) break;
 		if( cnnPrintfs[ i ].id == id ){
-			cmiNodeName( "CM_PRINTF", id, cnnPrintfs[ i ].name );
+			cmt_NodeName( "CM_PRINTF", id, cnnPrintfs[ i ].name );
 			if( cnnPrintfs[ i ].doTopic ){
 				printf("* Topic: ... %s\n", msgT->topic );
 			}
@@ -120,7 +117,7 @@ void cm_cmd( int cmdId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnnCmds[ i ].id == -1 ) break;
 		if( cnnCmds[ i ].id == cmdId ){
-			cmiNodeName( "CM_CMD", cmdId, cnnCmds[ i ].name );
+			cmt_NodeName( "CM_CMD", cmdId, cnnCmds[ i ].name );
 			printf(" | ...... cmd START ---\\ \n");
 			strcpy( msgT->payload, cmd_to_chars( cnnCmds[ i ].cmd ) );
 			printf(" | ...... cmd END -----/\n");
@@ -137,7 +134,7 @@ void cm_mqttPub( int mqttPubId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_MqttPubs[ i ].id == -1 ) break;
 		if( cnn_MqttPubs[ i ].id == mqttPubId ){
-			cmiNodeName( "CM_MQTT_PUB", mqttPubId, cnn_MqttPubs[ i ].name );
+			cmt_NodeName( "CM_MQTT_PUB", mqttPubId, cnn_MqttPubs[ i ].name );
 			printf(" | ...... mqtt pub START ---\\ \n"
 				" | ...		mqtt host id	[%i]\n"
 				" | ... 	topic 	[%s]\n"
@@ -164,7 +161,7 @@ void cm_CanvClear_byId( int ccId ){
 	for( int c=0; true; c++ ){
 		if( cnn_Canvass[ c ].id == -1 ) break;
 		if( cnn_Canvass[ c ].id == ccId ){
-			cmiNodeName("CNCANVCLEAR 2", cnn_Canvass[ c ].id, cnn_Canvass[ c ].name );
+			cmt_NodeName("CNCANVCLEAR 2", cnn_Canvass[ c ].id, cnn_Canvass[ c ].name );
 			if( cnn_Canvass[ c ].autoSize == false ){
 				//ccInit_FB_byPointer( &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].col, cnn_Canvass[ c ].row );
 				cc_clear_byPointer(  &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].ch, cnn_Canvass[ c ].col, cnn_Canvass[ c ].row );
@@ -185,7 +182,7 @@ void cm_CanvClear( int ccId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_CanvClears[ i ].id == -1 ) break;
 		if( cnn_CanvClears[ i ].id == ccId ){
-			cmiNodeName( "CM_CANVCLEARS 1", ccId, cnn_CanvClears[ i ].name );
+			cmt_NodeName( "CM_CANVCLEARS 1", ccId, cnn_CanvClears[ i ].name );
 			cm_CanvClear_byId(  cnn_CanvClears[ i ].canvId );
 			break;
 		}
@@ -246,7 +243,7 @@ void cm_CanvPrintf( int ccpId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_CanvPrintfs[ i ].id == -1 ) break;
 		if( cnn_CanvPrintfs[ i ].id == ccpId ){
-			cmiNodeName( "CM_CANVPRINTF", ccpId, cnn_CanvPrintfs[ i ].name );
+			cmt_NodeName( "CM_CANVPRINTF", ccpId, cnn_CanvPrintfs[ i ].name );
 			//printf( cnnPrintfs[ i ].printAs, msg.payload );
 			// TODO get canvas
 			cmCanvPrintf( cnn_CanvPrintfs[ i ].canvId, 
@@ -277,7 +274,7 @@ void cm_CanvRender( int ccrId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_CanvRenders[ i ].id == -1 ) break;
 		if( cnn_CanvRenders[ i ].id == ccrId ){
-			cmiNodeName( "CM_CANVRENDER", ccrId, cnn_CanvRenders[ i ].name );
+			cmt_NodeName( "CM_CANVRENDER", ccrId, cnn_CanvRenders[ i ].name );
 			cmCanvasRender( cnn_CanvRenders[ i ].canvId );
 			break;
 		}
@@ -289,7 +286,7 @@ void cm_TimeSince( int tsId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_TimeSinces[ i ].id == -1 ) break;
 		if( cnn_TimeSinces[ i ].id == tsId ){
-			cmiNodeName( "CM_TIMESINCE", tsId, cnn_TimeSinces[ i ].name );
+			cmt_NodeName( "CM_TIMESINCE", tsId, cnn_TimeSinces[ i ].name );
 			long int mesLong = strtol( msgT->payload, NULL, 10 );
 			snprintf( msgT->payload, 512, 
 				cnn_TimeSinces[ i ].printAs, cPP_secLeft( mesLong ) 
@@ -303,7 +300,7 @@ void cm_ProgressBar( int pId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_ProgressBars[ i ].id == -1 ) break;
 		if( cnn_ProgressBars[ i ].id == pId ){
-			cmiNodeName( "CM_PROGRESSBAR", pId, cnn_ProgressBars[ i ].name );
+			cmt_NodeName( "CM_PROGRESSBAR", pId, cnn_ProgressBars[ i ].name );
 			long int mesLong = strtol( msgT->payload, NULL, 10 );
 			col = cnn_ProgressBars[ i ].width;
 			snprintf( msgT->payload, 512, 
@@ -318,7 +315,7 @@ void cm_Compas( int nId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_Compass[ i ].id == -1 ) break;
 		if( cnn_Compass[ i ].id == nId ){
-			cmiNodeName( "CM_COMPASS", nId, cnn_Compass[ i ].name );
+			cmt_NodeName( "CM_COMPASS", nId, cnn_Compass[ i ].name );
 			long int mesLong = strtol( msgT->payload, NULL, 10 );
 			col = cnn_Compass[ i ].width;
 			snprintf( msgT->payload, 512, 
@@ -419,27 +416,11 @@ void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 
 }
 
-void cmInit_cnnAtStart(){
-	for( int n=0; true; n++ ){
-		if( cnnAtStarts[ n ].id == -1 ) break;
-		if( cnnAtStarts[ n ].onStart ){ 
-			printf("\n ### AUTOSTART ... START\n |\n");
-			cmiNodeName("CN_ATSTART", cnnAtStarts[ n ].id, cnnAtStarts[ n ].name );
-			cnn_Msg msgT;
-			cm_doClick( 0, cnnAtStarts[ n ].msgId, msgT, CNNATSTART, cnnAtStarts[ n ].id );
-			printf(" | \n \\ ___ ### AUTOSTART ... END\n");
-
-		}
-		printf("\n");
-	}
-}
-
-
 void cmInit_cnCanvass(){
 	for( int c=0; true; c++ ){
 		if( cnn_Canvass[ c ].id == -1 ) break;
 		printf("#* ... init FB nudle id[%i]\n", cnn_Canvass[ c ].id);
-		cmiNodeName("CNCANVAS", cnn_Canvass[ c ].id, cnn_Canvass[ c ].name );
+		cmt_NodeName("CNCANVAS", cnn_Canvass[ c ].id, cnn_Canvass[ c ].name );
 		cnn_Canvass[ c ].pCount = 0;
 		if( cnn_Canvass[ c ].autoSize == false ){
 			ccInit_FB_byPointer( &cnn_Canvass[ c ].ccFB, cnn_Canvass[ c ].col, cnn_Canvass[ c ].row );
@@ -491,7 +472,7 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 						strcpy( cnMs[ msgIndex  ].payload, message->payload );
 					}
 					//cm_doClick( 0, 1, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId );
-					cmiNodeName("CNNMQTTSUB", cnn_MqttSubs[ s ].id, cnn_MqttSubs[ s ].name );
+					cmt_NodeName("CNNMQTTSUB", cnn_MqttSubs[ s ].id, cnn_MqttSubs[ s ].name );
 					cnn_Msg msgT;
 					cm_doClick( 0, cnn_MqttSubs[ s ].msgId, msgT, cnnNudles[ n ].srcType, cnnNudles[ n ].srcId );
 
