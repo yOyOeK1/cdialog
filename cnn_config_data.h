@@ -4,6 +4,8 @@
 
 #include "cnn_config_types.h"
 
+extern char *cnn_name;
+extern char *cnn_target;
 extern char *cnn_Version;
 
 extern cnn_Msg cnMs[];
@@ -58,6 +60,9 @@ extern int cnnCmdsCount;
 
 void cmn_test0( int id, int msgPts );
 
+
+extern cnn_Hash cnn_Hashs[];
+extern int cnn_HashsCount;
 
 extern cnn_Nudle cnnNudles[];
 extern int cnnNudlesCount;

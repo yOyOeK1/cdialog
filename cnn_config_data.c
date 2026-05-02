@@ -2,7 +2,10 @@
 #include "mqNode.h"
 #include "cnn_config_data.h"
 
-char *cnn_Version = "260426_tt11";
+
+char *cnn_name = "Playground 001";
+char *cnn_target = "cmachine2Playground001";
+char *cnn_Version = "2026.0502";
 
 
 cnn_Msg cnMs[] = {
@@ -27,7 +30,9 @@ cnn_atStart cnnAtStarts[] = {
 // ... mqtt connection ... START 
 MqHost MqHosts[] = {
 	{1,	"at hu",	"192.168.43.1",		10883,		"cDialogTest2",		"and/"	},
-	{2,	"at local",	"localhost",		10883,		"cDialogTest2",		"and/"	}
+	{2,	"at local",	"localhost",		10883,		"cDialogTest2",		"and/"	},
+	{-1}
+
 };
 int MqHostsCount = 2;
 
@@ -38,18 +43,20 @@ cnn_mqttSub cnn_MqttSubs[] = {
 	{3,	1,	"all",			"e01Mux/#"	},
 	{4,	1,	"humidity",		"e01Mux/humidity",	4	},
 	{5,	1,	"magnetometer",		"and/mag",		7	},
+	{-1}
+
 };
 int cnn_MqttSubsCount = 5;
 // ... mqtt connection ... END
 
 cnn_Printf cnnPrintfs[] = {
-	{1,	"cc print id1",		"Printfs test1 : %s<OK", 		true, -1 },
-	{2,	"cc print id2",		"Printfs test2 :%s<OK(2)", 		false, -1 },
-	{3,	"cc print id3",		"Printfs test3 :%s<OK( 4.200 ...)", 	false, -1 },
-	{4,	"ccp mqttres1",		"Printfs :%s <- payload\n", 		true, -1 },
-	{5,	"cprin_humidity",	"%s %% :)\n", 				true, -1 },
-	{6,	"For from printf to pts",	"%s pts test \n", 		true, -1 },
-	{7,	"Uptime test1",		" | . . .   [ %s min. up ]\n", 			true, -1 },
+	{1,	"cc print id1",		"Printfs test1 : %s<OK", 		true, -1 	},
+	{2,	"cc print id2",		"Printfs test2 :%s<OK(2)", 		false, -1 	},
+	{3,	"cc print id3",		"Printfs test3 :%s<OK( 4.200 ...)", 	false, -1 	},
+	{4,	"ccp mqttres1",		"Printfs :%s <- payload\n", 		true, -1 	},
+	{5,	"cprin_humidity",	"%s %% :)\n", 				true, -1 	},
+	{6,	"For from printf to pts",	"%s pts test \n", 		true, -1 	},
+	{7,	"Uptime test1",		" | . . .   [ %s min. up ]\n", 	true, -1 	},
 	{-1}
 };
 // cnnAdd
@@ -90,10 +97,11 @@ cnn_MqttPub cnn_MqttPubs[] = {
 int cnn_MqttPubsCount = 1;
 
 cnn_Canvas cnn_Canvass[] = {
-	{1,	"debug",	false,	10,	40,	'1'	},
-	{2,	"small canvas",	false,	30,	5,	'2'	},
-	{3,	"auto canvas",	true,	0,	0,	'3'	},
-	{4,	"top banner",	false,	40,	40,	' '	},
+	/*id,	name,		autosize,	row,	col,	chFill	*/
+	{1,	"debug",	false,		10,	40,	'1'	},
+	{2,	"small canvas",	false,		30,	5,	'2'	},
+	{3,	"auto canvas",	true,		0,	0,	'3'	},
+	{4,	"top banner",	false,		40,	40,	' '	},
 	{-1}
 };
 int cnn_CanvassCount = 4;
@@ -151,11 +159,60 @@ cnn_Compas cnn_Compass[] = {
 };
 int cnn_CompassCount = 1;
 
+
+
+
+#include <stdio.h>
+#include "cmachine2.h"
+cnn_Hash cnn_Hashs[] = {
+	{ 1,	"At start",		CNNATSTART, 	false,	0	},
+	{ 2,	"mqtt sub",		CNNMQTTSUB,	false,	0	},
+	{ 3,	"key bind",		CNNKEYBIND,	false,	0 	},
+	
+	{ 4,	"Printf",		CNNPRINTF,	true,	&cm_printf 	},
+	{ 5,	"Cmd",			CNNCMD,		true,	&cm_cmd 	},
+	{ 6,	"mqtt publish",		CNNMQTTPUB,	true,	&cm_mqttPub 	},
+
+	{ 3,	"Add",			CNNADD,		true,	&cm_add		},
+	{ 3,	"Divide",		CNNDIV,		true,	&cm_div 	},
+	{ 3,	"as Time since",	CNNTIMESINCE,	true,	&cm_TimeSince 	},
+	{ 3,	"as Progress bar",	CNNPROGRESSBAR,	true,	&cm_ProgressBar 	},
+	{ 3,	"as Compas",		CNNCOMPAS,	true,	&cm_Compas 	},
+
+	{ 3,	"Canvas clear",		CNNCANVCLEAR,	true,	&cm_CanvClear 	},
+	{ 3,	"Canvas printf",	CNNCANVPRINTF,	true,	&cm_CanvPrintf 	},
+	{ 3,	"Canvas render",	CNNCANVRENDER,	true,	&cm_CanvRender 	},
+
+	{ -1 }
+}; 
+int cnn_HashsCount = 1;
+
+void cnn_config_init(){
+	printf("# cnn config init ....\n");
+	
+	cnn_Hashs[ 0 ].fPts = &cm_printf;
+
+
+}
+
+// ----- test zene START
 #include <stdio.h>
 void cmn_test0( int id, int msgPts ){
 	printf("cmn_test0 id[%i] msgPts[%i]\n", id, msgPts );
 }
 const int *cmn_test0_pts;
+
+// ----- test zene END 
+
+
+
+
+
+
+
+//
+// ------ nudles
+//
 cnn_Nudle cnnNudles[] = {
 	{1,	1,		1,	2,		1	},
 	{2,	CNNATSTART,	2,	CNNADD,		1	},
@@ -198,6 +255,9 @@ cnn_Nudle cnnNudles[] = {
 	{-1}	
 };
 
+//
+// ------ key mode / key binds
+//
 int cnn_KeyModeNow = 0;
 cnn_KeyMode cnn_KeyModes[] = {
 	{0,	"root"		},

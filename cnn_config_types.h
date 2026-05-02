@@ -153,6 +153,14 @@ typedef struct{
 
 typedef struct{
 	int id;
+	char name[512];
+	int nType;
+	bool isNode;
+	void (*fPts)( int, cnn_Msg* );
+} cnn_Hash;
+
+typedef struct{
+	int id;
 	int srcType;
 	int srcId;
 	int targetType;

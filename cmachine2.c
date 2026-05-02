@@ -6,7 +6,7 @@
 #include <mosquitto.h>
 
 
-#define CMACHINEVER "2026.0425"
+#define CMACHINEVER "2026.0502"
 
 extern int col;
 extern int row;
@@ -528,8 +528,28 @@ void cmInit_mqtt(){
 int main( int argc, char *argv[] ){
 	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
 
-	printf("cmachine2 ver[%s]\n", CMACHINEVER );
+	printf("cmachine2 [%s]\n * target [%s]\n * ver[%s]\n", cnn_name, cnn_target, CMACHINEVER );
 
+	if( 1 ){
+		printf("cnn_Hashs ... START\n");
+		for( int h=0; true; h++ ){
+			if( cnn_Hashs[ h ].id == -1 ) break;
+			printf("## h[% 3i] id[% 3i] N[%c] Ntype[% 3i] *(% 14p) [%s]\n", 
+				h, cnn_Hashs[ h ].id, 
+				( cnn_Hashs[ h ].isNode ? 'X' : ' ' ),
+				cnn_Hashs[ h ].nType, 
+				cnn_Hashs[ h ].fPts, cnn_Hashs[ h ].name 
+				);
+
+			if( 0 && h == 1 ){
+				cnn_Msg msgt = { -1, "and/testHot123", "42.02" };
+				cnn_Hashs [ h ].fPts( 1, &msgt );
+			}
+
+		}
+		printf("------ cnn_Hashs END \n");
+		return 1;
+	}
 	if( 0 ){
 		// pointer function ? START
 		printf("pts to cm_Printf [%p] as int[%i]\n", cm_printf,(int)cm_printf );
