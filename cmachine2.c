@@ -22,7 +22,8 @@ extern int chFill;
 
 
 #include "config.h"
-#include "configKeys.h"
+//#include "configKeys.h"
+#include "cmTools.h"
 #include "ctermh.h"
 #include "ckeyh.h"
 #include "mqtth.h"
@@ -531,24 +532,7 @@ int main( int argc, char *argv[] ){
 	printf("cmachine2 [%s]\n * target [%s]\n * ver[%s]\n", cnn_name, cnn_target, CMACHINEVER );
 
 	if( 1 ){
-		printf("cnn_Hashs ... START\n");
-		for( int h=0; true; h++ ){
-			if( cnn_Hashs[ h ].id == -1 ) break;
-			printf("## h[% 3i] id[% 3i] N[%c] Ntype[% 3i] *(% 14p) [%s]\n", 
-				h, cnn_Hashs[ h ].id, 
-				( cnn_Hashs[ h ].isNode ? 'X' : ' ' ),
-				cnn_Hashs[ h ].nType, 
-				cnn_Hashs[ h ].fPts, cnn_Hashs[ h ].name 
-				);
-
-			if( 0 && h == 1 ){
-				cnn_Msg msgt = { -1, "and/testHot123", "42.02" };
-				cnn_Hashs [ h ].fPts( 1, &msgt );
-			}
-
-		}
-		printf("------ cnn_Hashs END \n");
-		return 1;
+		cmt_hashsDump();
 	}
 	if( 0 ){
 		// pointer function ? START
