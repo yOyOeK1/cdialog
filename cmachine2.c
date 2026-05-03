@@ -25,8 +25,9 @@ extern int chFill;
 //#include "configKeys.h"
 #include "cmTools.h"
 #include "cmInits.h"
+#include "cmTime.h"
 #include "ctermh.h"
-#include "timeh.h"
+//#include "timeh.h"
 #include "ckeyh.h"
 #include "mqtth.h"
 #include "ccanvas.h"
@@ -87,20 +88,6 @@ void cm_add( int id, cnn_Msg *msgT ){
 	}	
 }
 
-// CNNTIMESINCE 12
-void cm_TimeSince( int tsId, cnn_Msg *msgT ){
-	for( int i=0; true; i++ ){
-		if( cnn_TimeSinces[ i ].id == -1 ) break;
-		if( cnn_TimeSinces[ i ].id == tsId ){
-			cmt_NodeName( "CM_TIMESINCE", tsId, cnn_TimeSinces[ i ].name );
-			long int mesLong = strtol( msgT->payload, NULL, 10 );
-			snprintf( msgT->payload, 512, 
-				cnn_TimeSinces[ i ].printAs, cPP_secLeft( mesLong ) 
-				);
-			break;
-		}
-	}
-}
 // CNNPROGRESSBAR 13
 void cm_ProgressBar( int pId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
@@ -130,15 +117,6 @@ void cm_Compas( int nId, cnn_Msg *msgT ){
 			break;
 		}
 	}
-}
-
-// CNITIMESTAMP 15
-void cmi_timestamp( int id, cnn_Msg *msgT ){
-	snprintf( msgT->payload, 512, "%s", "this is time stamp TODO" );
-}
-// CNITIMENOWTT 16
-void cmi_timeNowTT( int id, cnn_Msg *msgT ){
-	snprintf( msgT->payload, 512, "%s", time_now_tt() );
 }
 
 void cm_printf( int id, cnn_Msg *msgT ){
@@ -371,9 +349,12 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 
 	}
 
-	for( int h=0; true; h++ ){
+	// skip to 14 ifs above are doing it
+	for( int h=14; true; h++ ){
 		if( cnn_Hashs[ h ].id == -1 ) break;
-		printf("##% 3i|% 3i| %c | % 3i|% 16p| %s\n",
+
+		printf(" | ## looking in hashs ...\n"
+				" | ##% 3i|% 3i| %c | % 3i|% 16p| %s\n",
 			h, cnn_Hashs[ h ].id,
 			( cnn_Hashs[ h ].isNode ? 'X' : ' ' ),
 			cnn_Hashs[ h ].nType,
@@ -381,7 +362,8 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 			);
 
 		if( nType == cnn_Hashs[ h ].nType ){
-			printf(" # cnn Hashs OK [ %s ]!\n", cnn_Hashs[ h ].name );
+			printf(" | ## cnn Hashs OK [ %s ]!\n", cnn_Hashs[ h ].name );
+			cmt_NodeName( "CM_HASHS", cnn_Hashs[ h ].id, cnn_Hashs[ h ].name );
 			cnn_Hashs[ h ].fPts( nId, msgT );
 			return true;
 		}
@@ -389,7 +371,6 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 
 	}
 
-	printf("\n# EE not implemented 9898\n");
 	return false;
 	
 }

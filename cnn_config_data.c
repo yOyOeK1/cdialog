@@ -204,8 +204,8 @@ cnn_Hash cnn_Hashs[] = {
 	{ 10,	"Canvas printf",	CNNCANVPRINTF,	true,	&cm_CanvPrintf 	},
 	{ 11,	"Canvas render",	CNNCANVRENDER,	true,	&cm_CanvRender 	},
 
-	{ 12,	"Get time stamp",	CNITIMESTAMP,	true,	&cmi_timestamp	},
-	{ 13,	"Get time now tt",	CNITIMENOWTT,	true,	&cmi_timeNowTT	},
+	{ 15,	"Get time stamp",	CNITIMESTAMP,	true,	&cmi_timeStamp	},
+	{ 16,	"Get time now tt",	CNITIMENOWTT,	true,	&cmi_timeNowTT	},
 
 	{ -1 }
 }; 
@@ -237,6 +237,7 @@ const int *cmn_test0_pts;
 //
 // ------ nudles
 //
+
 cnn_Nudle cnnNudles[] = {
 //	{1,	1,		1,	2,		1	},
 //	{2,	CNNATSTART,	2,	CNNADD,		1	},
@@ -276,11 +277,11 @@ cnn_Nudle cnnNudles[] = {
 //
 //	//{23,	CNNMQTTSUB,	5,	CNNPROGRESSBAR,	1	},
 //
-	{25,	CNNATSTART,	1,	CNITIMESTAMP,	1	},
-	{26,	CNITIMESTAMP,	1,	CNNPRINTF,	5	},
-
-	{27,	CNNATSTART,	1,	CNITIMENOWTT,	1	},
+	{27,	CNNATSTART,	3,	CNITIMENOWTT,	1	},
 	{28,	CNITIMENOWTT,	1,	CNNPRINTF,	5	},
+
+	{25,	CNNATSTART,	3,	CNITIMESTAMP,	1	},
+	{26,	CNITIMESTAMP,	1,	CNNPRINTF,	5	},
 
 	{-1}	
 };

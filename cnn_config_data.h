@@ -4,6 +4,9 @@
 
 #include "cnn_config_types.h"
 
+#include "cmTime.h"
+
+
 extern char *cnn_name;
 extern char *cnn_target;
 extern char *cnn_Version;

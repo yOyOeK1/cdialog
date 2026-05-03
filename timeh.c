@@ -14,6 +14,10 @@ int time_now(){
 	return tNow;
 }
 
+long time_now_stamp(){
+	return (long)time( NULL );
+}
+
 char* time_now_tt(){
 	time_t tnow = time_now();
 	//time( &tnow );
