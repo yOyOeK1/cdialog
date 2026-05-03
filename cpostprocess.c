@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-
+#include <unistd.h>
 
 #ifndef CPPTEST
 
@@ -81,7 +81,7 @@ char *cPP_secLeft( long secL ){
 	return tr;
 }
 
-char *cPP_asCompass( long mag ){
+char *cPP_asCompass_opts( long mag, bool inCompasView, int angEvery ){
 	char *tr = (char *)malloc( 361*sizeof( char) );
 	int c;
 	for( c=0; c<360; c++ ){
@@ -118,21 +118,48 @@ char *cPP_asCompass( long mag ){
 	int cNo = 0;
 	int colH = col / 2;
 	int colHRest = col - colH;
-	for( c=ci-colH; c<ci+colHRest; c++ ){
-		//printf("c[%i]\n", c);
-		trt[cNo++] = tr[ ((c+360)%360) ];	
+	int tAng;
+	char aBuf[6];
+	if( inCompasView == false ){
+		for( c=ci-colH; c<ci+colHRest; c++ ){
+			tAng = ((c+360)%360);
+			trt[ cNo++ ] = tr[ tAng ];	
+			// every
+			if( ( tAng % angEvery ) == 0 ){
+				snprintf( aBuf, 6, "%03i", tAng );
+				trt[ cNo-3 ] = aBuf[0];
+				trt[ cNo-2 ] = aBuf[1];
+				trt[ cNo-1 ] = aBuf[2];
+			}
+		}
+	}else {
+		for( c=ci-colH; c<ci+colHRest; c++ ){
+			tAng = ((c+360)%360);
+			trt[ (col-1)-cNo++ ] = tr[ tAng ];	
+			// every
+			if( ( tAng % angEvery ) == 0 ){
+				snprintf( aBuf, 6, "%03i", tAng );
+				trt[ (col-1)-cNo-3 ] = aBuf[0];
+				trt[ (col-1)-cNo-2 ] = aBuf[1];
+				trt[ (col-1)-cNo-1 ] = aBuf[2];
+			}
+		}
 	}
 	//printf("asCompass [%i] \n%s\n", ci, trt );
 	char *magStr = malloc( 4*sizeof(char) );
 	snprintf( magStr, 4, "%03i", ci );
 	
+	trt[ colH-2 ] = '[';
 	trt[ colH-1 ] = magStr[0];
 	trt[ colH ] = magStr[1];
 	trt[ colH+1 ] = magStr[2];
+	trt[ colH+2 ] = ']';
 
 	return trt;
 }
-
+char *cPP_asCompass(  long mag ){
+	return cPP_asCompass_opts( mag, false, 30 );
+}
 
 #ifdef CPPTEST
 int main( int argc, char *argv[] ){
@@ -160,9 +187,11 @@ int main( int argc, char *argv[] ){
 	printf("compass ... 10.00 is \n\t%s\n", cPP_asCompass( 10.00 ) );
 	printf("compass ... 100.00 is \n\t%s\n", cPP_asCompass( 100.00 ) );
 	long angg = 0.00;
-	for( int a=0; a<360; a+=12){
-		printf("compass ... %i is \n\t%s\n", angg, cPP_asCompass( angg ) );
-		angg+= 12.31;
+	for( int a=0; a<360; a+=1){
+		printf("compass ... %i is \n\t%s\n", angg, cPP_asCompass_opts( angg, false, 20 ) );
+		printf("compass ... %i isII \n\t%s\n", angg, cPP_asCompass_opts( angg, false, a/10 ) );
+		angg+= 1.31;
+		usleep( 1000000/12 );
 	}
 
 	printf("c postprocess CPPTEST ... DONE\n");

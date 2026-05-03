@@ -159,6 +159,8 @@ typedef struct{
 	int id;
 	char name[512];
 	int width;
+	bool inCompasView;
+	int angEvery;
 	char parseArg[512];
 	char printAs[512];
 } cnn_Compas;
