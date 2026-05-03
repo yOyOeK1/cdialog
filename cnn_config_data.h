@@ -5,6 +5,7 @@
 #include "cnn_config_types.h"
 
 #include "cmTime.h"
+#include "cmCanvas.h"
 
 
 extern char *cnn_name;

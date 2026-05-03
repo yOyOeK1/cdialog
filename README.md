@@ -78,6 +78,14 @@ For now some types of `node`s implemended with status:
 `#define VARIABLES` as main switching mechanizm to decide what to build as binarry.
 
 
+### build h from c
+
+bash script to build auto .h from c
+In cmachine2 there is wrapper to do more ... can do OUTLINE of files with `-v` argument and can be use as
+```bash
+./cmachine2Build_H.sh -v
+```
+
 
 ### TODO / FIX / KNOWN bugs
 
