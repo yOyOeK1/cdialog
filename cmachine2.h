@@ -3,8 +3,6 @@
 
 int cm_msg_getIndex_byId( int id );
 cnn_Msg cm_msgClone( int msgId );
-void cm_div( int id, cnn_Msg *msgT );
-void cm_add( int id, cnn_Msg *msgT );
 void cm_ProgressBar( int pId, cnn_Msg *msgT );
 void cm_Compas( int nId, cnn_Msg *msgT );
 void cm_printf( int id, cnn_Msg *msgT );

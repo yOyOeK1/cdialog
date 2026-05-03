@@ -6,6 +6,7 @@
 
 #include "cmTime.h"
 #include "cmCanvas.h"
+#include "cmMath.h"
 
 
 extern char *cnn_name;
