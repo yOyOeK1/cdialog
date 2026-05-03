@@ -8,6 +8,7 @@
 #include "cmCanvas.h"
 #include "cmMath.h"
 #include "cmAs.h"
+#include "cmLogic.h"
 
 
 extern char *cnn_name;
@@ -61,6 +62,9 @@ extern int cnn_ProgressBarCount;
 
 extern cnn_Compas cnn_Compass[];
 extern int cnn_CompassCount;
+
+extern cnn_if cnn_ifs[];
+extern int cnn_ifsCount;
 
 extern cnn_Cmd cnnCmds[];
 extern int cnnCmdsCount;

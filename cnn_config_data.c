@@ -16,6 +16,7 @@ cnn_Msg cnMs[] = {
 	{.id=5,		.topic="and/as/key/bind/test",	.payload="In as payload from key bind test." },
 	{.id=6,		.topic="and/as/progress",	.payload="18.11" },
 	{.id=7,		.topic="and/test/mag",		.payload="" },
+	{.id=8,		.topic="and/test/logic",	.payload="4.19" },
 	{-1}
 };
 
@@ -177,6 +178,15 @@ cnn_Compas cnn_Compass[] = {
 };
 int cnn_CompassCount = 1;
 
+// cnn_ifs
+// id 17
+cnn_if cnn_ifs[] = {
+	{ 1,	"if same then 4.1 OK",	CNLIF_EQUAL,	"4.1000"	},
+	{ 2,	"if same then 4.1 NO",	CNLIF_DIFRENT,	"4.1000"	},
+	{ -1 }
+};
+int cnn_ifsCount = 2;
+
 
 
 
@@ -206,6 +216,8 @@ cnn_Hash cnn_Hashs[] = {
 
 	{ 15,	"Get time stamp",	CNITIMESTAMP,	true,	&cmi_timeStamp	},
 	{ 16,	"Get time now tt",	CNITIMENOWTT,	true,	&cmi_timeNowTT	},
+
+	{ 17,	"Logic - compale",	CNLIF,		true,	&cml_if		},
 
 	{ -1 }
 }; 
@@ -283,6 +295,9 @@ cnn_Nudle cnnNudles[] = {
 	{25,	CNNATSTART,	3,	CNITIMESTAMP,	1	},
 	{26,	CNITIMESTAMP,	1,	CNNPRINTF,	5	},
 
+	{27,	CNNKEYBIND,	17,	CNLIF,		1	},
+	{28,	CNNKEYBIND,	18,	CNLIF,		2	},
+
 	{-1}	
 };
 
@@ -297,6 +312,7 @@ cnn_KeyMode cnn_KeyModes[] = {
 	{3,	"main3"		},
 	{4,	"main4"		},
 	{5,	"DEB_canvas"	},
+	{6,	"Tests"		},
 	{-1}
 };
 
@@ -320,6 +336,9 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	{ 14,	 5,	       "r",	0,		"test render",		"",	5  },
 	{ 15,	 5,	       "c",	0,		"test clear",		"",	5  },
 	{ 16,	 5,	       "p",	0,		"test printf",		"",	5  },
+	
+	{ 17,	 6,	       "1",	0,		"send !ok",		"",	8  },
+	{ 18,	 6,	       "0",	0,		"send ok",		"",	8  },
 	
 	{-1}
 };

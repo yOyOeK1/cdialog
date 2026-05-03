@@ -10,7 +10,7 @@ echo "Build .h for cmachine files ... "
 
 
 
-fList="cmTools cmInits cmachine2 cmTime cmCanvas cmMath cmAs"
+fList="cmTools cmInits cmachine2 cmTime cmCanvas cmMath cmAs cmLogic"
 for f in `echo "$fList"`;do
 	#echo "//* $f .c to new .h ..."
 	

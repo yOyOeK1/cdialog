@@ -165,6 +165,16 @@ typedef struct{
 	char printAs[512];
 } cnn_Compas;
 
+#define CNLIF 17
+#define CNLIF_EQUAL '='
+#define CNLIF_DIFRENT '!'
+typedef struct{
+	int id;
+	char name[512];
+	char ifType;
+	char vThen[512];
+} cnn_if;
+
 typedef struct{
 	int id;
 	char name[512];
