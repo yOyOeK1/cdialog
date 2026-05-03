@@ -182,6 +182,9 @@ int cnn_CompassCount = 1;
 
 #include <stdio.h>
 #include "cmachine2.h"
+
+#define CNITIMESTAMP 15
+#define CNITIMENOWTT 16
 cnn_Hash cnn_Hashs[] = {
 	{ 1,	"At start",		CNNATSTART, 	false,	0	},
 	{ 5,	"mqtt sub",		CNNMQTTSUB,	false,	0	},
@@ -200,6 +203,9 @@ cnn_Hash cnn_Hashs[] = {
 	{ 9,	"Canvas clear",		CNNCANVCLEAR,	true,	&cm_CanvClear 	},
 	{ 10,	"Canvas printf",	CNNCANVPRINTF,	true,	&cm_CanvPrintf 	},
 	{ 11,	"Canvas render",	CNNCANVRENDER,	true,	&cm_CanvRender 	},
+
+	{ 12,	"Get time stamp",	CNITIMESTAMP,	true,	&cmi_timestamp	},
+	{ 13,	"Get time now tt",	CNITIMENOWTT,	true,	&cmi_timeNowTT	},
 
 	{ -1 }
 }; 
@@ -232,43 +238,49 @@ const int *cmn_test0_pts;
 // ------ nudles
 //
 cnn_Nudle cnnNudles[] = {
-	{1,	1,		1,	2,		1	},
-	{2,	CNNATSTART,	2,	CNNADD,		1	},
-	{3,	CNNADD,		1,	CNNPRINTF,	2	},
-	{4,	CNNPRINTF,	2,	CNNADD,		2	},
-	{5,	CNNADD,		2,	CNNDIV,		1	},
-	{6,	CNNDIV,		1,	CNNPRINTF,	3	},
-	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
-	{8,	CNNMQTTSUB,	4,	CNNPRINTF,	5	},
-	{9,	CNNKEYBIND,	8,	CNNCMD,		2	},
-	//{10,	CNNCMD,		2,	CNNDIV,		3	},
-	//{11,	CNNDIV,		3,	CNNPRINTF,	7	},
+//	{1,	1,		1,	2,		1	},
+//	{2,	CNNATSTART,	2,	CNNADD,		1	},
+//	{3,	CNNADD,		1,	CNNPRINTF,	2	},
+//	{4,	CNNPRINTF,	2,	CNNADD,		2	},
+//	{5,	CNNADD,		2,	CNNDIV,		1	},
+//	{6,	CNNDIV,		1,	CNNPRINTF,	3	},
+//	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
+//	{8,	CNNMQTTSUB,	4,	CNNPRINTF,	5	},
+//	{9,	CNNKEYBIND,	8,	CNNCMD,		2	},
+//	//{10,	CNNCMD,		2,	CNNDIV,		3	},
+//	//{11,	CNNDIV,		3,	CNNPRINTF,	7	},
+//
+//	{12,	CNNKEYBIND,	12,	CNNCMD,		1	},
+//	{13,	CNNCMD,		1,	CNNPRINTF,	5	},
+//	{14,	CNNKEYBIND,	13,	CNNPRINTF,	6	},
+//	{15,	CNNPRINTF,	6,	CNNMQTTPUB,	1	},
+////	{15,	CNNPRINTF,	6,	(int)cmn_test0_pts,	1	},
+//
+//	{16,	CNNKEYBIND,	3,	CNNCANVPRINTF,	1	},
+//
+//
+//	{17,	CNNKEYBIND,	14,	CNNCANVRENDER,	1	},
+//	{18,	CNNKEYBIND,	15,	CNNCANVCLEAR,	1	},
+//	{18,	CNNKEYBIND,	16,	CNNCANVPRINTF,	1	},
+//
+//	{19,	CNNCMD,		2,	CNNTIMESINCE,	1	},
+//	{20,	CNNTIMESINCE,	1,	CNNPRINTF,	5	},
+//
+//	{21,	CNNATSTART,	3,	CNNPROGRESSBAR,	1	},
+//	{22,	CNNPROGRESSBAR,	1,	CNNPRINTF,	1	},
+//
+//	{23,	CNNMQTTSUB,	5,	CNNCOMPAS,	1	},
+//	//{23,	CNNDIV,		4,	CNNPROGRESSBAR,	1	},
+//	//{23,	CNNDIV,		4,	CNNCOMPAS,	1	},
+//	{24,	CNNCOMPAS,	1,	CNNPRINTF,	1	},
+//
+//	//{23,	CNNMQTTSUB,	5,	CNNPROGRESSBAR,	1	},
+//
+	{25,	CNNATSTART,	1,	CNITIMESTAMP,	1	},
+	{26,	CNITIMESTAMP,	1,	CNNPRINTF,	5	},
 
-	{12,	CNNKEYBIND,	12,	CNNCMD,		1	},
-	{13,	CNNCMD,		1,	CNNPRINTF,	5	},
-	{14,	CNNKEYBIND,	13,	CNNPRINTF,	6	},
-	{15,	CNNPRINTF,	6,	CNNMQTTPUB,	1	},
-//	{15,	CNNPRINTF,	6,	(int)cmn_test0_pts,	1	},
-
-	{16,	CNNKEYBIND,	3,	CNNCANVPRINTF,	1	},
-
-
-	{17,	CNNKEYBIND,	14,	CNNCANVRENDER,	1	},
-	{18,	CNNKEYBIND,	15,	CNNCANVCLEAR,	1	},
-	{18,	CNNKEYBIND,	16,	CNNCANVPRINTF,	1	},
-
-	{19,	CNNCMD,		2,	CNNTIMESINCE,	1	},
-	{20,	CNNTIMESINCE,	1,	CNNPRINTF,	5	},
-
-	{21,	CNNATSTART,	3,	CNNPROGRESSBAR,	1	},
-	{22,	CNNPROGRESSBAR,	1,	CNNPRINTF,	1	},
-
-	{23,	CNNMQTTSUB,	5,	CNNCOMPAS,	1	},
-	//{23,	CNNDIV,		4,	CNNPROGRESSBAR,	1	},
-	//{23,	CNNDIV,		4,	CNNCOMPAS,	1	},
-	{24,	CNNCOMPAS,	1,	CNNPRINTF,	1	},
-
-	//{23,	CNNMQTTSUB,	5,	CNNPROGRESSBAR,	1	},
+	{27,	CNNATSTART,	1,	CNITIMENOWTT,	1	},
+	{28,	CNITIMENOWTT,	1,	CNNPRINTF,	5	},
 
 	{-1}	
 };

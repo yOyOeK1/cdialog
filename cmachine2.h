@@ -8,6 +8,8 @@ void cm_add( int id, cnn_Msg *msgT );
 void cm_TimeSince( int tsId, cnn_Msg *msgT );
 void cm_ProgressBar( int pId, cnn_Msg *msgT );
 void cm_Compas( int nId, cnn_Msg *msgT );
+void cmi_timestamp( int id, cnn_Msg *msgT );
+void cmi_timeNowTT( int id, cnn_Msg *msgT );
 void cm_printf( int id, cnn_Msg *msgT );
 void cm_cmd( int cmdId, cnn_Msg *msgT );
 void cm_mqttPub( int mqttPubId, cnn_Msg *msgT );

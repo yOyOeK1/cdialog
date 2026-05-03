@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "config.h"
+
+//#include "config.h"
+
+extern int TIME_ZONE_OFFSET;
+
 
 int time_now(){
 	time_t tNow;

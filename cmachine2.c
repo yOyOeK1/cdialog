@@ -26,6 +26,7 @@ extern int chFill;
 #include "cmTools.h"
 #include "cmInits.h"
 #include "ctermh.h"
+#include "timeh.h"
 #include "ckeyh.h"
 #include "mqtth.h"
 #include "ccanvas.h"
@@ -129,6 +130,15 @@ void cm_Compas( int nId, cnn_Msg *msgT ){
 			break;
 		}
 	}
+}
+
+// CNITIMESTAMP 15
+void cmi_timestamp( int id, cnn_Msg *msgT ){
+	snprintf( msgT->payload, 512, "%s", "this is time stamp TODO" );
+}
+// CNITIMENOWTT 16
+void cmi_timeNowTT( int id, cnn_Msg *msgT ){
+	snprintf( msgT->payload, 512, "%s", time_now_tt() );
 }
 
 void cm_printf( int id, cnn_Msg *msgT ){
@@ -359,10 +369,29 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 		cm_Compas( nId, msgT );
 		return true;
 
-	}else{
-		printf("\n# EE not implemented 9898\n");
-		return false;
 	}
+
+	for( int h=0; true; h++ ){
+		if( cnn_Hashs[ h ].id == -1 ) break;
+		printf("##% 3i|% 3i| %c | % 3i|% 16p| %s\n",
+			h, cnn_Hashs[ h ].id,
+			( cnn_Hashs[ h ].isNode ? 'X' : ' ' ),
+			cnn_Hashs[ h ].nType,
+			cnn_Hashs[ h ].fPts, cnn_Hashs[ h ].name
+			);
+
+		if( nType == cnn_Hashs[ h ].nType ){
+			printf(" # cnn Hashs OK [ %s ]!\n", cnn_Hashs[ h ].name );
+			cnn_Hashs[ h ].fPts( nId, msgT );
+			return true;
+		}
+
+
+	}
+
+	printf("\n# EE not implemented 9898\n");
+	return false;
+	
 }
 
 void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
@@ -467,8 +496,9 @@ int main( int argc, char *argv[] ){
 
 	printf("cmachine2 [%s]\n * target [%s]\n * ver[%s]\n", cnn_name, cnn_target, CMACHINEVER );
 
-	if( 1 ){
+	if( 0 ){
 		cmt_hashsDump();
+		return 1;
 	}
 	if( 0 ){
 		// pointer function ? START
@@ -499,7 +529,7 @@ int main( int argc, char *argv[] ){
 		cmInit_cnnAtStart();
 		printf("c cmachine2 -- 2 CPPMACHINE2 ... END  .. NUDLE SECTION\n");
 
-
+	return 1;
 		printf("c cmachine2 -- 3 CPPMACHINE2 ... START mqtt init \n"
 			"\t- mqtt hosts:	[ %i ]\n", MqHostsCount );
 		cmInit_mqtt();
