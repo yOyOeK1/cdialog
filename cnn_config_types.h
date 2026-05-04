@@ -9,6 +9,7 @@ typedef struct{
 	int id;
 	char topic[512];
 	char payload[512];
+	bool asVar;
 	long tStart;
 	long tEnd;
 } cnn_Msg;

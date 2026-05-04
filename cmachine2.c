@@ -56,6 +56,7 @@ cnn_Msg cm_msgClone( int msgId ){
 	cnn_Msg tr = {};//{ .id=-1, .topic="t", .payload="abc" };
 	strcpy( tr.topic, msg.topic );
 	strcpy( tr.payload, msg.payload );
+	tr.asVar = msg.asVar;
 	printf(" | . . .  cm message clone DONE\n");
 	return tr;
 }
@@ -191,7 +192,7 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 	
 }
 
-void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
+void cm_doClick_opts( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId, int niStart ){
 	bool msgClone = false;
 	cnn_Msg msgT;
 	if( level == 0 ){
@@ -210,7 +211,7 @@ void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 	}
 
 	int doClick = false;
-	for( int ni=0; true; ni++ ){
+	for( int ni=niStart; true; ni++ ){
 		if( cnnNudles[ ni ].id == -1 ) break;
 		if( cnnNudles[ ni ].srcType == srcType &&
 			cnnNudles[ ni ].srcId == srcId ){
@@ -219,7 +220,7 @@ void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 			doClick = cm_doWorkAt( &msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
 
 			if( doClick ){
-				cm_doClick( level+1, msgId, msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
+				cm_doClick_opts( level+1, msgId, msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId, ni+1 );
 			}else{
 				printf(" \\ __ ... nudle id[%i] END\n", cnnNudles[ ni ].id );
 			}
@@ -228,7 +229,9 @@ void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 	}
 
 }
-
+void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
+	cm_doClick_opts( level, msgId, msgTp, srcType, srcId, 0 );
+}
 void cmInit(){
 
 	//ccInit_FB_nudle( &cnn_Canvass );
@@ -293,11 +296,11 @@ int main( int argc, char *argv[] ){
 
 	printf("cmachine2 [%s]\n * target [%s]\n * ver[%s]\n", cnn_name, cnn_target, CMACHINEVER );
 
-	if( 1 ){
+	if( 0 ){
 		cnn_Msg msgte = {};
-		printf("message empty: [%i]t[%s] -> p[%s]\n", msgte.id, msgte.topic, msgte.payload );
-		cnn_Msg msgte1 = { -1 };
-		printf("message1 empty: [%i]t[%s] -> p[%s]\n", msgte1.id, msgte1.topic, msgte1.payload );
+		printf("message empty: [%i][%i]t[%s] -> p[%s]\n", msgte.id, msgte.asVar, msgte.topic, msgte.payload );
+		cnn_Msg msgte1 = { -1, "and/test/msgInlineAsVar", "1", true };
+		printf("message1 empty: [%i][%i]t[%s] -> p[%s]\n", msgte1.id, msgte1.asVar, msgte1.topic, msgte1.payload );
 		return 1;
 	}
 	if( 0 ){

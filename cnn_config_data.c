@@ -16,7 +16,7 @@ cnn_Msg cnMs[] = {
 	{.id=5,		.topic="and/as/key/bind/test",	.payload="In as payload from key bind test." },
 	{.id=6,		.topic="and/as/progress",	.payload="18.11" },
 	{.id=7,		.topic="and/test/mag",		.payload="" },
-	{.id=8,		.topic="and/test/logic",	.payload="4.19" },
+	{.id=8,		.topic="and/test/logic",	.payload="4.19", .asVar=true },
 	{-1}
 };
 
