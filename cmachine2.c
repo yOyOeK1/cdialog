@@ -293,6 +293,13 @@ int main( int argc, char *argv[] ){
 
 	printf("cmachine2 [%s]\n * target [%s]\n * ver[%s]\n", cnn_name, cnn_target, CMACHINEVER );
 
+	if( 1 ){
+		cnn_Msg msgte = {};
+		printf("message empty: [%i]t[%s] -> p[%s]\n", msgte.id, msgte.topic, msgte.payload );
+		cnn_Msg msgte1 = { -1 };
+		printf("message1 empty: [%i]t[%s] -> p[%s]\n", msgte1.id, msgte1.topic, msgte1.payload );
+		return 1;
+	}
 	if( 0 ){
 		cmt_hashsDump();
 		return 1;

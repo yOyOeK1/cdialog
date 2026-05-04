@@ -89,6 +89,11 @@ In cmachine2 there is wrapper to do more ... can do OUTLINE of files with `-v` a
 
 ### TODO / FIX / KNOWN bugs
 
+[ ] hub node - empty node doing nothing.
+[ ] cnn_Msg should have 0/1 if it's as pointer or no
+    so if not then it's as not changed
+    so as pointer can be use as variable
+
 [ ] mqtth when init2 for nudles can send only after receaving first mesage. then it get's it's mqHeader struct 
 [ ] ccanvas don't do correct unicode characters :(
 
