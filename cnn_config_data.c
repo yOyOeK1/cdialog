@@ -17,6 +17,7 @@ cnn_Msg cnMs[] = {
 	{.id=6,		.topic="and/as/progress",	.payload="18.11" },
 	{.id=7,		.topic="and/test/mag",		.payload="" },
 	{.id=8,		.topic="and/test/logic",	.payload="4.19", .asVar=true },
+	{.id=9,		.topic="and/test/gitStatus",	.payload="4.19"},
 	{-1}
 };
 
@@ -102,9 +103,11 @@ cnn_Div cnnDivs[] = {
 cnn_Cmd cnnCmds[] = {
 	{ 1,	"echo test",		"echo 'Hello from cnnCmds[0] :)'"	},
 	{ 2,	"cat uptime",		"cat /proc/uptime"	},
+	{ 3,	"pwd",			"pwd"	},
+	{ 4,	"git status",		"git status"	},
 	{ -1 }
 };
-int cnnCmdsCount = 2;
+int cnnCmdsCount = 4;
 
 //
 // cnn_MqttPub
@@ -195,6 +198,16 @@ int cnn_ifsCount = 2;
 
 #define CNITIMESTAMP 15
 #define CNITIMENOWTT 16
+#define CNRDUMPMSG 18
+void cmr_dump_msgs( int nId, cnn_Msg *msgT ){
+	printf("dump messages -----\n"
+		" | ...   no | id  |var|  topic 	| payload\n");
+	for( int m=0; true; m++ ){
+		if( cnMs[ m ].id == -1 ) break;
+		printf(" |      %03i | %i | %04i [ %s ]\n | . . . [ %s ]\n", m, cnMs[ m ].asVar, cnMs[ m ].id, cnMs[ m ].topic, cnMs[ m ].payload);
+	}
+}
+
 cnn_Hash cnn_Hashs[] = {
 	{ 1,	"At start",		CNNATSTART, 	false,	0	},
 	{ 5,	"mqtt sub",		CNNMQTTSUB,	false,	0	},
@@ -218,6 +231,8 @@ cnn_Hash cnn_Hashs[] = {
 	{ 16,	"Get time now tt",	CNITIMENOWTT,	true,	&cmi_timeNowTT	},
 
 	{ 17,	"Logic - compale",	CNLIF,		true,	&cml_if		},
+	
+	{ 18,	"Dump - msg's",		CNRDUMPMSG,	true,	&cmr_dump_msgs	},
 
 	{ -1 }
 }; 
@@ -298,6 +313,13 @@ cnn_Nudle cnnNudles[] = {
 	{27,	CNNKEYBIND,	17,	CNLIF,		1	},
 	{28,	CNNKEYBIND,	18,	CNLIF,		2	},
 
+	{29,	CNNKEYBIND,	19,	CNNCMD,		2	},
+
+	{30,	CNNKEYBIND,	20,	CNRDUMPMSG,	1	},
+
+	{31,	CNNKEYBIND,	21,	CNNCMD,		3	},
+	{32,	CNNKEYBIND,	22,	CNNCMD,		4	},
+
 	{-1}	
 };
 
@@ -310,7 +332,7 @@ cnn_KeyMode cnn_KeyModes[] = {
 	{1,	"main"		},
 	{2,	"help"		},
 	{3,	"main3"		},
-	{4,	"main4"		},
+	{4,	"devs"		},
 	{5,	"DEB_canvas"	},
 	{6,	"Tests"		},
 	{-1}
@@ -339,6 +361,11 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	
 	{ 17,	 6,	       "1",	0,		"send !ok",		"",	8  },
 	{ 18,	 6,	       "0",	0,		"send ok",		"",	8  },
+	{ 19,	 6,	       "+",	0,		"send date to msgVar",	"",	8  },
+	{ 20,	 6,	       "dm",	0,		"dump msgs",		"",	8  },
+
+	{ 21,	 4,	       "pwd",	0,		"pwd test",		"",	8  },
+	{ 22,	 4,	       "gs",	0,	"git status",		"",	9  },
 	
 	{-1}
 };

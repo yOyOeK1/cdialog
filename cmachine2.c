@@ -53,12 +53,17 @@ int cm_msg_getIndex_byId( int id ){
 
 cnn_Msg cm_msgClone( int msgId ){
 	cnn_Msg msg = cnMs[ cm_msg_getIndex_byId( msgId ) ];
-	cnn_Msg tr = {};//{ .id=-1, .topic="t", .payload="abc" };
-	strcpy( tr.topic, msg.topic );
-	strcpy( tr.payload, msg.payload );
-	tr.asVar = msg.asVar;
-	printf(" | . . .  cm message clone DONE\n");
-	return tr;
+	if( msg.asVar ){
+		printf(" | . . .  cm message id[%i] asVar DONE\n", msgId);
+		return msg;//cnMs[ cm_msg_getIndex_byId( msgId ) ];
+	} else {
+		cnn_Msg tr = {};//{ .id=-1, .topic="t", .payload="abc" };
+		strcpy( tr.topic, msg.topic );
+		strcpy( tr.payload, msg.payload );
+		tr.asVar = msg.asVar;	
+		printf(" | . . .  cm message id[%i] clone DONE\n", msgId);
+		return tr;
+	}
 }
 
 void cm_printf( int id, cnn_Msg *msgT ){
@@ -199,7 +204,6 @@ void cm_doClick_opts( int level, int msgId, cnn_Msg msgTp, int srcType, int srcI
 		printf(" | . . . "
 			" level(%i) srcType[%i] srcId[%i] \n", level, srcType, srcId );
 		if( msgId != -1 ){
-			printf(" | . . .  With msg id[%i]\n", msgId );
 			msgT = cm_msgClone( msgId );
 			msgClone = true;
 		} else { 

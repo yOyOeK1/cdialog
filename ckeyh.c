@@ -94,19 +94,24 @@ void cnn_keyBind_on_OK( int kbId ){
 
 void keyPrintf_helpForCurrentMode(){
 	printf("--------------------------------\n"
-		" help / legend \n\n"
+		"# help / legend \n\n"
 		);
 	int p,pNo;
 	
-	printf(" ## key modes \n");
+	printf("## master keys\n"
+		"	[mN]	- switch modes N is mode No\n"
+		"	[q]	- quit / exit\n"
+		);
+	printf("## key modes \n"
+		" [@]	- is current\n");
 	pNo = 1;
 	for( p=0; true; p++ ){
 		if( cnn_KeyModes[ p ].id == -1 ) break;
-		printf(" %i.	%c[%i] [%s]\n", pNo++,
+		printf(" %i.	%c[m%i] [%s]\n", pNo++,
 			(cnn_KeyModes[ p ].id == cnn_KeyModeNow ? '@' : ' '),
 			cnn_KeyModes[ p ].id, cnn_KeyModes[ p ].name );
 	}
-	printf(" ## key at this mode \n");
+	printf("## key at this mode \n");
 
 	pNo = 1;
 	for( p=0; true; p++ ){
