@@ -23,6 +23,7 @@ extern int chFill;
 
 #include "config.h"
 //#include "configKeys.h"
+#include "cmachine2.h"
 #include "cmTools.h"
 #include "cmInits.h"
 #include "cmTime.h"
@@ -75,20 +76,26 @@ void cm_printf( int id, cnn_Msg *msgT ){
 				printf("* Topic: ... %s\n", msgT->topic );
 			}
 			printf( cnnPrintfs[ i ].printAs, msgT->payload );
+			
+			cm_doWorkAt_byNId( id, CNNPRINTF, 0, msgT );
+
 			break;
 		}
 	}	
 }
 // CNNCMD 6 
-void cm_cmd( int cmdId, cnn_Msg *msgT ){
+void cm_cmd( int nId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnnCmds[ i ].id == -1 ) break;
-		if( cnnCmds[ i ].id == cmdId ){
-			cmt_NodeName( "CM_CMD", cmdId, cnnCmds[ i ].name );
+		if( cnnCmds[ i ].id == nId ){
+			cmt_NodeName( "CM_CMD", nId, cnnCmds[ i ].name );
 			printf(" | ...... cmd START ---\\ \n");
 			strcpy( msgT->payload, cmd_to_chars( cnnCmds[ i ].cmd ) );
 			printf(" | ...... cmd END -----/\n");
 			//printf( cnnPrintfs[ i ].printAs, msg.payload );
+			
+			cm_doWorkAt_byNId( nId, CNNCMD, 0, msgT );
+
 			break;
 		}
 	}	
@@ -97,11 +104,11 @@ void cm_cmd( int cmdId, cnn_Msg *msgT ){
 // CNNMQTTPUB 8
 struct mosquitto *mqHea;
 bool mqConnected = false;
-void cm_mqttPub( int mqttPubId, cnn_Msg *msgT ){
+void cm_mqttPub( int nId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_MqttPubs[ i ].id == -1 ) break;
-		if( cnn_MqttPubs[ i ].id == mqttPubId ){
-			cmt_NodeName( "CM_MQTT_PUB", mqttPubId, cnn_MqttPubs[ i ].name );
+		if( cnn_MqttPubs[ i ].id == nId ){
+			cmt_NodeName( "CM_MQTT_PUB", nId, cnn_MqttPubs[ i ].name );
 			printf(" | ...... mqtt pub START ---\\ \n"
 				" | ...		mqtt host id	[%i]\n"
 				" | ... 	topic 	[%s]\n"
@@ -118,13 +125,19 @@ void cm_mqttPub( int mqttPubId, cnn_Msg *msgT ){
 
 			printf(" | ...... mqtt pub  END -----/\n");
 			//printf( cnnPrintfs[ i ].printAs, msg.payload );
+			
+			cm_doWorkAt_byNId( nId, CNNMQTTPUB, 0, msgT );
+
 			break;
 		}
 	}	
 }
 
 // ------------------------------
-bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
+bool cm_doWorkAt( int level, cnn_Msg *msgT, int nIndex, int nType, int nId ){
+	
+	msgT->nIndex = nIndex;
+
 	if( nType == CNNPRINTF ){
 		cm_printf( nId, msgT);
 		return true;
@@ -186,6 +199,7 @@ bool cm_doWorkAt( cnn_Msg *msgT, int nType, int nId ){
 		if( nType == cnn_Hashs[ h ].nType ){
 			printf(" | ## cnn Hashs OK [ %s ]!\n", cnn_Hashs[ h ].name );
 			cmt_NodeName( "CM_HASHS", cnn_Hashs[ h ].id, cnn_Hashs[ h ].name );
+			// execute pointer function 
 			cnn_Hashs[ h ].fPts( nId, msgT );
 			return true;
 		}
@@ -221,17 +235,34 @@ void cm_doClick_opts( int level, int msgId, cnn_Msg msgTp, int srcType, int srcI
 			cnnNudles[ ni ].srcId == srcId ){
 
 			printf(" |\n |\n *--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
-			doClick = cm_doWorkAt( &msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
+			cm_doWorkAt( level, &msgT, ni, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
+		//	doClick = cm_doWorkAt( &msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
 
-			if( doClick ){
-				cm_doClick_opts( level+1, msgId, msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId, ni+1 );
-			}else{
-				printf(" \\ __ ... nudle id[%i] END\n", cnnNudles[ ni ].id );
-			}
+		//	if( doClick ){
+		//		cm_doClick_opts( level+1, msgId, msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId, ni+1 );
+		//	}else{
+		//		printf(" \\ __ ... nudle id[%i] END\n", cnnNudles[ ni ].id );
+		//	}
 
 		}
 	}
 
+}
+void cm_doWorkAt_byNId( int nId, int nType, int chaNo, cnn_Msg *msgT ){
+	printf(" | . . . node channel [%i] DONE\n"
+		" | . . . doWorkAt by nType[%i] id[%i] nIndex[%i]\n", 
+		chaNo, nType, nId, msgT->nIndex 
+		);
+	for( int ni=msgT->nIndex; true; ni++ ){
+		if( cnnNudles[ ni ].id == -1 ) break;
+		if( cnnNudles[ ni ].srcType == nType &&
+			cnnNudles[ ni ].srcId == nId ){
+
+			printf(" |\n |\n *--- nudle id[%i] srcCh[%i]\n |\n", cnnNudles[ ni ].id, cnnNudles[ ni ].srcChNo );
+			cm_doWorkAt( -1, msgT, ni, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
+
+		}
+	}
 }
 void cm_doClick( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId ){
 	cm_doClick_opts( level, msgId, msgTp, srcType, srcId, 0 );
@@ -341,18 +372,21 @@ int main( int argc, char *argv[] ){
 		printf("c cmachine2 -- 2 CPPMACHINE2 ... END  .. NUDLE SECTION\n");
 
 //	return 1;
+#ifdef CM_DO_INIT_MQTT
 		printf("c cmachine2 -- 3 CPPMACHINE2 ... START mqtt init \n"
 			"\t- mqtt hosts:	[ %i ]\n", MqHostsCount );
 		cmInit_mqtt();
 		printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");
-		
-
+#endif	
+#ifdef CM_DO_INIT_CANVAS
 		cmInit_cnCanvass();
 		//cmCanvasRender( 2 );
-
+#endif
+#ifdef CM_DO_INIT_KEYBIND		
 		printf("c cmachine2 -- 4 CPPKEYBIND... START\n");
 		keyBindDoIt();
 		printf("c cmachine2 -- 4 CPPKEYBIND... END\n");
+#endif
 
 	}
 

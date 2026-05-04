@@ -5,6 +5,7 @@
 
 #include "cnn_config_data.h"
 #include "cmTools.h"
+#include "cmachine2.h"
 
 void cm_div( int id, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
@@ -15,6 +16,9 @@ void cm_div( int id, cnn_Msg *msgT ){
 			fin/= cnnDivs[ i ].divBy;
 			printf("[DEB] div %s by %f res [%f]\n",  msgT->payload, cnnDivs[ i ].divBy, fin );
 			snprintf( msgT->payload, 512, "%f", fin );
+			
+			cm_doWorkAt_byNId( id, CNNDIV, 0, msgT );
+
 			break;
 		}
 	}	
@@ -29,6 +33,9 @@ void cm_add( int id, cnn_Msg *msgT ){
 			fin+= cnnAdds[ i ].add;
 			printf("[DEB] add %f to %s res [%f]\n", cnnAdds[ i ].add, msgT->payload, fin );
 			snprintf( msgT->payload, 512, "%f", fin );
+			
+			cm_doWorkAt_byNId( id, CNNADD, 0, msgT );
+
 			break;
 		}
 	}	

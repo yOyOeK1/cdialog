@@ -2,7 +2,16 @@
 #ifndef CNN_TYPES_H
 #define CNN_TYPES_H
 
+#define CM_DO_INIT_CANVAS 1
+#define CM_DO_INIT_MQTT 1
+#define CM_DO_INIT_KEYBIND 1
+
+#define CNITIMESTAMP 15
+#define CNITIMENOWTT 16
+#define CNRDUMPMSG 18
+
 #include <stdbool.h>
+
 
 // cnnMsg
 typedef struct{
@@ -12,6 +21,7 @@ typedef struct{
 	bool asVar;
 	long tStart;
 	long tEnd;
+	int nIndex;
 } cnn_Msg;
 
 
@@ -190,6 +200,7 @@ typedef struct{
 	int srcId;
 	int targetType;
 	int targetId;
+	int srcChNo;
 } cnn_Nudle;
 
 typedef struct{

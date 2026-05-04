@@ -196,9 +196,6 @@ int cnn_ifsCount = 2;
 #include <stdio.h>
 #include "cmachine2.h"
 
-#define CNITIMESTAMP 15
-#define CNITIMENOWTT 16
-#define CNRDUMPMSG 18
 void cmr_dump_msgs( int nId, cnn_Msg *msgT ){
 	printf("dump messages -----\n"
 		" | ...   no | id  |var|  topic 	| payload\n");
@@ -264,7 +261,6 @@ const int *cmn_test0_pts;
 //
 // ------ nudles
 //
-
 cnn_Nudle cnnNudles[] = {
 	{1,	1,		1,	2,		1	},
 	{2,	CNNATSTART,	2,	CNNADD,		1	},

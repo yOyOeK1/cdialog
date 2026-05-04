@@ -5,6 +5,7 @@
 
 #include "cnn_config_data.h"
 #include "cmTools.h"
+#include "cmachine2.h"
 #include "cpostprocess.h"
 
 extern int col;
@@ -14,16 +15,17 @@ extern int chFill;
 
 
 // CNNPROGRESSBAR 13
-void cm_AsProgressBar( int pId, cnn_Msg *msgT ){
+void cm_AsProgressBar( int nId, cnn_Msg *msgT ){
 	for( int i=0; true; i++ ){
 		if( cnn_ProgressBars[ i ].id == -1 ) break;
-		if( cnn_ProgressBars[ i ].id == pId ){
-			cmt_NodeName( "CM_PROGRESSBAR", pId, cnn_ProgressBars[ i ].name );
+		if( cnn_ProgressBars[ i ].id == nId ){
+			cmt_NodeName( "CM_PROGRESSBAR", nId, cnn_ProgressBars[ i ].name );
 			long int mesLong = strtol( msgT->payload, NULL, 10 );
 			col = cnn_ProgressBars[ i ].width;
 			snprintf( msgT->payload, 512, 
 				cnn_ProgressBars[ i ].printAs, cPP_asProgress( mesLong ) 
 				);
+			cm_doWorkAt_byNId( nId, CNNPROGRESSBAR, 0, msgT );
 			break;
 		}
 	}
@@ -39,6 +41,7 @@ void cm_AsCompas( int nId, cnn_Msg *msgT ){
 			snprintf( msgT->payload, 512, 
 				cnn_Compass[ i ].printAs, cPP_asCompass( mesLong ) 
 				);
+			cm_doWorkAt_byNId( nId, CNNCOMPAS, 0, msgT );
 			break;
 		}
 	}
