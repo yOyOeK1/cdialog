@@ -42,7 +42,7 @@ extern int chFill;
 #include "cmdh.h"
 
 char cmachBuff[512];
-
+uint64_t tSms;
 
 
 int cm_msg_getIndex_byId( int id ){
@@ -133,10 +133,16 @@ void cm_mqttPub( int nId, cnn_Msg *msgT ){
 		}
 	}	
 }
+void cm_benchmarkTik(){
+	printf(" | . . . BEN [%lu]ms. \n", time_now_deltaMS( tSms ) );
+	tSms = time_now_stampMS();
+}
+
 
 // ------------------------------
 bool cm_doWorkAt( int level, cnn_Msg *msgT, int nIndex, int nType, int nId ){
 	
+	cm_benchmarkTik();
 	msgT->nIndex = nIndex;
 
 	if( nType == CNNPRINTF ){
@@ -216,6 +222,7 @@ void cm_doClick_opts( int level, int msgId, cnn_Msg msgTp, int srcType, int srcI
 	bool msgClone = false;
 	cnn_Msg msgT;
 	if( level == 0 ){
+		tSms = time_now_stampMS();
 		printf(" | . . . "
 			" level(%i) srcType[%i] srcId[%i] \n", level, srcType, srcId );
 		if( msgId != -1 ){
@@ -344,7 +351,7 @@ int main( int argc, char *argv[] ){
 				printf("o");
 			}
 		}
-		usleep( 1000000 ); // 1 sec
+		//usleep( 1000000 ); // 1 sec
 
 		printf("time stampMS[%lu] delta:[%lu]ms.\n next [%lu]\n", tSms, time_now_deltaMS( tSms ), tSms3 );
 		return 0;

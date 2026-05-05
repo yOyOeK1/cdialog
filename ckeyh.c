@@ -50,6 +50,7 @@ int key_chk_KeyBinds(  ){
 				cnn_Msg msgT;
 				cm_doClick( 0, cnn_KeyBinds[kBin].msgId, msgT, CNNKEYBIND, cnn_KeyBinds[kBin].id );
 
+				printf(" | \n \\ ___ ### CNNKEYBIND... END\n");
 
 				/*if( cnn_KeyBinds[kBin].doWhat == 0 ){ // cmd
 					snprintf( tmsg, 512, cnn_KeyBinds[kBin].parser, cmd_to_chars( cnn_KeyBinds[kBin].args  ) );
@@ -131,7 +132,7 @@ int keyBindDoIt(){
 	keyNo = 0;
 	keyCmdOk = false;
 	keyBindIdLast = -1;
-	printf("[q] key to exit ...\n");
+	printf("[q] key to exit ... or [?] for help ...\n");
 	while( true ){
 		keyCh = getchar();
 
