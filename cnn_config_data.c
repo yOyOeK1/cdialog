@@ -5,7 +5,10 @@
 
 char *cnn_name = "Playground 001";
 char *cnn_target = "cmachine2Playground001";
-char *cnn_Version = "2026.0502";
+char *cnn_Version = "2026.0505";
+
+bool cmtDeb_verbose = false;
+bool cmtBen = false;
 
 
 cnn_Msg cnMs[] = {
@@ -204,7 +207,6 @@ void cmr_dump_msgs( int nId, cnn_Msg *msgT ){
 		printf(" |      %03i | %i | %04i [ %s ]\n | . . . [ %s ]\n", m, cnMs[ m ].asVar, cnMs[ m ].id, cnMs[ m ].topic, cnMs[ m ].payload);
 	}
 }
-bool cmtDeb_verbose = true;
 void cmr_debug_on( int nId, cnn_Msg *msgT ){
 	printf("DEBUG on\n");
 	cmtDeb_verbose = true;

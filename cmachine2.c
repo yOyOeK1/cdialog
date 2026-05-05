@@ -7,7 +7,7 @@
 #include <mosquitto.h>
 
 
-#define CMACHINEVER "2026.0503"
+#define CMACHINEVER "2026.0505"
 
 extern int col;
 extern int row;
@@ -135,8 +135,10 @@ void cm_mqttPub( int nId, cnn_Msg *msgT ){
 	}	
 }
 void cm_benchmarkTik(){
-	printf(" | . . . BEN [%lu]ms. \n", time_now_deltaMS( tSms ) );
-	tSms = time_now_stampMS();
+	if( cmtBen ){
+		printf(" | . . . BEN [%lu]ms. \n", time_now_deltaMS( tSms ) );
+		tSms = time_now_stampMS();
+	}
 }
 
 

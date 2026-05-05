@@ -11,6 +11,7 @@
 #include "cmLogic.h"
 
 extern bool cmtDeb_verbose;
+extern bool cmtBen;
 
 extern char *cnn_name;
 extern char *cnn_target;

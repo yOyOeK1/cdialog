@@ -488,7 +488,7 @@ int main( int argc, char *argv[] ){
 						// TODO mqtt publish
 
 					} else {
-						printf("EE NOT IMPlemented yet doWhat [%i]\n", keyBinds[kBin].doWhat);	
+						printf(" | . . . keyBind exec EE NOT IMPlemented yet doWhat [%i]\n", keyBinds[kBin].doWhat);	
 					}
 					break;
 				}
