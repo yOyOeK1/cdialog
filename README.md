@@ -8,7 +8,7 @@
 
  - at postmarketOs arm64
 
-gcc, build-base, ncurses-dev, mosquitto-dev
+gcc, build-base, ncurses-dev, mosquitto-dev, cjson-dev
 
 
 
@@ -86,6 +86,12 @@ In cmachine2 there is wrapper to do more ... can do OUTLINE of files with `-v` a
 ./cmachine2Build_H.sh -v
 ```
 
+
+### NOTES
+
+sources / reading:
+* cJSON:
+https://www.geeksforgeeks.org/c/cjson-json-file-write-read-modify-in-c/
 
 ### TODO / FIX / KNOWN bugs
 
