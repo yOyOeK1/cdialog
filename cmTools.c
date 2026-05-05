@@ -5,21 +5,74 @@
 #include "cnn_config_data.h"
 #include "cmdh.h"
 
+
+typedef struct{
+	char blame[512];
+	char line[512];
+}cmtDeb_item;
+
+#define CMTDEB_MAX 10
+#define CMTDEB 1
+bool cmtDeb_verbose = false;
+int cmtDeb_No = 0;
+cmtDeb_item cDEBS[ CMTDEB_MAX + 5];
+
+
+void cmtDeb_dump(){
+	printf("[DEB] --------------- START\n");
+	for( int l=cmtDeb_No-1; l<CMTDEB_MAX; l++ ){
+		printf("[DEB%03i][% 8s] \t%s\n", l,  cDEBS[ (l%CMTDEB_MAX) ].blame, cDEBS[ (l%CMTDEB_MAX) ].line );
+	}
+	printf("[DEB] --------------- END\n");
+}
+
+int cmtDeb( char *blame, const char *format, ... ){
+#ifndef CMTDEB
+	return 0;
+#endif
+	va_list args;
+	va_start( args, format );
+	int len = vsnprintf( NULL, 0, format, args );
+	va_end( args );
+	if( len < 0 ){
+		printf("EE in cmtDeb 9879 in \n");
+		return 1;
+	}
+
+	va_start( args, format );
+	if( cmtDeb_verbose ){
+		printf("[DEBUG] cmachine [%s]\n", blame );
+		vprintf( format, args );
+	}
+	strcpy( cDEBS[ cmtDeb_No ].blame, blame ); 
+	vsnprintf( cDEBS[ cmtDeb_No  ].line, 512, format, args );
+	cDEBS[ cmtDeb_No ].line[511] = 0;
+	va_end( args );
+
+	cmtDeb_No++;
+	if( cmtDeb_No > CMTDEB_MAX )
+		cmtDeb_No = 0;
+
+	//cmtDeb_dump();
+
+	return 0;
+}
+
 void cmt_start_byNode( machNode mn ){
-	printf("\t* start by id ... %i\n", mn.id );	
+	cmtDeb("startByNode", "\t* start by id ... %i\n", mn.id );	
 
 	if( mn.typeOf == 0 ){ // cmd
 		mn.isRunning = true;
 		strcpy( mn.result, cmd_to_chars( mn.cmd ) );
-		printf( "\t* ... result [ %s ]\n", mn.result );
+		cmtDeb( "startByNode", "\t* ... result [ %s ]\n", mn.result );
 
 	}else{
-		printf("\tEE type not implemented [%i]\n", mn.typeOf );
+		cmtDeb( "startByNode","\tEE type not implemented [%i]\n", mn.typeOf );
 	}
 }
 
 void cmt_NodeName( char *type, int id, char *name ){
-	printf(" |\n |__  %s id[%i][ %s ]\n |\n", type, id, name );
+	cmtDeb( name, " |\n |__  %s id[%i][ %s ]\n |\n", type, id, name );
 }
 
 void cmt_hashsDump( ){

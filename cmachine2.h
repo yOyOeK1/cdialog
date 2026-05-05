@@ -4,6 +4,7 @@ cnn_Msg cm_msgClone( int msgId );
 void cm_printf( int id, cnn_Msg *msgT );
 void cm_cmd( int nId, cnn_Msg *msgT );
 void cm_mqttPub( int nId, cnn_Msg *msgT );
+void cm_benchmarkTik();
 bool cm_doWorkAt( int level, cnn_Msg *msgT, int nIndex, int nType, int nId );
 void cm_doClick_opts( int level, int msgId, cnn_Msg msgTp, int srcType, int srcId, int niStart );
 void cm_doWorkAt_byNId( int nId, int nType, int chaNo, cnn_Msg *msgT );

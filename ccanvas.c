@@ -195,12 +195,16 @@ int ccInit_FB_byPointer( char **pts, int dcol, int drow ){
 	if( *pts == NULL ) 
 		printf("EE ccInit error size %i x %i\n", dcol, drow);
 
+#ifdef CMTDEB 
 	if( asBar == false )
 		printf("#* .. ccFB size [ %i ] for [ %i x %i ] terminal \n", ccFBc, dcol, drow );
+#endif
 
 	memset( *pts, 'x', ccFBc );
 	(*pts)[ ccFBc ] = 0;
+#ifdef CMTDEB 
 	printf("[DEB ccInit FB byP] after init len(%zu)\n", strlen( *pts ) );
+#endif
 }
 int ccInit_FB(){
 	ccInit_FB_byPointer( &ccFB, col, row );

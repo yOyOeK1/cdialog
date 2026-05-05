@@ -35,7 +35,7 @@ char *key_getCurrentMode_name(){
 
 int key_chk_KeyBinds(  ){
 	if( asBar == false ) 
-		printf( " * keyBin parentId[%i] ", cnn_KeyModeNow );
+		cmtDeb( "keyBind", " * keyBin parentId[%i] ", cnn_KeyModeNow );
 
 	for( int kBin=0; true; kBin++ ){
 		if( cnn_KeyBinds[kBin].id == -1 ) break;
@@ -44,13 +44,13 @@ int key_chk_KeyBinds(  ){
 				printf( "[%s] ", cnn_KeyBinds[kBin].keys );
 			if( strcmp( keyIn, cnn_KeyBinds[kBin].keys ) == 0 ){
 				cmt_NodeName("CNNKEYBIND", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].keys );
-				printf(" | OK keyBind id[%i]\n | ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
+				cmtDeb( "keyBind"," | OK keyBind id[%i]\n | ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
 
 				//cm_doClick( 0, 0/*cnn_KeyBinds[kBin].msgId*/, CNNKEYBIND, cnn_KeyBinds[kBin].id );
 				cnn_Msg msgT;
 				cm_doClick( 0, cnn_KeyBinds[kBin].msgId, msgT, CNNKEYBIND, cnn_KeyBinds[kBin].id );
 
-				printf(" | \n \\ ___ ### CNNKEYBIND... END\n");
+				cmtDeb( "keyBind"," | \n \\ ___ ### CNNKEYBIND... END\n");
 
 				/*if( cnn_KeyBinds[kBin].doWhat == 0 ){ // cmd
 					snprintf( tmsg, 512, cnn_KeyBinds[kBin].parser, cmd_to_chars( cnn_KeyBinds[kBin].args  ) );
@@ -67,7 +67,7 @@ int key_chk_KeyBinds(  ){
 			}
 		}
 	}
-	printf("\n");
+	//cmtDeb( "keyBind","\n");
 	return -1;
 }
 

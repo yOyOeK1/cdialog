@@ -56,14 +56,14 @@ int cm_msg_getIndex_byId( int id ){
 cnn_Msg cm_msgClone( int msgId ){
 	cnn_Msg msg = cnMs[ cm_msg_getIndex_byId( msgId ) ];
 	if( msg.asVar ){
-		printf(" | . . .  msgClone id[%i] asVar DONE\n", msgId);
+		cmtDeb( "msgClone", " | . . .  msgClone id[%i] asVar DONE\n", msgId);
 		return msg;//cnMs[ cm_msg_getIndex_byId( msgId ) ];
 	} else {
 		cnn_Msg tr = {};//{ .id=-1, .topic="t", .payload="abc" };
 		strcpy( tr.topic, msg.topic );
 		strcpy( tr.payload, msg.payload );
 		tr.asVar = msg.asVar;	
-		printf(" | . . .  msgClone id[%i] clone DONE\n", msgId);
+		cmtDeb( "msgClone", " | . . .  msgClone id[%i] clone DONE\n", msgId);
 		return tr;
 	}
 }
@@ -90,10 +90,10 @@ void cm_cmd( int nId, cnn_Msg *msgT ){
 		if( cnnCmds[ i ].id == -1 ) break;
 		if( cnnCmds[ i ].id == nId ){
 			cmt_NodeName( "CM_CMD", nId, cnnCmds[ i ].name );
-			printf(" | ...... cmd START ---\\ \n");
+			cmtDeb( "cmCmd", " | ...... cmd START ---\\ \n");
 			strcpy( msgT->payload, cmd_to_chars( cnnCmds[ i ].cmd ) );
 			//msgT->payload[511] = 0;
-			printf(" | ...... cmd END -----/ (%i)\n", strlen(msgT->payload) );
+			cmtDeb( "cmCmd", " | ...... cmd END -----/ (%i)\n", strlen(msgT->payload) );
 			//printf( cnnPrintfs[ i ].printAs, msg.payload );
 			
 			cm_doWorkAt_byNId( nId, CNNCMD, 0, msgT );
@@ -196,7 +196,7 @@ bool cm_doWorkAt( int level, cnn_Msg *msgT, int nIndex, int nType, int nId ){
 	for( int h=14; true; h++ ){
 		if( cnn_Hashs[ h ].id == -1 ) break;
 
-		printf(" | ## looking in hashs ...\n"
+		cmtDeb( "lokHash", " | ## looking in hashs ...\n"
 				" | ##% 3i|% 3i| %c | % 3i|% 16p| %s\n",
 			h, cnn_Hashs[ h ].id,
 			( cnn_Hashs[ h ].isNode ? 'X' : ' ' ),
@@ -205,7 +205,7 @@ bool cm_doWorkAt( int level, cnn_Msg *msgT, int nIndex, int nType, int nId ){
 			);
 
 		if( nType == cnn_Hashs[ h ].nType ){
-			printf(" | ## cnn Hashs OK [ %s ]!\n", cnn_Hashs[ h ].name );
+			cmtDeb( "lokHash", " | ## cnn Hashs OK [ %s ]!\n", cnn_Hashs[ h ].name );
 			cmt_NodeName( "CM_HASHS", cnn_Hashs[ h ].id, cnn_Hashs[ h ].name );
 			// execute pointer function 
 			cnn_Hashs[ h ].fPts( nId, msgT );
@@ -224,17 +224,17 @@ void cm_doClick_opts( int level, int msgId, cnn_Msg msgTp, int srcType, int srcI
 	cnn_Msg msgT;
 	if( level == 0 ){
 		tSms = time_now_stampMS();
-		printf(" | . . . "
+		cmtDeb( "doCliOpts"," | . . . "
 			" level(%i) srcType[%i] srcId[%i] \n", level, srcType, srcId );
 		if( msgId != -1 ){
 			msgT = cm_msgClone( msgId );
 			msgClone = true;
 		} else { 
-			printf("# msgT blank topic [%s] payload [%s]\n", msgT.topic, msgT.payload );
+			cmtDeb( "doCliOpts", "# msgT blank topic [%s] payload [%s]\n", msgT.topic, msgT.payload );
 		}
 	} else {
 		msgT = msgTp;
-		printf("\n | . . . msgT reuse topic [%s] payload [%s]\n", msgT.topic, msgT.payload );
+		cmtDeb( "doCliOpts", "\n | . . . msgT reuse topic [%s] payload [%s]\n", msgT.topic, msgT.payload );
 	}
 
 	int doClick = false;
@@ -243,7 +243,7 @@ void cm_doClick_opts( int level, int msgId, cnn_Msg msgTp, int srcType, int srcI
 		if( cnnNudles[ ni ].srcType == srcType &&
 			cnnNudles[ ni ].srcId == srcId ){
 
-			printf(" |\n |\n *--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
+			cmtDeb( "doCliOpts"," |\n |\n *--- nudle id[%i]\n |\n", cnnNudles[ ni ].id );
 			cm_doWorkAt( level, &msgT, ni, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
 		//	doClick = cm_doWorkAt( &msgT, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
 
@@ -258,7 +258,7 @@ void cm_doClick_opts( int level, int msgId, cnn_Msg msgTp, int srcType, int srcI
 
 }
 void cm_doWorkAt_byNId( int nId, int nType, int chaNo, cnn_Msg *msgT ){
-	printf(" | . . . node channel [%i] DONE\n"
+	cmtDeb( "doWork"," | . . . node channel [%i] DONE\n"
 		" | . . . doWorkAt by nType[%i] id[%i] nIndex[%i]\n", 
 		chaNo, nType, nId, msgT->nIndex 
 		);
@@ -267,7 +267,7 @@ void cm_doWorkAt_byNId( int nId, int nType, int chaNo, cnn_Msg *msgT ){
 		if( cnnNudles[ ni ].srcType == nType &&
 			cnnNudles[ ni ].srcId == nId ){
 
-			printf(" |\n |\n *--- nudle id[%i] srcCh[%i]\n |\n", cnnNudles[ ni ].id, cnnNudles[ ni ].srcChNo );
+			cmtDeb( "doWork"," |\n |\n *--- nudle id[%i] srcCh[%i]\n |\n", cnnNudles[ ni ].id, cnnNudles[ ni ].srcChNo );
 			cm_doWorkAt( -1, msgT, ni, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
 
 		}
@@ -296,14 +296,14 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 		if( strcmp( cnn_MqttSubs[ s ].topic, message->topic ) == 0 ){
 			sIndex = s;
 		
-			printf(" * OK cm2 mqtt msg ... index[%i] obj [%i]\n * _ topic: [%s] %s\n", sIndex, message->mid, message->topic, message->payload ); 
+			cmtDeb("mqOnMsg", " * OK cm2 mqtt msg ... index[%i] obj [%i]\n * _ topic: [%s] %s\n", sIndex, message->mid, message->topic, message->payload ); 
 
 			for( int n=0; true; n++ ){
 				if( cnnNudles[ n ].id == -1 ) break;
 
 				if( cnnNudles[ n ].srcType == CNNMQTTSUB &&
 					cnnNudles[ n ].srcId == cnn_MqttSubs[ s ].id ){
-					printf(" */ mqtt got nudle .... n[%i] type[%i] id[%i] msgId[%i]\n", n, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId, cnn_MqttSubs[ s ].msgId );
+					cmtDeb("mqOnMsg", " */ mqtt got nudle .... n[%i] type[%i] id[%i] msgId[%i]\n", n, cnnNudles[ n ].targetType, cnnNudles[ n ].targetId, cnn_MqttSubs[ s ].msgId );
 					if( cnn_MqttSubs[ s ].msgId == 0 ){
 					} else {
 						int msgIndex = cm_msg_getIndex_byId( cnn_MqttSubs[ s ].msgId  );
@@ -319,11 +319,11 @@ void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosqui
 
 
 			}
-			printf(" | \n \\ ___ ### CNNMQTTSUB ... END\n");
+			cmtDeb("mqOnMsg", " | \n \\ ___ ### CNNMQTTSUB ... END\n");
 		} 
 	}
 	if( sIndex == -1 ){
-		printf(" * cm2 mqtt msg ... topic: [%s]\n *\t[ %s ]\n", message->topic, message->payload ); 
+		cmtDeb("mqOnMsg", " * cm2 mqtt msg ... topic: [%s]\n *\t[ %s ]\n", message->topic, message->payload ); 
 	}
 
 
@@ -340,6 +340,12 @@ int main( int argc, char *argv[] ){
 
 	printf("cmachine2 [%s]\n * target [%s]\n * ver[%s]\n", cnn_name, cnn_target, CMACHINEVER );
 
+	if( 0 ){
+		// cmachine debug test 
+		cmtDeb("main test", "abc %s 098\n", "xxx");
+		//cmtDeb_dump();
+		return 0;
+	}
 	if( 0 ){
 		// ms time test
 		uint64_t tSms = time_now_stampMS();
