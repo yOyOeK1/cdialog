@@ -204,6 +204,16 @@ void cmr_dump_msgs( int nId, cnn_Msg *msgT ){
 		printf(" |      %03i | %i | %04i [ %s ]\n | . . . [ %s ]\n", m, cnMs[ m ].asVar, cnMs[ m ].id, cnMs[ m ].topic, cnMs[ m ].payload);
 	}
 }
+bool cmtDeb_verbose = true;
+void cmr_debug_on( int nId, cnn_Msg *msgT ){
+	printf("DEBUG on\n");
+	cmtDeb_verbose = true;
+}
+void cmr_debug_off( int nId, cnn_Msg *msgT ){
+	printf("DEBUG off\n");
+	cmtDeb_verbose = false;
+}
+
 
 cnn_Hash cnn_Hashs[] = {
 	{ 1,	"At start",		CNNATSTART, 	false,	0	},
@@ -231,9 +241,12 @@ cnn_Hash cnn_Hashs[] = {
 	
 	{ 18,	"Dump - msg's",		CNRDUMPMSG,	true,	&cmr_dump_msgs	},
 
+	{ 19,	"Debug on",		CNRDEBUGON,	true,	&cmr_debug_on},
+	{ 20,	"Debug off",		CNRDEBUGOFF,	true,	&cmr_debug_off},
+
 	{ -1 }
 }; 
-int cnn_HashsCount = 14;
+int cnn_HashsCount = 19;
 
 void cnn_config_init(){
 	printf("# cnn config init ....\n");
@@ -251,8 +264,6 @@ void cmn_test0( int id, int msgPts ){
 const int *cmn_test0_pts;
 
 // ----- test zene END 
-
-
 
 
 
@@ -316,6 +327,9 @@ cnn_Nudle cnnNudles[] = {
 	{31,	CNNKEYBIND,	21,	CNNCMD,		3	},
 	{32,	CNNKEYBIND,	22,	CNNCMD,		4	},
 
+	{33,	CNNKEYBIND,	23,	CNRDEBUGON,	1	},
+	{34,	CNNKEYBIND,	24,	CNRDEBUGOFF,	1	},
+
 	{-1}	
 };
 
@@ -361,7 +375,10 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	{ 20,	 6,	       "dm",	0,		"dump msgs",		"",	8  },
 
 	{ 21,	 4,	       "pwd",	0,		"pwd test",		"",	8  },
-	{ 22,	 4,	       "gs",	0,	"git status",		"",	9  },
+	{ 22,	 4,	       "gs",	0,		"git status",		"",	9  },
+	
+	{ 23,	 6,	       "d1",	0,		"debug on",		"",	9  },
+	{ 24,	 6,	       "d0",	0,		"debug off",		"",	9  },
 	
 	{-1}
 };

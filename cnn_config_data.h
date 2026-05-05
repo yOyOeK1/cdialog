@@ -10,6 +10,7 @@
 #include "cmAs.h"
 #include "cmLogic.h"
 
+extern bool cmtDeb_verbose;
 
 extern char *cnn_name;
 extern char *cnn_target;

@@ -9,6 +9,8 @@
 #define CNITIMESTAMP 15
 #define CNITIMENOWTT 16
 #define CNRDUMPMSG 18
+#define CNRDEBUGON 19
+#define CNRDEBUGOFF 20
 
 #include <stdbool.h>
 

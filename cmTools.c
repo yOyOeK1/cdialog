@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <stdarg.h>
 #include <string.h>
 
 #include "cnn_config_data.h"
@@ -13,7 +14,7 @@ typedef struct{
 
 #define CMTDEB_MAX 10
 #define CMTDEB 1
-bool cmtDeb_verbose = false;
+extern bool cmtDeb_verbose;
 int cmtDeb_No = 0;
 cmtDeb_item cDEBS[ CMTDEB_MAX + 5];
 
