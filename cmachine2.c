@@ -1,6 +1,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
 #include <mosquitto.h>
@@ -29,7 +30,7 @@ extern int chFill;
 #include "cmTime.h"
 #include "cmCanvas.h"
 //#include "ctermh.h"
-//#include "timeh.h"
+#include "timeh.h"
 #include "ckeyh.h"
 #include "mqtth.h"
 //#include "ccanvas.h"
@@ -330,6 +331,25 @@ int main( int argc, char *argv[] ){
 	if( argc > 1 && cc_main_argcParse( argc, argv )!= 1 )  return 0;
 
 	printf("cmachine2 [%s]\n * target [%s]\n * ver[%s]\n", cnn_name, cnn_target, CMACHINEVER );
+
+	if( 0 ){
+		// ms time test
+		uint64_t tSms = time_now_stampMS();
+		int a;
+		uint64_t tSms3; 
+		for ( int b=0;b<1000;b++){
+			for( int i=0;i<1000;i++){
+				a*=0.1;
+				tSms3 = time_now_stampMS();
+				printf("o");
+			}
+		}
+		usleep( 1000000 ); // 1 sec
+
+		printf("time stampMS[%lu] delta:[%lu]ms.\n next [%lu]\n", tSms, time_now_deltaMS( tSms ), tSms3 );
+		return 0;
+		// ms time test - END
+	}
 
 	if( 0 ){
 		cnn_Msg msgte = {};

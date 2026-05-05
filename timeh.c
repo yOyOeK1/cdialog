@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 
 //#include "config.h"
@@ -16,6 +17,19 @@ int time_now(){
 
 long time_now_stamp(){
 	return (long)time( NULL );
+}
+
+uint64_t time_now_stampMS(){
+    struct timespec ts;
+    // CLOCK_REALTIME: Wall clock time (can jump if NTP adjusts time)
+    // CLOCK_MONOTONIC: Time since boot (better for measuring intervals)
+    clock_gettime(CLOCK_REALTIME, &ts);
+
+    // Convert seconds to ms and nanoseconds to ms
+    return (uint64_t)ts.tv_sec * 1000 + (uint64_t)ts.tv_nsec / 1000000;
+}
+uint64_t time_now_deltaMS( uint64_t tStart ){
+	return time_now_stampMS() - tStart;
 }
 
 char* time_now_tt(){
