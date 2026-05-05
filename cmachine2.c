@@ -92,7 +92,8 @@ void cm_cmd( int nId, cnn_Msg *msgT ){
 			cmt_NodeName( "CM_CMD", nId, cnnCmds[ i ].name );
 			printf(" | ...... cmd START ---\\ \n");
 			strcpy( msgT->payload, cmd_to_chars( cnnCmds[ i ].cmd ) );
-			printf(" | ...... cmd END -----/\n");
+			//msgT->payload[511] = 0;
+			printf(" | ...... cmd END -----/ (%i)\n", strlen(msgT->payload) );
 			//printf( cnnPrintfs[ i ].printAs, msg.payload );
 			
 			cm_doWorkAt_byNId( nId, CNNCMD, 0, msgT );
