@@ -39,6 +39,14 @@ void key_mouseKey_disable(){
     tcsetattr(STDIN_FILENO, TCSANOW, &original_termios);
 }
 
+void key_mouseKey_modeMouse( int modeNo ){
+	if( modeNo == 0  ){ // mouse pc
+		printf("\x1b[?1003h\x1b[?1006h");
+	} else if ( modeNo == 1 ){ // termux
+		printf("\033[?1003h\033[?1006h");   
+	}
+	fflush(stdout);
+}
 int key_mouseKey_enable(){
     // 1. Save original settings and register reset on exit
     tcgetattr(STDIN_FILENO, &original_termios);
@@ -49,9 +57,8 @@ int key_mouseKey_enable(){
     raw.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &raw);
 
-    // 3. Enable mouse tracking (all motion + SGR mode)
-    printf("\x1b[?1003h\x1b[?1006h");
-    fflush(stdout);
+
+    key_mouseKey_modeMouse( 1 );
 
     char buf[32];
     printf("Capturing... Press 'q' to quit.\n");
