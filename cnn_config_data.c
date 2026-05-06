@@ -105,12 +105,13 @@ cnn_Div cnnDivs[] = {
 // id 6
 cnn_Cmd cnnCmds[] = {
 	{ 1,	"echo test",		"echo 'Hello from cnnCmds[0] :)'"	},
-	{ 2,	"cat uptime",		"cat /proc/uptime"	},
-	{ 3,	"pwd",			"pwd"	},
-	{ 4,	"git status",		"git status"	},
+	{ 2,	"cat uptime",		"cat /proc/uptime"			},
+	{ 3,	"pwd",			"pwd"					},
+	{ 4,	"git status",		"git ls-files -m"			},
+	{ 5,	"git add modifed",	"git add `git ls-files -m`"		},
 	{ -1 }
 };
-int cnnCmdsCount = 4;
+int cnnCmdsCount = 5;
 
 //
 // cnn_MqttPub
@@ -342,6 +343,8 @@ cnn_Nudle cnnNudles[] = {
 
 	{37,	CNNINPUTEVENT,	0,	CNNPRINTF,	5	},
 
+	{37,	CNNKEYBIND,	27,	CNNCMD,		5	},
+
 	{-1}	
 };
 
@@ -388,13 +391,14 @@ cnn_KeyBind cnn_KeyBinds[] = {
 
 	{ 21,	 4,	       "pwd",	0,		"pwd test",		"",	8  },
 	{ 22,	 4,	       "gs",	0,		"git status",		"",	9  },
+	{ 27,	 4,	       "ga",	0,		"git add modifications","",	9  },
 	
 	{ 23,	 6,	       "d1",	0,		"debug on",		"",	9  },
 	{ 24,	 6,	       "d0",	0,		"debug off",		"",	9  },
 	
 	{ 25,	 6,	       "m1",	0,		"mouse enable",		"",	9  },
 	{ 26,	 6,	       "m0",	0,		"mouse disable",	"",	9  },
-	
+	//27
 
 	{-1}
 };
