@@ -47,6 +47,7 @@ void key_mouseKey_modeMouse( int modeNo ){
 	}
 	fflush(stdout);
 }
+
 int key_mouseKey_enable(){
     // 1. Save original settings and register reset on exit
     tcgetattr(STDIN_FILENO, &original_termios);
