@@ -342,6 +342,7 @@ int main( int argc, char *argv[] ){
 
 	printf("cmachine2 [%s]\n * target [%s]\n * ver[%s]\n", cnn_name, cnn_target, CMACHINEVER );
 
+	key_mouseKey_enable();
 	if( 0 ){
 		// cmachine debug test 
 		cmtDeb("main test", "abc %s 098\n", "xxx");

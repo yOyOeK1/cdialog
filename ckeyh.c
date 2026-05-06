@@ -23,6 +23,73 @@ int keyNo;
 bool keyCmdOk;
 //char keyLine[512] = "-";
 
+
+
+
+
+#include <stdlib.h>
+#include <termios.h>
+#include <unistd.h>
+
+struct termios original_termios;
+
+void key_mouseKey_disable(){
+    // Disable mouse tracking and restore original termios
+    printf("\x1b[?1006l\x1b[?1003l"); 
+    tcsetattr(STDIN_FILENO, TCSANOW, &original_termios);
+}
+
+int key_mouseKey_enable(){
+    // 1. Save original settings and register reset on exit
+    tcgetattr(STDIN_FILENO, &original_termios);
+    atexit( key_mouseKey_disable );
+
+    // 2. Enter raw mode
+    struct termios raw = original_termios;
+    raw.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &raw);
+
+    // 3. Enable mouse tracking (all motion + SGR mode)
+    printf("\x1b[?1003h\x1b[?1006h");
+    fflush(stdout);
+
+    char buf[32];
+    printf("Capturing... Press 'q' to quit.\n");
+
+    while (1) {
+        int n = read(STDIN_FILENO, buf, sizeof(buf) - 1);
+        if (n > 0) {
+            buf[n] = '\0';
+            if (buf[0] == 'q') break;
+	
+            // Mouse events start with \x1b[<
+            if (n > 3 && buf[0] == '\x1b' && buf[1] == '[' && buf[2] == '<') {
+                printf("Mouse event: %s\r\n", buf + 3);
+	    }else if ( n>1 ){
+		    printf("Special key n(%i)	",n);
+		    for( int c=0; c<n; c++ )
+			    printf(" [%i] ", buf[c]);
+		    printf("\n");
+            } else {
+                printf("Key pressed n(%i)[%c]	int[%i]: %d\r\n", n, buf[0], buf[0], buf[0]);
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 char *key_getCurrentMode_name(){
 
 	for( int p=0; true; p++ ){
