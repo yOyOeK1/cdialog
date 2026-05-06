@@ -32,11 +32,18 @@ bool keyCmdOk;
 #include <unistd.h>
 
 struct termios original_termios;
+bool key_mouseKey_currentStatus = false;
+bool key_mouseKey_haveNode = true;
 
 void key_mouseKey_disable(){
     // Disable mouse tracking and restore original termios
     printf("\x1b[?1006l\x1b[?1003l"); 
     tcsetattr(STDIN_FILENO, TCSANOW, &original_termios);
+    key_mouseKey_currentStatus = false;
+}
+
+void key_mouseKey_disable_byNode( int nId, cnn_Msg *msgT ){
+	key_mouseKey_disable();
 }
 
 void key_mouseKey_modeMouse( int modeNo ){
@@ -46,9 +53,23 @@ void key_mouseKey_modeMouse( int modeNo ){
 		printf("\033[?1003h\033[?1006h");   
 	}
 	fflush(stdout);
+	key_mouseKey_currentStatus = true;
+}
+void key_cmInputEvent( char *eType, char *msg ){
+	printf("key_cmInputEvent emit ....\n");
+
+	cmtDeb( "cmiInputEvent","\n ### INPUTEVENT... START\n |\n");
+	cmt_NodeName("CN_INPUTEVENT", 0, "InputEvent" );
+	cnn_Msg msgT = { -1 };
+	snprintf( msgT.topic, 512, "and/inputevent/%s", eType );
+	snprintf( msgT.payload, 512, "%s", msg );
+	cm_doClick( 1, -1, msgT, CNNINPUTEVENT, 0 );
+	cmtDeb( "cmiInputEvent"," | \n \\ ___ ### INPUTEVENT ... END\n");
+
+
 }
 
-int key_mouseKey_enable(){
+void key_mouseKey_enable(){
     // 1. Save original settings and register reset on exit
     tcgetattr(STDIN_FILENO, &original_termios);
     atexit( key_mouseKey_disable );
@@ -68,25 +89,36 @@ int key_mouseKey_enable(){
         int n = read(STDIN_FILENO, buf, sizeof(buf) - 1);
         if (n > 0) {
             buf[n] = '\0';
-            if (buf[0] == 'q') break;
+            if (buf[0] == 'q'){
+		    printf("* Quit mouseKey mode ____/\n");
+		    break;
+	    }
 	
             // Mouse events start with \x1b[<
             if (n > 3 && buf[0] == '\x1b' && buf[1] == '[' && buf[2] == '<') {
                 printf("Mouse event: %s\r\n", buf + 3);
+		if( key_mouseKey_haveNode ){
+			key_cmInputEvent("mouse", buf+3 );	
+		}
 	    }else if ( n>1 ){
 		    printf("Special key n(%i)	",n);
 		    for( int c=0; c<n; c++ )
 			    printf(" [%i] ", buf[c]);
 		    printf("\n");
+		    key_cmInputEvent("skey", "OK TO PASS" );	
             } else {
-                printf("Key pressed n(%i)[%c]	int[%i]: %d\r\n", n, buf[0], buf[0], buf[0]);
+                printf("Key pressed n(%i)int[%i]	char[%c]: %d\r\n", n, buf[0], buf[0], buf[0]);
+		key_cmInputEvent("key", buf );	
             }
         }
     }
+    key_mouseKey_disable();
 
-    return 0;
 }
 
+void key_mouseKey_enable_byNode( int nId, cnn_Msg *msgT ){
+	key_mouseKey_enable();
+}
 
 
 
@@ -118,6 +150,7 @@ int key_chk_KeyBinds(  ){
 			if( asBar == false ) 
 				printf( "[%s] ", cnn_KeyBinds[kBin].keys );
 			if( strcmp( keyIn, cnn_KeyBinds[kBin].keys ) == 0 ){
+				printf("OK\n");
 				cmt_NodeName("CNNKEYBIND", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].keys );
 				cmtDeb( "keyBind"," | OK keyBind id[%i]\n | ... [%s]\n", cnn_KeyBinds[kBin].id, cnn_KeyBinds[kBin].parser );
 

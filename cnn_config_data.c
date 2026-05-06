@@ -198,6 +198,7 @@ int cnn_ifsCount = 2;
 
 #include <stdio.h>
 #include "cmachine2.h"
+#include "ckeyh.h"
 
 void cmr_dump_msgs( int nId, cnn_Msg *msgT ){
 	printf("dump messages -----\n"
@@ -218,9 +219,9 @@ void cmr_debug_off( int nId, cnn_Msg *msgT ){
 
 
 cnn_Hash cnn_Hashs[] = {
-	{ 1,	"At start",		CNNATSTART, 	false,	0	},
-	{ 5,	"mqtt sub",		CNNMQTTSUB,	false,	0	},
-	{ 7,	"key bind",		CNNKEYBIND,	false,	0 	},
+	{ 1,	"At start",		CNNATSTART, 	false,	0		},
+	{ 5,	"mqtt sub",		CNNMQTTSUB,	false,	0		},
+	{ 7,	"key bind",		CNNKEYBIND,	false,	0 		},
 	
 	{ 2,	"Printf",		CNNPRINTF,	true,	&cm_printf 	},
 	{ 6,	"Cmd",			CNNCMD,		true,	&cm_cmd 	},
@@ -245,6 +246,10 @@ cnn_Hash cnn_Hashs[] = {
 
 	{ 19,	"Debug on",		CNRDEBUGON,	true,	&cmr_debug_on},
 	{ 20,	"Debug off",		CNRDEBUGOFF,	true,	&cmr_debug_off},
+
+	{ 21,	"Mouse on",		CNIKEYMOUSE_ENABLE,	true,	&key_mouseKey_enable_byNode	},
+	{ 22,	"Mouse off",		CNIKEYMOUSE_DISABLE,	true,	&key_mouseKey_disable_byNode	},
+	{ 23,	"At mouseKey event",	CNNINPUTEVENT,	false,	0		},
 
 	{ -1 }
 }; 
@@ -332,6 +337,11 @@ cnn_Nudle cnnNudles[] = {
 	{33,	CNNKEYBIND,	23,	CNRDEBUGON,	1	},
 	{34,	CNNKEYBIND,	24,	CNRDEBUGOFF,	1	},
 
+	{35,	CNNKEYBIND,	25,	CNIKEYMOUSE_ENABLE,	1	},
+	{36,	CNNKEYBIND,	26,	CNIKEYMOUSE_DISABLE,	1	},
+
+	{37,	CNNINPUTEVENT,	0,	CNNPRINTF,	5	},
+
 	{-1}	
 };
 
@@ -382,6 +392,10 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	{ 23,	 6,	       "d1",	0,		"debug on",		"",	9  },
 	{ 24,	 6,	       "d0",	0,		"debug off",		"",	9  },
 	
+	{ 25,	 6,	       "m1",	0,		"mouse enable",		"",	9  },
+	{ 26,	 6,	       "m0",	0,		"mouse disable",	"",	9  },
+	
+
 	{-1}
 };
 

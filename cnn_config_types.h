@@ -8,6 +8,9 @@
 
 #define CNITIMESTAMP 15
 #define CNITIMENOWTT 16
+#define CNIKEYMOUSE_ENABLE 21
+#define CNIKEYMOUSE_DISABLE 22
+#define CNNINPUTEVENT 23
 #define CNRDUMPMSG 18
 #define CNRDEBUGON 19
 #define CNRDEBUGOFF 20
@@ -26,6 +29,15 @@ typedef struct{
 	int nIndex;
 } cnn_Msg;
 
+
+typedef struct{
+	int id;
+	char name[512];
+	int mPos[2];
+	bool mButtons[3];
+	int mScroll;
+	char key;
+} cnn_inputEvent;
 
 typedef struct{
 	int id;
