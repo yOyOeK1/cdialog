@@ -16,7 +16,7 @@
 #define CNRDEBUGOFF 20
 
 #include <stdbool.h>
-
+#include <pthread.h>
 
 // cnnMsg
 typedef struct{
@@ -56,6 +56,12 @@ typedef struct{
 	bool onStart;
 	char name[512];
 	int msgId;
+	unsigned long msDelay; 		// delay at start
+	unsigned long msIntervals; 	// interval every 
+	long loops; 			// count of loops
+
+	pthread_t tId;
+	long _loopNow;
 } cnn_atStart;
 
 #define CNNPRINTF 2

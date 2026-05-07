@@ -17,10 +17,11 @@ cnn_Msg cnMs[] = {
 	{.id=3,		.topic="e01Mux/left org",	.payload="1234567890"	},
 	{.id=4,		.topic="e01Mux/humidity org"},
 	{.id=5,		.topic="and/as/key/bind/test",	.payload="In as payload from key bind test." },
-	{.id=6,		.topic="and/as/progress",	.payload="18.11" },
-	{.id=7,		.topic="and/test/mag",		.payload="" },
-	{.id=8,		.topic="and/test/logic",	.payload="4.19", .asVar=true },
-	{.id=9,		.topic="and/test/gitStatus",	.payload="4.19", .asVar=true },
+	{.id=6,		.topic="and/as/progress",	.payload="18.11" 				},
+	{.id=7,		.topic="and/test/mag",		.payload="" 					},
+	{.id=8,		.topic="and/test/logic",	.payload="4.19", .asVar=true 			},
+	{.id=9,		.topic="and/test/gitStatus",	.payload="4.19", .asVar=true 			},
+	{.id=10,	.topic="and/test/loop2",	.payload="msg of loop 2 test"			},
 	{-1}
 };
 
@@ -47,6 +48,7 @@ cnn_atStart cnnAtStarts[] = {
 	{1,		true,		"cnn at start",			1  },
 	{2,		true,		"cnn battery capacity",		2 },
 	{3,		true,		"cnn debug / test",		6 },
+	{4,		true,		"test of loop 2",		10, 1500, 1000, 2},
 	{-1}
 };
 
@@ -254,7 +256,7 @@ cnn_Hash cnn_Hashs[] = {
 
 	{ -1 }
 }; 
-int cnn_HashsCount = 19;
+int cnn_HashsCount = 23;
 
 void cnn_config_init(){
 	printf("# cnn config init ....\n");
@@ -345,6 +347,8 @@ cnn_Nudle cnnNudles[] = {
 
 	{37,	CNNKEYBIND,	27,	CNNCMD,		5	},
 
+	{38,	CNNATSTART,	4,	CNNPRINTF,	5	},
+
 	{-1}	
 };
 
@@ -391,7 +395,7 @@ cnn_KeyBind cnn_KeyBinds[] = {
 
 	{ 21,	 4,	       "pwd",	0,		"pwd test",		"",	8  },
 	{ 22,	 4,	       "gs",	0,		"git status",		"",	9  },
-	{ 27,	 4,	       "ga",	0,		"git add modifications","",	9  },
+	{ 27,	 4,	       "gam",	0,		"git add modifications","",	9  },
 	
 	{ 23,	 6,	       "d1",	0,		"debug on",		"",	9  },
 	{ 24,	 6,	       "d0",	0,		"debug off",		"",	9  },

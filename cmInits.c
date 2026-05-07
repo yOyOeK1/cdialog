@@ -1,6 +1,7 @@
 
 
 #include <stdio.h>
+#include <unistd.h>
 
 //#include "config.h"
 #include "cnn_config_data.h"
@@ -22,14 +23,40 @@ void cmInit_machNs(){
 	}
 }
 
+
+void *cmInit_cnnAtStartSpone( void *vargp ){
+	cmtDeb( "CN_ATSTART_SPONE"," msDel spone ... index[%i]\n",  vargp );
+	int n = (int)vargp;
+	if( cmtDeb_verbose ){
+	printf("\n\n# msDelay[%lu] msInt[%lu] loops[%lu / %lu]\n\n", 
+			cnnAtStarts[ n ].msDelay, cnnAtStarts[ n ].msIntervals, cnnAtStarts[ n ].loops, cnnAtStarts[ n ]._loopNow );
+	}
+
+	
+	usleep( cnnAtStarts[ n ].msDelay*1000 );
+	
+	for( unsigned long ln = cnnAtStarts[ n ]._loopNow, lc = cnnAtStarts[ n ].loops; ln < lc; ln++ ){
+		cnn_Msg msgT;
+		cm_doClick( 0, cnnAtStarts[ n ].msgId, msgT, CNNATSTART, cnnAtStarts[ n ].id );
+		usleep( cnnAtStarts[ n ].msIntervals*1000 );
+	}
+
+	cmtDeb( "CN_ATSTART_SPONE"," msDel spone ... index[%i] ... DONE\n",  vargp );
+}
+
 void cmInit_cnnAtStart(){
 	for( int n=0; true; n++ ){
 		if( cnnAtStarts[ n ].id == -1 ) break;
 		if( cnnAtStarts[ n ].onStart ){ 
 			cmtDeb( "cmiAutoStart","\n ### AUTOSTART ... START\n |\n");
 			cmt_NodeName("CN_ATSTART", cnnAtStarts[ n ].id, cnnAtStarts[ n ].name );
+			
+			int casSponeN = n;
+			pthread_create( &cnnAtStarts[ n ].tId, NULL, cmInit_cnnAtStartSpone, (void *)casSponeN );
+
 			cnn_Msg msgT;
 			cm_doClick( 0, cnnAtStarts[ n ].msgId, msgT, CNNATSTART, cnnAtStarts[ n ].id );
+			
 			cmtDeb( "cmiAutoStart"," | \n \\ ___ ### AUTOSTART ... END\n");
 
 		}
