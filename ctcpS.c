@@ -2,6 +2,7 @@
 #include <stdio.h> 
 #include <netdb.h> 
 #include <netinet/in.h> 
+#include <pthread.h>
 #include <arpa/inet.h>
 #include <stdlib.h> 
 #include <string.h> 
@@ -36,37 +37,61 @@ cnn_tcpServer cnn_tcpServers[] = {
 int cnn_tcpServersCount = 1;
 
 // Function designed for chat between client and server. 
-void func(int connfd){ 
+void func(int connfd, int sNo, int cNo){ 
     char buff[MAX]; 
+    cnn_tcpServers[ sNo ].online[ cNo ] = true;
     int n; 
     // infinite loop for chat 
     for (;;) { 
         bzero(buff, MAX); 
-  
-	strcpy( buff, "$GPGGA,172814.0,3723.46587704,N,12202.26957864,W,2,6,1.2,18.893,M,-25.669,M,2.0,0031*4F\n" );
-	write( connfd, buff, sizeof(buff));
+ 
+	// on hello to client  
+//	strcpy( buff, "$GPGGA,172814.0,3723.46587704,N,12202.26957864,W,2,6,1.2,18.893,M,-25.669,M,2.0,0031*4F\n" );
+//	write( connfd, buff, sizeof(buff));
+
         // read the message from client and copy it in buffer 
         read(connfd, buff, sizeof(buff)); 
         // print buffer which contains the client contents 
-        printf("From client: %s\t To client : ", buff); 
+        printf("From client: %s\n", buff); 
         bzero(buff, MAX); 
-        n = 0; 
+ //       n = 0; 
         // copy server message in the buffer 
-        while ((buff[n++] = getchar()) != '\n') 
+//        while ((buff[n++] = getchar()) != '\n') 
             ; 
   
         // and send that buffer to client 
-        write(connfd, buff, sizeof(buff)); 
+//        write(connfd, buff, sizeof(buff)); 
   
         // if msg contains "Exit" then server exit and chat ended. 
-        if (strncmp("exit", buff, 4) == 0) { 
-            printf("Server Exit...\n"); 
-            break; 
-        } 
+//        if (strncmp("exit", buff, 4) == 0) { 
+//            printf("Server Exit...\n"); 
+//            break; 
+//        } 
     } 
+    cnn_tcpServers[ sNo ].online[ cNo ] = false;
 } 
 
-
+int tcpSC = 0;
+char tcpBuff[512];
+void *cmInit_tcpServerSpone1( void *vargp ){
+	while( true ){
+		printf(".\n");
+		tcpSC++;
+		for( int s=0; true; s++ ){
+			if( cnn_tcpServers[ s ].id == -1 ) break;
+			for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
+				
+				if( cnn_tcpServers[ s ].online[ c ] ){
+					printf(" %i ", c);
+					snprintf( tcpBuff, 512, "hi %i\n", tcpSC );
+					write( cnn_tcpServers[ s ].connfds[ c ], tcpBuff, sizeof( tcpBuff ) );
+				}
+			}
+		}
+		sleep(1);
+	}
+}
+int tcpClientNo = 0;
 int cmInit_tcpServer(){
 	for( int s=0; true ; s++){
 		if( cnn_tcpServers[ s ].id == -1 ) break;	
@@ -107,6 +132,7 @@ int cmInit_tcpServer(){
 			printf("Server listening..\n"); 
 		    cnn_tcpServers[ s ].len = sizeof(cnn_tcpServers[ s ].cli); 
 		  
+
 		    // Accept the data packet from client and verification 
 		    int connfd = accept(cnn_tcpServers[ s ].sockfd, (SA*)&cnn_tcpServers[ s ].cli, &cnn_tcpServers[ s ].len); 
 		    if (connfd < 0) { 
@@ -117,9 +143,11 @@ int cmInit_tcpServer(){
 		    else
 			printf("server accept the client...\n"); 
 		  
+		    cnn_tcpServers[ s ].connfds[ tcpClientNo ] = connfd;
 		    // Function for chatting between client and server 
-		    func(connfd); 
-		  
+		    func(connfd, s, tcpClientNo++ ); 
+	    
+			
 		    // After chatting close the socket 
 		    close(cnn_tcpServers[ s ].sockfd); 
 
@@ -130,6 +158,9 @@ int cmInit_tcpServer(){
 
 // Driver function 
 int main( ){
+
+	pthread_t tId;
+	pthread_create( &tId, NULL, cmInit_tcpServerSpone1, NULL ); 
 
 	cmInit_tcpServer();
 	return 0;
@@ -179,7 +210,7 @@ int main( ){
         printf("server accept the client...\n"); 
   
     // Function for chatting between client and server 
-    func(connfd); 
+    func(connfd, 1, 1); 
   
     // After chatting close the socket 
     close(sockfd); 
