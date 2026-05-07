@@ -36,7 +36,7 @@ void cnn_tcpS_func(int connfd, int sNo, int cNo){
     for (;;) { 
         //bzero(buff, CNN_TCP_SERVER_MAX); 
  	memset( buff, ' ', CNN_TCP_SERVER_MAX );
-
+        buff[0] = 0;
 	// on hello to client  
 //	strcpy( buff, "$GPGGA,172814.0,3723.46587704,N,12202.26957864,W,2,6,1.2,18.893,M,-25.669,M,2.0,0031*4F\n" );
 //	write( connfd, buff, sizeof(buff));
@@ -110,6 +110,7 @@ void *cmInit_tcpServer_pthread( void *vargp ){
 		printf("* tcp server sSocket successfully created..\n"); 
 	    memset(&cnn_tcpServers[ s ].servaddr, ' ', sizeof(cnn_tcpServers[ s ].servaddr)); 
 	  
+
 	    // assign IP, PORT 
 	    cnn_tcpServers[ s ].servaddr.sin_family = AF_INET; 
 	    cnn_tcpServers[ s ].servaddr.sin_port = htons( cnn_tcpServers[ s ].port); 
