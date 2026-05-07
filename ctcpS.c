@@ -108,7 +108,7 @@ void *cmInit_tcpServer_pthread( void *vargp ){
 		printf("-11\n"); 
 	    } else
 		printf("* tcp server sSocket successfully created..\n"); 
-	    bzero(&cnn_tcpServers[ s ].servaddr, sizeof(cnn_tcpServers[ s ].servaddr)); 
+	    memset(&cnn_tcpServers[ s ].servaddr, ' ', sizeof(cnn_tcpServers[ s ].servaddr)); 
 	  
 	    // assign IP, PORT 
 	    cnn_tcpServers[ s ].servaddr.sin_family = AF_INET; 
