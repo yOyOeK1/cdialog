@@ -5,6 +5,7 @@
 #define CM_DO_INIT_CANVAS 1
 #define CM_DO_INIT_MQTT 1
 #define CM_DO_INIT_KEYBIND 1
+#define CN_DO_INIT_TCPSERVER 1
 
 #define CNITIMESTAMP 15
 #define CNITIMENOWTT 16
@@ -113,6 +114,43 @@ typedef struct {
 	struct mosquitto *mqHeader;
 
 } MqHost;
+
+
+// tcp server start
+//
+#define CNNTCPSERVER 24
+#define CNNTCPSPUB 25
+#include <sys/socket.h>
+#include <netinet/in.h> 
+#include <pthread.h>
+#include <arpa/inet.h>
+#include <stdlib.h> 
+#include <string.h> 
+#include <sys/types.h> 
+
+#define CNN_TCP_SERVER_CLIENTS_MAX 10
+
+typedef struct{
+	int id;
+	char name[512];
+
+	char ipBind[14]; // 123.567.890.123
+	int port;
+
+	bool running;
+	int connfds[ CNN_TCP_SERVER_CLIENTS_MAX ];
+	bool online[ CNN_TCP_SERVER_CLIENTS_MAX ];
+
+	int sockfd, len;
+	struct sockaddr_in servaddr, cli; 
+
+	pthread_t tId;
+} cnn_tcpServer;
+
+typedef struct{
+} cnn_tcpSPub;
+//
+// tcp server end
 
 #define CNNCMD 6
 typedef struct {

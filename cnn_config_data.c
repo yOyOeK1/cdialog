@@ -74,6 +74,18 @@ cnn_mqttSub cnn_MqttSubs[] = {
 int cnn_MqttSubsCount = 5;
 // ... mqtt connection ... END
 
+// ... tcp Server ... START 
+cnn_tcpServer cnn_tcpServers[] = {
+	{ 1,	"tcp test at 8088",	"0.0.0.0", 8090	},
+	//{ 2,	"tcp test at 8089",	"127.0.0.1", 8089	},
+	{ -1 }
+};
+int cnn_tcpServersCount = 1;
+// ... tcp Server ... END 
+
+
+
+
 cnn_Printf cnnPrintfs[] = {
 	{1,	"cc print id1",		"Printfs test1 : %s<OK", 		true, -1 	},
 	{2,	"cc print id2",		"Printfs test2 :%s<OK(2)", 		false, -1 	},
@@ -202,6 +214,7 @@ int cnn_ifsCount = 2;
 #include <stdio.h>
 #include "cmachine2.h"
 #include "ckeyh.h"
+#include "ctcpS.h"
 
 void cmr_dump_msgs( int nId, cnn_Msg *msgT ){
 	printf("dump messages -----\n"
@@ -254,6 +267,9 @@ cnn_Hash cnn_Hashs[] = {
 	{ 22,	"Mouse off",		CNIKEYMOUSE_DISABLE,	true,	&key_mouseKey_disable_byNode	},
 	{ 23,	"At mouseKey event",	CNNINPUTEVENT,	false,	0		},
 
+	{ 24,	"TCP Server",		CNNTCPSERVER,	false,	0		},
+	{ 25,	"TCP Server - write",	CNNTCPSPUB,	true,	&cnn_tcpServer_pub	},
+
 	{ -1 }
 }; 
 int cnn_HashsCount = 23;
@@ -284,7 +300,7 @@ const int *cmn_test0_pts;
 //
 cnn_Nudle cnnNudles[] = {
 	{1,	1,		1,	2,		1	},
-	{2,	CNNATSTART,	2,	CNNADD,		1	},
+/*	{2,	CNNATSTART,	2,	CNNADD,		1	},
 	{3,	CNNADD,		1,	CNNPRINTF,	2	},
 	{4,	CNNPRINTF,	2,	CNNADD,		2	},
 	{5,	CNNADD,		2,	CNNDIV,		1	},
@@ -348,7 +364,10 @@ cnn_Nudle cnnNudles[] = {
 	{37,	CNNKEYBIND,	27,	CNNCMD,		5	},
 
 	{38,	CNNATSTART,	4,	CNNPRINTF,	5	},
-
+*/
+	
+	{39,	CNNTCPSERVER,	1,	CNNPRINTF,	5	},
+	{40,	CNNKEYBIND,	28,	CNNTCPSPUB,	0	},
 	{-1}	
 };
 
@@ -403,6 +422,10 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	{ 25,	 6,	       "m1",	0,		"mouse enable",		"",	9  },
 	{ 26,	 6,	       "m0",	0,		"mouse disable",	"",	9  },
 	//27
+
+	{ 28,	 6,	       "tcpS",	0,		"tcp server send",	"",	9  },
+	{ 29,	 6,	       "tcpD",	0,		"tcp server disconect all clients",	"",	9  },
+	{ 30,	 6,	       "tcpd",	0,		"tcp server dump clients list",	"",	9  },
 
 	{-1}
 };
