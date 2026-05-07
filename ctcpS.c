@@ -35,8 +35,7 @@ void cnn_tcpS_func(int connfd, int sNo, int cNo){
     // infinite loop for chat 
     for (;;) { 
         //bzero(buff, CNN_TCP_SERVER_MAX); 
- 	memset( buff, ' ', CNN_TCP_SERVER_MAX );
-        buff[0] = 0;
+ 	memset( buff, 0, CNN_TCP_SERVER_MAX );
 	// on hello to client  
 //	strcpy( buff, "$GPGGA,172814.0,3723.46587704,N,12202.26957864,W,2,6,1.2,18.893,M,-25.669,M,2.0,0031*4F\n" );
 //	write( connfd, buff, sizeof(buff));
@@ -47,7 +46,7 @@ void cnn_tcpS_func(int connfd, int sNo, int cNo){
         //printf("From client(%i): %s\n", strlen(buff), buff); 
 	cnn_tcpS_onMsg( sNo, cNo, buff );
         //bzero(buff, CNN_TCP_SERVER_MAX); 
- 	memset( buff, ' ', CNN_TCP_SERVER_MAX );
+ 	memset( buff, 0, CNN_TCP_SERVER_MAX );
  //       n = 0; 
         // copy server message in the buffer 
 //        while ((buff[n++] = getchar()) != '\n') 
