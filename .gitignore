@@ -1,0 +1,14 @@
+ccanvas.test.bin
+cpostprocess.test.bin
+csubstream.test.bin
+mqttView1.test.bin
+arrayh3.test.bin.last
+ccanvas.test.bin.last
+cmachine.test.bin.last
+cmachine2.test.bin.last
+mqttView1.test.bin.last
+mqttView2.test.bin.last
+
+*.o
+*.swp
+*.test.bin*
