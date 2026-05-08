@@ -65,7 +65,11 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
 	int mqHontId = 1;
 	for( int c=0; c<cnn_MqttSubsCount; c++ ){
 		if( cnn_MqttSubs[ c ].mqHostId == mqHontId ){
-			printf("mqNode2 ... cnn_MqttSubs ... c:[%i]\n - id[%i] [ %s ] @ [ %s ]\n", c, cnn_MqttSubs[ c ].id, cnn_MqttSubs[ c ].name, cnn_MqttSubs[ c ].topic );
+			//printf("[MQTT] mqNode2 ... cnn_MqttSubs ... c:[%i]\n - id[%i] [ %s ] @ [ %s ]\n", c, cnn_MqttSubs[ c ].id, cnn_MqttSubs[ c ].name, cnn_MqttSubs[ c ].topic );
+			printf("[MQTT] cnn_MqttSubs  [%s]\n\tc[%i] id[%i] topic[%s]\n",
+				cnn_MqttSubs[ c ].name, c, cnn_MqttSubs[ c ].id, cnn_MqttSubs[ c ].topic
+				);
+
 			mosquitto_subscribe( mosq, NULL, cnn_MqttSubs[ c ].topic, 0 );
 		}
 	}
@@ -83,7 +87,7 @@ void on_connect(struct mosquitto *mosq, void *obj, int result)
 		}
 	}
 #endif
-        printf("mqtth ... subscribed\n");
+        printf("[MQTTH] ... subscribed\n");
 	mqHandler = mosq;
 	mqConnection = true;
     }else{
@@ -143,7 +147,7 @@ void mqttInit( ){
 void mqttInit2( void *pts_on_message ){
 	mosquitto_lib_init();
 	for( int c=0; c<MqHostsCount; c++ ){
-		printf("* mqtt init 2 [%s]\n\t%s:%i\n", MqHosts[ c ].name,  MqHosts[ c ].host, MqHosts[ c ].port );
+		printf("[MQTT][%i] mqtt init 2 [%s]\n\t%s:%i\n", c, MqHosts[ c ].name,  MqHosts[ c ].host, MqHosts[ c ].port );
 		MqHosts[ c ].mqMosqi = mosquitto_new( NULL, true, NULL);
 		mosquitto_connect_callback_set( MqHosts[ c ].mqMosqi, on_connect );
 		mosquitto_message_callback_set( MqHosts[ c ].mqMosqi, ( void (*)(struct mosquitto *, void *, const struct mosquitto_message *) )pts_on_message );
@@ -152,7 +156,7 @@ void mqttInit2( void *pts_on_message ){
 }
 void mqttDoIt2(){
 	for( int c=0; c<MqHostsCount; c++ ){
-		printf("* mqtt do it ... 2 [%s]\n\t%s:%i\n", MqHosts[ c ].name,  MqHosts[ c ].host, MqHosts[ c ].port );
+		printf("[MQTT][%i] do it 2 [%s]\n\t%s:%i\n", c, MqHosts[ c ].name,  MqHosts[ c ].host, MqHosts[ c ].port );
 
 		//mosquitto_loop_forever( MqHosts[ c ].mqMosqi, -1, 1);
 		mosquitto_loop_start( MqHosts[ c ].mqMosqi );

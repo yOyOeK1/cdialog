@@ -300,7 +300,8 @@ const int *cmn_test0_pts;
 //
 cnn_Nudle cnnNudles[] = {
 	{1,	1,		1,	2,		1	},
-/*	{2,	CNNATSTART,	2,	CNNADD,		1	},
+///*	
+	{2,	CNNATSTART,	2,	CNNADD,		1	},
 	{3,	CNNADD,		1,	CNNPRINTF,	2	},
 	{4,	CNNPRINTF,	2,	CNNADD,		2	},
 	{5,	CNNADD,		2,	CNNDIV,		1	},
@@ -364,7 +365,7 @@ cnn_Nudle cnnNudles[] = {
 	{37,	CNNKEYBIND,	27,	CNNCMD,		5	},
 
 	{38,	CNNATSTART,	4,	CNNPRINTF,	5	},
-*/
+//*/
 	
 	{39,	CNNTCPSERVER,	1,	CNNPRINTF,	5	},
 	{40,	CNNKEYBIND,	28,	CNNTCPSPUB,	0	},
