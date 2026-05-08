@@ -2,6 +2,44 @@
 # small helper script to compile it as it is...
 #
 
+if test "$1" = "-c";then
+	echo "# ... clean *.o"
+	rm ./*.o
+	exit 0
+
+elif test "$1" = "-bh";then
+	echo "# ... build new *.h"
+	./cmachine2Build_H.sh
+	exit 0
+
+elif test "$1" = "-vh";then
+	echo "# ... view *.h"
+	./cmachine2Build_H.sh -v
+	exit 0
+
+elif test "$1" = "-b";then
+	echo "# ... build ..."
+
+elif test "$1" = "-h";then
+	echo "# ... help
+ -h 	- this help
+
+ -b	- build all
+ -c	- as clean *.o
+ -bh	- build new *.h
+ -vh	- viem *.h
+
+	"
+	exit 0
+
+else
+	echo "no arg set try -h"
+	exit 0
+fi
+
+
+
+
 bTarget="cmachine2.test.bin"
 bSrc="cnn_config_data cmTools cmInits cmCanvas ctcpS cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh ccanvas cargs cpostprocess mqtth cmachine2"
 inc=""
