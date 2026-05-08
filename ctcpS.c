@@ -67,7 +67,7 @@ void cnn_tcpS_func(int connfd, int sNo, int cNo){
 
 char tcpBuff[512];
 void cnn_tcpServer_pub( int nInd, cnn_Msg *msgT ){
-	printf("[TCPS] pub msg ... NoServer[%i] not id\n", nInd);
+	printf("[TCPS] pub msg ... NoSer[%i] not id\n", nInd);
 	for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
 		if( cnn_tcpServers[ nInd ].online[ c ] ){
 			printf(" %i ", c);
@@ -104,62 +104,77 @@ int tcpClientNo = 0;
 void *cmInit_tcpServer_pthread( void *vargp ){
 
 	int s = (int)vargp;
-	    // socket create and verification 
-	    cnn_tcpServers[ s ].sockfd = socket(AF_INET, SOCK_STREAM, 0); 
-	    if ( cnn_tcpServers[ s ].sockfd == -1) { 
-		printf("[TCPS][%i] EE socket creation failed...\n", s ); 
-	    } else
-		printf("[TCPS][%i] sSocket successfully created..\n", s ); 
-	    memset(&cnn_tcpServers[ s ].servaddr, ' ', sizeof(cnn_tcpServers[ s ].servaddr)); 
-	  
+	bool initStatus = true;
+	while( true ){
 
-	    // assign IP, PORT 
-	    cnn_tcpServers[ s ].servaddr.sin_family = AF_INET; 
-	    cnn_tcpServers[ s ].servaddr.sin_port = htons( cnn_tcpServers[ s ].port); 
-	    //cnn_tcpServers[ s ].servaddr.sin_addr.s_addr = htonl(INADDR_ANY); 
-	    if( inet_pton( AF_INET, cnn_tcpServers[ s ].ipBind, &cnn_tcpServers[ s ].servaddr.sin_addr ) <= 0 ){
-		printf("[TCPS][%i] EE when making ip bind\n", s );
-	    }
+		    // socket create and verification 
+		    cnn_tcpServers[ s ].sockfd = socket(AF_INET, SOCK_STREAM, 0); 
+		    if ( cnn_tcpServers[ s ].sockfd == -1) { 
+			printf("[TCPS][%i] EE socket creation failed...\n", s ); 
+			initStatus = false;
+			break;
+		    } else
+			printf("[TCPS][%i] sSocket successfully created..\n", s ); 
+		    memset(&cnn_tcpServers[ s ].servaddr, ' ', sizeof(cnn_tcpServers[ s ].servaddr)); 
+		  
 
-	    // Binding newly created socket to given IP and verification 
-	    if ((bind(cnn_tcpServers[ s ].sockfd, (SA*)&cnn_tcpServers[ s ].servaddr, sizeof(cnn_tcpServers[ s ].servaddr))) != 0) { 
-		printf("[TCPS][%i] EE socket bind failed...\n", s ); 
-	    } 
-	    else
-		printf("[TCPS][%i] sSocket successfully binded..\n", s ); 
-	  
-	    // Now server is ready to listen and verification 
-	    if ((listen(cnn_tcpServers[ s ].sockfd, 5)) != 0) { 
-		printf("[TCPS][%i]EE Listen failed...\n", s ); 
-	    } else
-		printf("[TCPS][%i] Server listening..\n", s ); 
-	    
-	    cnn_tcpServers[ s ].len = sizeof( cnn_tcpServers[ s ].cli ); 
-	  
+		    // assign IP, PORT 
+		    cnn_tcpServers[ s ].servaddr.sin_family = AF_INET; 
+		    cnn_tcpServers[ s ].servaddr.sin_port = htons( cnn_tcpServers[ s ].port); 
+		    //cnn_tcpServers[ s ].servaddr.sin_addr.s_addr = htonl(INADDR_ANY); 
+		    if( inet_pton( AF_INET, cnn_tcpServers[ s ].ipBind, &cnn_tcpServers[ s ].servaddr.sin_addr ) <= 0 ){
+			printf("[TCPS][%i] EE when making ip bind\n", s );
+			initStatus = false;
+			break;
+		    }
 
-   while( true ){
+		    // Binding newly created socket to given IP and verification 
+		    if ((bind(cnn_tcpServers[ s ].sockfd, (SA*)&cnn_tcpServers[ s ].servaddr, sizeof(cnn_tcpServers[ s ].servaddr))) != 0) { 
+			printf("[TCPS][%i] EE socket bind failed...\n", s ); 
+			initStatus = false;
+			break;
+		    } 
+		    else
+			printf("[TCPS][%i] sSocket successfully binded..\n", s ); 
+		  
+		    // Now server is ready to listen and verification 
+		    if ((listen(cnn_tcpServers[ s ].sockfd, 5)) != 0) { 
+			printf("[TCPS][%i]EE Listen failed...\n", s ); 
+			initStatus = false;
+			break;
+		    } else
+			printf("[TCPS][%i] Server listening..\n", s ); 
+		    
+		    cnn_tcpServers[ s ].len = sizeof( cnn_tcpServers[ s ].cli ); 
+		  
 
-	    printf("[TCPS][%i] ... waiting for client...\n", s ); 
-	    // Accept the data packet from client and verification 
-	    int connfd = accept( cnn_tcpServers[ s ].sockfd, (SA*)&cnn_tcpServers[ s ].cli, &cnn_tcpServers[ s ].len ); 
-	    if (connfd < 0) { 
-		printf("[TCPS][%i] EE server accept failed...\n", s ); 
-		printf("-4\n");
-	    } else
-		printf("[TCPS][%i] server accept the client...\n", s ); 
-	  
-	    cnn_tcpServers[ s ].connfds[ tcpClientNo ] = connfd;
-	    // Function for chatting between client and server 
-	    cnn_tcpS_func(connfd, s, tcpClientNo++ ); 
-	    printf("[TCPS] ... left client function ...\n");
+	   while( true ){
 
-   	usleep( 1000*500 );
+		    printf("[TCPS][%i] ... waiting for client...\n", s ); 
+		    // Accept the data packet from client and verification 
+		    int connfd = accept( cnn_tcpServers[ s ].sockfd, (SA*)&cnn_tcpServers[ s ].cli, &cnn_tcpServers[ s ].len ); 
+		    if (connfd < 0) { 
+			initStatus = false;
+			break;
+			printf("[TCPS][%i] EE server accept failed...\n", s ); 
+			printf("-4\n");
+		    } else
+			printf("[TCPS][%i] server accept the client...\n", s ); 
+		  
+		    cnn_tcpServers[ s ].connfds[ tcpClientNo ] = connfd;
+		    // Function for chatting between client and server 
+		    cnn_tcpS_func(connfd, s, tcpClientNo++ ); 
+		    printf("[TCPS] ... left client function ...\n");
 
-   }
-		
-	    // After chatting close the socket 
-	    close(cnn_tcpServers[ s ].sockfd); 
-	    printf("[TCPS] ... end thread\n");
+		usleep( 1000*500 );
+
+	   }
+			
+		    // After chatting close the socket 
+		    close(cnn_tcpServers[ s ].sockfd); 
+		    printf("[TCPS] ... end thread\n");
+	}
+	printf("[TCPS] ... end status(%s)\n", initStatus?"OK":"ERROR");
 }
 
 int cmInit_tcpServer(){
