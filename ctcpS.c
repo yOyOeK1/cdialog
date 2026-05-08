@@ -44,6 +44,7 @@ void cnn_tcpS_func(int connfd, int sNo, int cNo){
         // print buffer which contains the client contents 
         //printf("From client(%i): %s\n", strlen(buff), buff); 
 	cnn_tcpS_onMsg( sNo, cNo, buff );
+	if( strlen( buff ) == 0 ) break;
         //bzero(buff, CNN_TCP_SERVER_MAX); 
  	memset( buff, 0, CNN_TCP_SERVER_MAX );
  //       n = 0; 
@@ -61,6 +62,7 @@ void cnn_tcpS_func(int connfd, int sNo, int cNo){
 //        } 
     } 
     cnn_tcpServers[ sNo ].online[ cNo ] = false;
+    printf("[TCPS][%i] client[%i] left ...\n", sNo, cNo );
 } 
 
 char tcpBuff[512];
@@ -98,7 +100,8 @@ void *cmInit_tcpServerSpone1( void *vargp ){
 
 int tcpClientNo = 0;
 void *cmInit_tcpServer_pthread( void *vargp ){
-		int s = (int)vargp;
+
+	int s = (int)vargp;
 	    // socket create and verification 
 	    cnn_tcpServers[ s ].sockfd = socket(AF_INET, SOCK_STREAM, 0); 
 	    if ( cnn_tcpServers[ s ].sockfd == -1) { 
@@ -132,6 +135,9 @@ void *cmInit_tcpServer_pthread( void *vargp ){
 	    cnn_tcpServers[ s ].len = sizeof( cnn_tcpServers[ s ].cli ); 
 	  
 
+   while( true ){
+
+	    printf("[TCPS][%i] ... waiting for client...\n", s ); 
 	    // Accept the data packet from client and verification 
 	    int connfd = accept( cnn_tcpServers[ s ].sockfd, (SA*)&cnn_tcpServers[ s ].cli, &cnn_tcpServers[ s ].len ); 
 	    if (connfd < 0) { 
@@ -143,9 +149,15 @@ void *cmInit_tcpServer_pthread( void *vargp ){
 	    cnn_tcpServers[ s ].connfds[ tcpClientNo ] = connfd;
 	    // Function for chatting between client and server 
 	    cnn_tcpS_func(connfd, s, tcpClientNo++ ); 
+	    printf("[TCPS] ... left client function ...\n");
+
+   	usleep( 1000*500 );
+
+   }
 		
 	    // After chatting close the socket 
 	    close(cnn_tcpServers[ s ].sockfd); 
+	    printf("[TCPS] ... end thread\n");
 }
 
 int cmInit_tcpServer(){
