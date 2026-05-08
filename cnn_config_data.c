@@ -22,6 +22,7 @@ cnn_Msg cnMs[] = {
 	{.id=8,		.topic="and/test/logic",	.payload="4.19", .asVar=true 			},
 	{.id=9,		.topic="and/test/gitStatus",	.payload="4.19", .asVar=true 			},
 	{.id=10,	.topic="and/test/loop2",	.payload="msg of loop 2 test"			},
+	{11,		"and/test/nmeaMsg",		"$GPGGA,172814.0,3723.46587704,N,12202.26957864,W,2,6,1.2,18.893,M,-25.669,M,2.0,0031*4F\n"						},
 	{-1}
 };
 
@@ -76,7 +77,7 @@ int cnn_MqttSubsCount = 5;
 
 // ... tcp Server ... START 
 cnn_tcpServer cnn_tcpServers[] = {
-	{ 1,	"tcp test at 8081",	"0.0.0.0", 	8081	},
+	{ 1,	"tcp test at ",	"0.0.0.0", 	8083	},
 	{ 2,	"tcp test at 8089",	"127.0.0.1", 	8089	},
 	{ -1 }
 };
@@ -424,7 +425,7 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	{ 26,	 6,	       "m0",	0,		"mouse disable",	"",	9  },
 	//27
 
-	{ 28,	 6,	       "tcpS",	0,		"tcp server send",	"",	9  },
+	{ 28,	 6,	       "tcpS",	0,		"tcp server send",	"",	11  },
 	{ 29,	 6,	       "tcpD",	0,		"tcp server disconect all clients",	"",	9  },
 	{ 30,	 6,	       "tcpd",	0,		"tcp server dump clients list",	"",	9  },
 

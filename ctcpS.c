@@ -71,8 +71,10 @@ void cnn_tcpServer_pub( int nInd, cnn_Msg *msgT ){
 	for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
 		if( cnn_tcpServers[ nInd ].online[ c ] ){
 			printf(" %i ", c);
-			snprintf( tcpBuff, 512, "hi %s\n", msgT->payload );
-			write( cnn_tcpServers[ nInd ].connfds[ c ], tcpBuff, sizeof( tcpBuff ) );
+			//snprintf( tcpBuff, 512, "hi %s\n", msgT->payload );
+			//write( cnn_tcpServers[ nInd ].connfds[ c ], tcpBuff, sizeof( tcpBuff ) );
+			write( cnn_tcpServers[ nInd ].connfds[ c ], msgT->payload, sizeof( msgT->payload ) );
+
 		}
 	}
 }
