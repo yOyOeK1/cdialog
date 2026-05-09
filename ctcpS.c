@@ -19,12 +19,24 @@
 void cnn_tcp_printf(  ){
 }
 
+void cnn_tcpS_doClick( int chNo, int sNo, int cNo, char *topic, char *msg ){
+	cnn_Msg msgT;
+	strcpy( msgT.topic, topic );
+	strcpy( msgT.payload, msg );
+	//cm_doClick( 1, 0, msgT, CNNTCPSERVER, cnn_tcpServers[ sNo ].id );
+	//cm_doWorkAt_byNId( cnn_tcpServers[ sNo ].id, CNNTCPSERVER, chNo, &msgT );
+	cm_doWorkAt_byNId( sNo, CNNTCPSERVER, chNo, &msgT );
+}
+
+
 void cnn_tcpS_onMsg( int sNo, int cNo, char *msg ){
         printf(" | [TCPS]No[%i] . . . msg from clientNo[%i] (%i): %s\n", sNo, cNo, strlen(msg), msg ); 
-	cnn_Msg msgT;
-	strcpy( msgT.topic, "/and/test/tcp/server/onMsg" );
-	strcpy( msgT.payload, msg );
-	cm_doClick( 1, 0, msgT, CNNTCPSERVER, cnn_tcpServers[ sNo ].id );
+	cnn_tcpS_doClick( 0, sNo, cNo, "/and/test/tcp/server/onMsg", msg );
+
+//	cnn_Msg msgT;
+//	strcpy( msgT.topic, "/and/test/tcp/server/onMsg" );
+//	strcpy( msgT.payload, msg );
+//	cm_doClick( 1, 0, msgT, CNNTCPSERVER, cnn_tcpServers[ sNo ].id );
 }
 
 void cnn_tcpS_func(int connfd, int sNo, int cNo){ 
@@ -158,14 +170,16 @@ void *cmInit_tcpServer_pthread( void *vargp ){
 			break;
 			printf("[TCPS][%i] EE server accept failed...\n", s ); 
 			printf("-4\n");
-		    } else
+		    } else {
 			printf("[TCPS][%i] server accept the client...\n", s ); 
-		  
+		    	
+			cnn_tcpS_doClick( 1, s, tcpClientNo, "/and/test/tcp/server/status/newClient", "newClient" );
+		    }
 		    cnn_tcpServers[ s ].connfds[ tcpClientNo ] = connfd;
 		    // Function for chatting between client and server 
 		    cnn_tcpS_func(connfd, s, tcpClientNo++ ); 
 		    printf("[TCPS] ... left client function ...\n");
-
+		    cnn_tcpS_doClick( 1, s, tcpClientNo, "/and/test/tcp/server/status/disconnectClient", "disconnectetClient" );
 		usleep( 1000*500 );
 
 	   }

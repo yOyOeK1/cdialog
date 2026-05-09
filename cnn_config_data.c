@@ -77,8 +77,8 @@ int cnn_MqttSubsCount = 5;
 
 // ... tcp Server ... START 
 cnn_tcpServer cnn_tcpServers[] = {
-	{ 1,	"tcp test at ",	"0.0.0.0", 	8083	},
-	{ 2,	"tcp test at 8089",	"127.0.0.1", 	8089	},
+	{ 1,	"tcp test at ",		"0.0.0.0", 	8089	},
+	{ 2,	"tcp test at 8089",	"127.0.0.1", 	8090	},
 	{ -1 }
 };
 int cnn_tcpServersCount = 1;
@@ -95,6 +95,8 @@ cnn_Printf cnnPrintfs[] = {
 	{5,	"cprin_humidity",	"%s %% :)\n", 				true, -1 	},
 	{6,	"For from printf to pts",	"%s pts test \n", 		true, -1 	},
 	{7,	"Uptime test1",		" | . . .   [ %s min. up ]\n", 	true, -1 	},
+	{8,	"deb ch0",		"deb ch0\n[%s]\n",	true	},
+	{9,	"deb ch1",		"deb ch1\n[%s]\n",	true	},
 	{-1}
 };
 // cnnAdd
@@ -368,8 +370,9 @@ cnn_Nudle cnnNudles[] = {
 	{38,	CNNATSTART,	4,	CNNPRINTF,	5	},
 //*/
 	
-	{39,	CNNTCPSERVER,	1,	CNNPRINTF,	5	},
-	{40,	CNNKEYBIND,	28,	CNNTCPSPUB,	0	},
+	{39,	CNNTCPSERVER,	0,	CNNPRINTF,	8	},
+	{40,	CNNTCPSERVER,	0,	CNNPRINTF,	9, 1	},
+	{41,	CNNKEYBIND,	28,	CNNTCPSPUB,	0	},
 	{-1}	
 };
 

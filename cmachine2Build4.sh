@@ -48,7 +48,7 @@ libs="-lm"
 inc="-I/home/yoyo/src/mosquitto-2.0.13/include "
 libsDir="-L/home/yoyo/src/mosquitto-2.0.13/bu/lib "
 libs="-lmosquitto -lrt -lm -lpthread -lcurses -lncurses -lncursesw "
-gccFlags="-O3 -DDEBUG -DCPPMACHINE -DMQTT_FROM_MQNODES2" 
+gccFlags="-g -O3 -DDEBUG -DCPPMACHINE -DMQTT_FROM_MQNODES2" 
 
 oStr=" "
 

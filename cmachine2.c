@@ -261,14 +261,17 @@ void cm_doClick_opts( int level, int msgId, cnn_Msg msgTp, int srcType, int srcI
 
 }
 void cm_doWorkAt_byNId( int nId, int nType, int chaNo, cnn_Msg *msgT ){
-	cmtDeb( "doWork"," | . . . node channel [%i] DONE\n"
+	cmtDeb( "doWork"," || . . . node channel [%i] DONE\n"
 		" | . . . doWorkAt by nType[%i] id[%i] nIndex[%i]\n", 
 		chaNo, nType, nId, msgT->nIndex 
 		);
-	for( int ni=msgT->nIndex; true; ni++ ){
+
+	for( int ni=( msgT->nIndex >=0 ? msgT->nIndex : 0 ); true; ni++ ){
 		if( cnnNudles[ ni ].id == -1 ) break;
 		if( cnnNudles[ ni ].srcType == nType &&
-			cnnNudles[ ni ].srcId == nId ){
+			cnnNudles[ ni ].srcId == nId &&
+			cnnNudles[ ni ].srcChNo == chaNo
+			){
 
 			cmtDeb( "doWork"," |\n |\n *--- nudle id[%i] srcCh[%i]\n |\n", cnnNudles[ ni ].id, cnnNudles[ ni ].srcChNo );
 			cm_doWorkAt( -1, msgT, ni, cnnNudles[ ni ].targetType, cnnNudles[ ni ].targetId );
