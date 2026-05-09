@@ -23,6 +23,7 @@ void cnn_tcpS_doClick( int chNo, int sNo, int cNo, char *topic, char *msg ){
 	cnn_Msg msgT;
 	strcpy( msgT.topic, topic );
 	strcpy( msgT.payload, msg );
+	msgT.nIndex = 0;
 	//cm_doClick( 1, 0, msgT, CNNTCPSERVER, cnn_tcpServers[ sNo ].id );
 	//cm_doWorkAt_byNId( cnn_tcpServers[ sNo ].id, CNNTCPSERVER, chNo, &msgT );
 	cm_doWorkAt_byNId( sNo, CNNTCPSERVER, chNo, &msgT );
