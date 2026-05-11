@@ -7,9 +7,9 @@
 char *machineName = "yDell";
 
 // at pinebook pro offset is
-int TIME_ZONE_OFFSET = 0;// sec
+//int TIME_ZONE_OFFSET = 0;// sec
 // at dell yoyo
-//int TIME_ZONE_OFFSET = -5 * 60 * 60; // sec
+int TIME_ZONE_OFFSET = -5 * 60 * 60; // sec
 
 
 //--------------------------- Mqtt

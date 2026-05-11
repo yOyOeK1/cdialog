@@ -50,9 +50,14 @@ Current a.k.a. sceenshot of app running:
 ### cmachine2
 
 Current work is at this file. It's semi node-red a.k.a. c language / hardcoded set of tools. Instade of nice interactive ui interface hosted by node-red. In this case it is puzzle of id and define types of `nodes` / workers. Same like in node-red flow of event:
+
+##### starters
+
 ./cnn_config_types.h:#define CNNATSTART 1
 ./cnn_config_types.h:#define CNNMQTTSUB 5
 ./cnn_config_types.h:#define CNNKEYBIND 7
+./cnn_config_types.h:#define CNNTCPSERVER 24
+
 
 all of them should have `cnn_Msg` define as there default values on event. 
 - CNNMQTTSUB payload is populated with message comming from subscription.
@@ -63,6 +68,7 @@ sends it over to `nudle` to `node`.
 
 For now some types of `node`s implemended with status:
 
+./cnn_config_types.h:#define CNLIF 17
 ./cnn_config_types.h:#define CNNADD 3
 ./cnn_config_types.h:#define CNNDIV 4
 ./cnn_config_types.h:#define CNNCMD 6
@@ -72,7 +78,12 @@ For now some types of `node`s implemended with status:
 ./cnn_config_types.h:#define CNNCANVPRINTF 10
 ./cnn_config_types.h:#define CNNCANVRENDER 11
 ./cnn_config_types.h:#define CNNTIMESINCE 12
+./cnn_config_types.h:#define CNITIMESTAMP 15
+./cnn_config_types.h:#define CNITIMENOWTT 16
+./cnn_config_types.h:#define CNIKEYMOUSE_ENABLE 21
+./cnn_config_types.h:#define CNIKEYMOUSE_DISABLE 22
 ./cnn_config_types.h:#define CNNPROGRESSBAR 13
+./cnn_config_types.h:#define CNNTCPSPUB 25
 
 `cnn_config*` files are to set what you want to build. Now it's a bOnaNzA one big test. I'm thinking to use 
 `#define VARIABLES` as main switching mechanizm to decide what to build as binarry.
@@ -80,11 +91,36 @@ For now some types of `node`s implemended with status:
 
 ### build h from c
 
-bash script to build auto .h from c
-In cmachine2 there is wrapper to do more ... can do OUTLINE of files with `-v` argument and can be use as
+Bash script to build .h files from .c files.
+In cmachine2 there is wrapper to do more ... can do:
+- OUTLINE of files with `-v` argument and can be use as
 ```bash
 ./cmachine2Build_H.sh -v
 ```
+
+### building one
+
+To build cmachine2 Build4
+```bash
+./cmachine2Build4.sh -bh
+./cmachine2Build4.sh -b
+```
+It's a devToy so it's starting after successfully build.
+
+
+### start nudle - xdev
+
+Nudle can by start from one of build in types (look section cmachine2 - starters).
+Or
+in code
+```c
+    int nId = 1;            // node id 
+    int channelNo = 1;      // it will emit at channel 1
+    cnn_Msg msgT = { -1, "and/myTest/topic", "my payload" };
+    msgT.nIndex = 0;        // to look for what entrens in nudle definition
+    cm_doWorkAt_byNId( nId, CNNTYPENO, channelNo, &msgT );
+```
+This will look in `cnnNudles` for chains to start.
 
 
 ### NOTES

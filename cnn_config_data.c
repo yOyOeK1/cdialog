@@ -5,7 +5,7 @@
 
 char *cnn_name = "Playground 001";
 char *cnn_target = "cmachine2Playground001";
-char *cnn_Version = "2026.0505";
+char *cnn_Version = "2026.0511";
 
 bool cmtDeb_verbose = false;
 bool cmtBen = false;

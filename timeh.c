@@ -3,7 +3,9 @@
 #include <stdint.h>
 #include <time.h>
 
-//#include "config.h"
+#ifdef CCANVASTEST
+#include "config.h"
+#endif
 
 extern int TIME_ZONE_OFFSET;
 

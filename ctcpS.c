@@ -199,9 +199,9 @@ int cmInit_tcpServer(){
 
 		//printf("[TCPS] init  %s:%i\n   \\__ sNo[%i] as: [ %s ]\n", 
 		//	cnn_tcpServers[ s ].ipBind, cnn_tcpServers[ s ].port, s, cnn_tcpServers[ s ].name );
-		printf("[TCPS] init  [%s]\n"
+		printf("[TCPS][%i] init  [%s]\n"
 				"\t%s:%i\n",
-			cnn_tcpServers[ s ].name,
+			s, cnn_tcpServers[ s ].name,
 				cnn_tcpServers[ s ].ipBind, cnn_tcpServers[ s ].port
 			);
 
