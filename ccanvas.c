@@ -266,7 +266,8 @@ int ccUpdate(){
 int cc_clear_byPointer( char **pts, char chf, int dcol, int drow ){
 	char *tmpc;
 	int cSize = drow*dcol;
-	printf( "[DEB cc_clear by pointer] cSize:[%d] as strlen(%d)\n", cSize, strlen( *pts ) );
+	if( asBar == false )
+		printf( "[DEB cc_clear by pointer] cSize:[%d] as strlen(%d)\n", cSize, strlen( *pts ) );
 	for( int y=0; y<drow; y++ ){
 		for(int x=0; x<=dcol; x++){
 			//resBuf = cc_getPx_byPointer( pts, x, y );					     //tmpc = resBuf[0]; 

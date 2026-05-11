@@ -128,7 +128,13 @@ typedef struct {
 #include <string.h> 
 #include <sys/types.h> 
 
-#define CNN_TCP_SERVER_CLIENTS_MAX 10
+#define CNN_TCP_SERVER_CLIENTS_MAX 3
+
+typedef struct{
+	int sNo;
+	int cNo;
+	int connfd;
+} cnn_tcpClient;
 
 typedef struct{
 	int id;
@@ -140,6 +146,8 @@ typedef struct{
 	bool running;
 	int connfds[ CNN_TCP_SERVER_CLIENTS_MAX ];
 	bool online[ CNN_TCP_SERVER_CLIENTS_MAX ];
+	int sNo[ CNN_TCP_SERVER_CLIENTS_MAX ];
+	void *clients[ CNN_TCP_SERVER_CLIENTS_MAX ];
 
 	int sockfd, len;
 	struct sockaddr_in servaddr, cli; 

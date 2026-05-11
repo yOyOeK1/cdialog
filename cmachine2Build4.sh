@@ -41,7 +41,7 @@ fi
 
 
 bTarget="cmachine2.test.bin"
-bSrc="cnn_config_data cmTools cmInits cmCanvas ctcpS cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh ccanvas cargs cpostprocess mqtth cmachine2"
+bSrc="cnn_config_data cmTools cmInits cmCanvas ctcpS ctcpS_v2 cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh ccanvas cargs cpostprocess mqtth cmachine2"
 inc=""
 libsDir=""
 libs="-lm"

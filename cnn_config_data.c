@@ -77,8 +77,8 @@ int cnn_MqttSubsCount = 5;
 
 // ... tcp Server ... START 
 cnn_tcpServer cnn_tcpServers[] = {
-	{ 1,	"tcp test at ",		"0.0.0.0", 	8089	},
-	{ 2,	"tcp test at 8089",	"127.0.0.1", 	8090	},
+	{ 1,	"tcp test at ",		"0.0.0.0", 	8091	},
+	{ 2,	"tcp test at 8089",	"127.0.0.1", 	8092	},
 	{ -1 }
 };
 int cnn_tcpServersCount = 1;

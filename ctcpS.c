@@ -12,6 +12,7 @@
 
 #include "cnn_config_data.h"
 #include "cmachine2.h"
+#include "ctcpS_v2.h"
 
 #define CNN_TCP_SERVER_MAX 512 
 #define SA struct sockaddr 
@@ -31,7 +32,7 @@ void cnn_tcpS_doClick( int chNo, int sNo, int cNo, char *topic, char *msg ){
 
 
 void cnn_tcpS_onMsg( int sNo, int cNo, char *msg ){
-        printf(" | [TCPS]No[%i] . . . msg from clientNo[%i] (%i): %s\n", sNo, cNo, strlen(msg), msg ); 
+        printf(" | [TCPS][%i] . . . msg from clientNo[%i] (%i): %s\n", sNo, cNo, strlen(msg), msg ); 
 	cnn_tcpS_doClick( 0, sNo, cNo, "/and/test/tcp/server/onMsg", msg );
 
 //	cnn_Msg msgT;
@@ -160,7 +161,7 @@ void *cmInit_tcpServer_pthread( void *vargp ){
 		    
 		    cnn_tcpServers[ s ].len = sizeof( cnn_tcpServers[ s ].cli ); 
 		  
-
+		/*
 	   while( true ){
 
 		    printf("[TCPS][%i] ... waiting for client...\n", s ); 
@@ -184,9 +185,55 @@ void *cmInit_tcpServer_pthread( void *vargp ){
 		usleep( 1000*500 );
 
 	   }
+	   */
 			
+	// 4. Accept loop
+	int connfd;
+	int *new_sock;
+	cnn_tcpClient *nClient;
+	int cSlot = -1;
+	while ((connfd = accept( cnn_tcpServers[ s ].sockfd, (SA*)&cnn_tcpServers[ s ].cli, &cnn_tcpServers[ s ].len))) {
+		pthread_t thread_id;
+		new_sock = malloc(sizeof(int)); // Use heap to avoid race conditions
+
+		printf("[TCPSv2][%i] Lookinf for a spot for client ....\n", s );
+		cSlot = -1;
+		for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
+			if( cnn_tcpServers[ s ].online[ c ] == false ){
+				printf(" - slot [%i / %i]\n", c, CNN_TCP_SERVER_CLIENTS_MAX );
+				cnn_tcpServers[ s ].connfds[ c ] = connfd;
+				cnn_tcpServers[ s ].online[ c ] = true;
+				//cnn_tcpServers[ s ].sNo[ c ] = s;
+				cSlot = c;
+				nClient = malloc( sizeof( cnn_tcpClient ) );
+				nClient->cNo = c;
+				nClient->sNo = s;
+				nClient->connfd = connfd;
+				cnn_tcpServers[ s ].clients[ c ] = (void*)nClient;
+				break;
+			}
+		}
+
+		if( cSlot != -1 ){
+
+			//*new_sock = connfd;
+			//*new_sock = cSlot;
+			//if (pthread_create(&thread_id, NULL, cnn_tcpSV2_func, (void*)new_sock) < 0) {
+			if (pthread_create(&thread_id, NULL, cnn_tcpSV2_func, (void*)nClient) < 0) {
+				printf("[TCPSv2][%i] EE Could not create thread", s);
+				break;
+			}
+
+			// Detach the thread to reclaim resources automatically upon exit
+			pthread_detach(thread_id);
+			printf("[TCPSv2][%i]DD Handler assigned to client\n", s);
+		} else {
+			printf("[TCPSV2][%i] server to many clients\n", s );
+		}
+	}
+
 		    // After chatting close the socket 
-		    close(cnn_tcpServers[ s ].sockfd); 
+		    close( cnn_tcpServers[ s ].sockfd ); 
 		    printf("[TCPS] ... end thread\n");
 	}
 	printf("[TCPS] ... end status(%s)\n", initStatus?"OK":"ERROR");
