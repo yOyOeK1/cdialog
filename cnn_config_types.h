@@ -134,7 +134,7 @@ typedef struct{
 	int sNo;
 	int cNo;
 	int connfd;
-} cnn_tcpClient;
+} cnn_tcpClient; // struct for tcpServer 
 
 typedef struct{
 	int id;
