@@ -43,11 +43,41 @@ void cnn_tcpS_func(int connfd, int sNo, int cNo){
         read(connfd, buff, sizeof(buff)); 
 	cnn_tcpS_onMsg( sNo, cNo, buff );
 	if( strlen( buff ) == 0 ) break;
- 	memset( buff, 0, CNN_TCP_SERVER_MAX );
     } 
     cnn_tcpServers[ sNo ].online[ cNo ] = false;
     printf("[TCPS][%i] client[%i] left ...\n", sNo, cNo );
 } 
+
+void cnn_tcpServer_disconnect( int nId, cnn_Msg *msgT ){
+	printf("[TCPS] disconnect all clients for server id[%i]\n", nId );
+	for( int nInd=0; true; nInd++ ){
+		if( cnn_tcpServers[ nInd ].id == -1 ) break;
+		if( cnn_tcpServers[ nInd ].id == nId ){
+			for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
+				if( cnn_tcpServers[ nInd ].online[ c ] ){
+					printf(" - client slot[%i]\n", c );
+					close( cnn_tcpServers[ nInd].connfds[ c ] );
+
+				}
+			}
+		}
+	}
+}
+void cnn_tcpServer_clients( int nId, cnn_Msg *msgT ){
+	printf("[TCPS] clients dump for server id[%i]\n", nId );
+	for( int nInd=0; true; nInd++ ){
+		if( cnn_tcpServers[ nInd ].id == -1 ) break;
+		if( cnn_tcpServers[ nInd ].id == nId ){
+			for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
+				if( cnn_tcpServers[ nInd ].online[ c ] ){
+					printf(" - client slot[%i]\n", c );
+
+				}
+			}
+		}
+	}
+}
+
 
 char tcpBuff[512];
 void cnn_tcpServer_pub( int nId, cnn_Msg *msgT ){

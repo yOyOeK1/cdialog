@@ -120,6 +120,8 @@ typedef struct {
 //
 #define CNNTCPSERVER 24
 #define CNNTCPSPUB 25
+#define CNNTCPSDISCONNECT 26
+#define CNNTCPSCLIENTS 27
 #include <sys/socket.h>
 #include <netinet/in.h> 
 #include <pthread.h>

@@ -272,7 +272,10 @@ cnn_Hash cnn_Hashs[] = {
 
 	{ 24,	"TCP Server",		CNNTCPSERVER,	false,	0		},
 	{ 25,	"TCP Server - write",	CNNTCPSPUB,	true,	&cnn_tcpServer_pub	},
-
+	{ 26,	"TCP Server - disconnect",	
+					CNNTCPSDISCONNECT,	
+							true,	&cnn_tcpServer_disconnect	},
+	{ 27,	"TCP Server - clients",	CNNTCPSCLIENTS,	true,	&cnn_tcpServer_clients		},
 	{ -1 }
 }; 
 int cnn_HashsCount = 23;
@@ -373,6 +376,10 @@ cnn_Nudle cnnNudles[] = {
 	{39,	CNNTCPSERVER,	1,	CNNPRINTF,	8	},
 	{40,	CNNTCPSERVER,	1,	CNNPRINTF,	9, 1	},
 	{41,	CNNKEYBIND,	28,	CNNTCPSPUB,	2	},
+	{42,	CNNKEYBIND,	29,	CNNTCPSDISCONNECT,	
+							2	},
+	{43,	CNNKEYBIND,	30,	CNNTCPSCLIENTS,	1	},
+	
 	{-1}	
 };
 
