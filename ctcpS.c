@@ -25,8 +25,6 @@ void cnn_tcpS_doClick( int chNo, int sNo, int cNo, char *topic, char *msg ){
 	strcpy( msgT.topic, topic );
 	strcpy( msgT.payload, msg );
 	msgT.nIndex = 0;
-	//cm_doClick( 1, 0, msgT, CNNTCPSERVER, cnn_tcpServers[ sNo ].id );
-	//cm_doWorkAt_byNId( cnn_tcpServers[ sNo ].id, CNNTCPSERVER, chNo, &msgT );
 	cm_doWorkAt_byNId( cnn_tcpServers[ sNo ].id, CNNTCPSERVER, chNo, &msgT );
 }
 
@@ -34,70 +32,44 @@ void cnn_tcpS_doClick( int chNo, int sNo, int cNo, char *topic, char *msg ){
 void cnn_tcpS_onMsg( int sNo, int cNo, char *msg ){
         printf(" | [TCPS][%i] . . . msg from clientNo[%i] (%i): %s\n", sNo, cNo, strlen(msg), msg ); 
 	cnn_tcpS_doClick( 0, sNo, cNo, "/and/test/tcp/server/onMsg", msg );
-
-//	cnn_Msg msgT;
-//	strcpy( msgT.topic, "/and/test/tcp/server/onMsg" );
-//	strcpy( msgT.payload, msg );
-//	cm_doClick( 1, 0, msgT, CNNTCPSERVER, cnn_tcpServers[ sNo ].id );
 }
 
 void cnn_tcpS_func(int connfd, int sNo, int cNo){ 
     char buff[CNN_TCP_SERVER_MAX]; 
     cnn_tcpServers[ sNo ].online[ cNo ] = true;
     int n; 
-    // infinite loop for chat 
     for (;;) { 
-        //bzero(buff, CNN_TCP_SERVER_MAX); 
  	memset( buff, 0, CNN_TCP_SERVER_MAX );
-	// on hello to client  
-//	strcpy( buff, "$GPGGA,172814.0,3723.46587704,N,12202.26957864,W,2,6,1.2,18.893,M,-25.669,M,2.0,0031*4F\n" );
-//	write( connfd, buff, sizeof(buff));
-
-        // read the message from client and copy it in buffer 
         read(connfd, buff, sizeof(buff)); 
-        // print buffer which contains the client contents 
-        //printf("From client(%i): %s\n", strlen(buff), buff); 
 	cnn_tcpS_onMsg( sNo, cNo, buff );
 	if( strlen( buff ) == 0 ) break;
-        //bzero(buff, CNN_TCP_SERVER_MAX); 
  	memset( buff, 0, CNN_TCP_SERVER_MAX );
- //       n = 0; 
-        // copy server message in the buffer 
-//        while ((buff[n++] = getchar()) != '\n') 
-            ; 
-  
-        // and send that buffer to client 
-//        write(connfd, buff, sizeof(buff)); 
-  
-        // if msg contains "Exit" then server exit and chat ended. 
-//        if (strncmp("exit", buff, 4) == 0) { 
-//            printf("Server Exit...\n"); 
-//            break; 
-//        } 
     } 
     cnn_tcpServers[ sNo ].online[ cNo ] = false;
     printf("[TCPS][%i] client[%i] left ...\n", sNo, cNo );
 } 
 
 char tcpBuff[512];
-void cnn_tcpServer_pub( int nInd, cnn_Msg *msgT ){
-	printf("[TCPS] pub msg ... NoSer[%i] not id\n", nInd);
-	for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
-		if( cnn_tcpServers[ nInd ].online[ c ] ){
-			printf(" %i ", c);
-			//snprintf( tcpBuff, 512, "hi %s\n", msgT->payload );
-			//write( cnn_tcpServers[ nInd ].connfds[ c ], tcpBuff, sizeof( tcpBuff ) );
-			write( cnn_tcpServers[ nInd ].connfds[ c ], msgT->payload, sizeof( msgT->payload ) );
+void cnn_tcpServer_pub( int nId, cnn_Msg *msgT ){
+	printf("[TCPS] pub msg ... id[%i]\n", nId);
+	for( int nInd=0; true; nInd++ ){
+		if( cnn_tcpServers[ nInd ].id == -1 ) break;
+		if( cnn_tcpServers[ nInd ].id == nId ){
+			for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
+				if( cnn_tcpServers[ nInd ].online[ c ] ){
+					printf(" %i ", c);
+					write( cnn_tcpServers[ nInd ].connfds[ c ], msgT->payload, sizeof( msgT->payload ) );
 
+				}
+			}
+			break;
 		}
 	}
 }
 
 
-
 int tcpClientNo = 0;
 void *cmInit_tcpServer_pthread( void *vargp ){
-
 	int s = (int)vargp;
 	bool initStatus = true;
 	while( true ){
@@ -167,51 +139,47 @@ void *cmInit_tcpServer_pthread( void *vargp ){
 
 	   }
 	   */
-			
-	// 4. Accept loop
-	int connfd;
-	int *new_sock;
-	cnn_tcpClient *nClient;
-	int cSlot = -1;
-	while ((connfd = accept( cnn_tcpServers[ s ].sockfd, (SA*)&cnn_tcpServers[ s ].cli, &cnn_tcpServers[ s ].len))) {
-		pthread_t thread_id;
-		new_sock = malloc(sizeof(int)); // Use heap to avoid race conditions
+				
+		// 4. Accept loop
+		int connfd;
+		//int *new_sock;
+		cnn_tcpClient *nClient;
+		int cSlot = -1;
+		while ((connfd = accept( cnn_tcpServers[ s ].sockfd, (SA*)&cnn_tcpServers[ s ].cli, &cnn_tcpServers[ s ].len))) {
+			pthread_t thread_id;
+		//	new_sock = malloc(sizeof(int)); // Use heap to avoid race conditions
 
-		printf("[TCPSv2][%i] Lookinf for a spot for client ....\n", s );
-		cSlot = -1;
-		for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
-			if( cnn_tcpServers[ s ].online[ c ] == false ){
-				printf(" - slot [%i / %i]\n", c, CNN_TCP_SERVER_CLIENTS_MAX );
-				cnn_tcpServers[ s ].connfds[ c ] = connfd;
-				cnn_tcpServers[ s ].online[ c ] = true;
-				//cnn_tcpServers[ s ].sNo[ c ] = s;
-				cSlot = c;
-				nClient = malloc( sizeof( cnn_tcpClient ) );
-				nClient->cNo = c;
-				nClient->sNo = s;
-				nClient->connfd = connfd;
-				cnn_tcpServers[ s ].clients[ c ] = (void*)nClient;
-				break;
-			}
-		}
-
-		if( cSlot != -1 ){
-
-			//*new_sock = connfd;
-			//*new_sock = cSlot;
-			//if (pthread_create(&thread_id, NULL, cnn_tcpSV2_func, (void*)new_sock) < 0) {
-			if (pthread_create(&thread_id, NULL, cnn_tcpSV2_func, (void*)nClient) < 0) {
-				printf("[TCPSv2][%i] EE Could not create thread", s);
-				break;
+			printf("[TCPSv2][%i] Lookinf for a spot for client ....\n", s );
+			cSlot = -1;
+			for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
+				if( cnn_tcpServers[ s ].online[ c ] == false ){
+					printf(" - slot [%i / %i]\n", c, CNN_TCP_SERVER_CLIENTS_MAX );
+					cnn_tcpServers[ s ].connfds[ c ] = connfd;
+					cnn_tcpServers[ s ].online[ c ] = true;
+					//cnn_tcpServers[ s ].sNo[ c ] = s;
+					cSlot = c;
+					nClient = malloc( sizeof( cnn_tcpClient ) );
+					nClient->cNo = c;
+					nClient->sNo = s;
+					nClient->connfd = connfd;
+					cnn_tcpServers[ s ].clients[ c ] = (void*)nClient;
+					break;
+				}
 			}
 
-			// Detach the thread to reclaim resources automatically upon exit
-			pthread_detach(thread_id);
-			printf("[TCPSv2][%i]DD Handler assigned to client\n", s);
-		} else {
-			printf("[TCPSV2][%i] server to many clients\n", s );
+			if( cSlot != -1 ){
+				if (pthread_create(&thread_id, NULL, cnn_tcpSV2_func, (void*)nClient) < 0) {
+					printf("[TCPSv2][%i] EE Could not create thread", s);
+					break;
+				}
+
+				// Detach the thread to reclaim resources automatically upon exit
+				pthread_detach(thread_id);
+				printf("[TCPSv2][%i]DD Handler assigned to client\n", s);
+			} else {
+				printf("[TCPSV2][%i] server to many clients\n", s );
+			}
 		}
-	}
 
 		    // After chatting close the socket 
 		    close( cnn_tcpServers[ s ].sockfd ); 

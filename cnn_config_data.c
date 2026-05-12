@@ -372,7 +372,7 @@ cnn_Nudle cnnNudles[] = {
 	
 	{39,	CNNTCPSERVER,	1,	CNNPRINTF,	8	},
 	{40,	CNNTCPSERVER,	1,	CNNPRINTF,	9, 1	},
-	{41,	CNNKEYBIND,	28,	CNNTCPSPUB,	0	},
+	{41,	CNNKEYBIND,	28,	CNNTCPSPUB,	2	},
 	{-1}	
 };
 
