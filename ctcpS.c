@@ -27,7 +27,7 @@ void cnn_tcpS_doClick( int chNo, int sNo, int cNo, char *topic, char *msg ){
 	msgT.nIndex = 0;
 	//cm_doClick( 1, 0, msgT, CNNTCPSERVER, cnn_tcpServers[ sNo ].id );
 	//cm_doWorkAt_byNId( cnn_tcpServers[ sNo ].id, CNNTCPSERVER, chNo, &msgT );
-	cm_doWorkAt_byNId( sNo, CNNTCPSERVER, chNo, &msgT );
+	cm_doWorkAt_byNId( cnn_tcpServers[ sNo ].id, CNNTCPSERVER, chNo, &msgT );
 }
 
 
@@ -94,25 +94,6 @@ void cnn_tcpServer_pub( int nInd, cnn_Msg *msgT ){
 }
 
 
-int tcpSC = 0;
-void *cmInit_tcpServerSpone1( void *vargp ){
-	while( true ){
-		printf(".\n");
-		tcpSC++;
-		for( int s=0; true; s++ ){
-			if( cnn_tcpServers[ s ].id == -1 ) break;
-			for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
-				
-				if( cnn_tcpServers[ s ].online[ c ] ){
-					printf(" %i ", c);
-					snprintf( tcpBuff, 512, "hi %i\n", tcpSC );
-					write( cnn_tcpServers[ s ].connfds[ c ], tcpBuff, sizeof( tcpBuff ) );
-				}
-			}
-		}
-		sleep(1);
-	}
-}
 
 int tcpClientNo = 0;
 void *cmInit_tcpServer_pthread( void *vargp ){
@@ -246,14 +227,13 @@ int cmInit_tcpServer(){
 
 		//printf("[TCPS] init  %s:%i\n   \\__ sNo[%i] as: [ %s ]\n", 
 		//	cnn_tcpServers[ s ].ipBind, cnn_tcpServers[ s ].port, s, cnn_tcpServers[ s ].name );
-		printf("[TCPS][%i] init  [%s]\n"
+		printf("[TCPS][%i] id[%i] init  [%s]\n"
 				"\t%s:%i\n",
-			s, cnn_tcpServers[ s ].name,
+			s, cnn_tcpServers[ s ].id, cnn_tcpServers[ s ].name,
 				cnn_tcpServers[ s ].ipBind, cnn_tcpServers[ s ].port
 			);
 
-		int sNo = s;
-		pthread_create( &cnn_tcpServers[ s ].tId, NULL, cmInit_tcpServer_pthread, (void *)sNo );
+		pthread_create( &cnn_tcpServers[ s ].tId, NULL, cmInit_tcpServer_pthread, (void *)s );
 
 
 	}
@@ -263,6 +243,25 @@ int cmInit_tcpServer(){
 }
 
 #ifdef CNN_TCP_SERVER_TEST
+int tcpSC = 0;
+void *cmInit_tcpServerSpone1( void *vargp ){
+	while( true ){
+		printf(".\n");
+		tcpSC++;
+		for( int s=0; true; s++ ){
+			if( cnn_tcpServers[ s ].id == -1 ) break;
+			for( int c=0; c<CNN_TCP_SERVER_CLIENTS_MAX; c++ ){
+				
+				if( cnn_tcpServers[ s ].online[ c ] ){
+					printf(" %i ", c);
+					snprintf( tcpBuff, 512, "hi %i\n", tcpSC );
+					write( cnn_tcpServers[ s ].connfds[ c ], tcpBuff, sizeof( tcpBuff ) );
+				}
+			}
+		}
+		sleep(1);
+	}
+}
 // Driver function 
 int main( ){
 
