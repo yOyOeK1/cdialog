@@ -47,6 +47,10 @@ else
 fi
 
 
+bMod_wsS=1
+
+
+
 
 
 bTarget="cmachine2.test.bin"
@@ -59,6 +63,18 @@ libsDir="-L/home/yoyo/src/mosquitto-2.0.13/bu/lib "
 libs="-lmosquitto -lrt -lm -lpthread -lcurses -lncurses -lncursesw "
 gccFlags="-g -O3 -DDEBUG -DCPPMACHINE -DMQTT_FROM_MQNODES2" 
 
+
+if test "$bMod_wsS" = "1";then
+	echo "# addind module wsS"
+	wsLibs="../wsServer/src/*.o"
+	wsInc="../wsServer/include "
+	libsDir="$libsDir $wsLibs"
+	inc="$inc -I""$wsInc"
+	bSrc="cwsS $bSrc"
+fi
+
+
+
 oStr=" "
 
 for f in `echo "$bSrc"`;do
@@ -67,7 +83,7 @@ for f in `echo "$bSrc"`;do
 		echo "file exists"
 	else
 		echo " build ..."
-		gcc $gccFlags -c "$f"".c"
+		gcc $inc $gccFlags -c "$f"".c"
 	
 
 		if test "$?" = "0"; then

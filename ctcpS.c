@@ -223,8 +223,6 @@ int cmInit_tcpServer(){
 	for( int s=0; true ; s++){
 		if( cnn_tcpServers[ s ].id == -1 ) break;	
 
-		//printf("[TCPS] init  %s:%i\n   \\__ sNo[%i] as: [ %s ]\n", 
-		//	cnn_tcpServers[ s ].ipBind, cnn_tcpServers[ s ].port, s, cnn_tcpServers[ s ].name );
 		printf("[TCPS][%i] id[%i] init  [%s]\n"
 				"\t%s:%i\n",
 			s, cnn_tcpServers[ s ].id, cnn_tcpServers[ s ].name,

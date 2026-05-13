@@ -2,10 +2,15 @@
 #ifndef CNN_TYPES_H
 #define CNN_TYPES_H
 
+
+
 #define CM_DO_INIT_CANVAS 1
 #define CM_DO_INIT_MQTT 1
 #define CM_DO_INIT_KEYBIND 1
 #define CN_DO_INIT_TCPSERVER 1
+#define CN_DO_INIT_WSSERVER 1
+
+
 
 #define CNITIMESTAMP 15
 #define CNITIMENOWTT 16
@@ -116,19 +121,57 @@ typedef struct {
 } MqHost;
 
 
+#include <pthread.h>
+#include <sys/socket.h>
+#include <netinet/in.h> 
+#include <arpa/inet.h>
+#include <stdlib.h> 
+#include <string.h> 
+#include <sys/types.h> 
+// ws server start
+//
+#define CNNWSSERVER 24
+#define CNNWSSPUB 25
+#define CNNWSSDISCONNECT 26
+#define CNNWSSCLIENTS 27
+
+#define CNN_WS_SERVER_CLIENTS_MAX 3
+
+typedef struct{
+	int sNo;
+	int cNo;
+	int connfd;
+} cnn_wsClient; // struct for wsServer 
+
+typedef struct{
+	int id;
+	char name[512];
+
+	char ipBind[14]; // 123.567.890.123
+	int port;
+
+	bool running;
+	int connfds[ CNN_WS_SERVER_CLIENTS_MAX ];
+	bool online[ CNN_WS_SERVER_CLIENTS_MAX ];
+	int sNo[ CNN_WS_SERVER_CLIENTS_MAX ];
+	void *clients[ CNN_WS_SERVER_CLIENTS_MAX ];
+
+	int sockfd, len;
+	struct sockaddr_in servaddr, cli; 
+
+	pthread_t tId;
+} cnn_wsServer;
+
+typedef struct{
+} cnn_wsSPub;
+//
+// ws server end
 // tcp server start
 //
 #define CNNTCPSERVER 24
 #define CNNTCPSPUB 25
 #define CNNTCPSDISCONNECT 26
 #define CNNTCPSCLIENTS 27
-#include <sys/socket.h>
-#include <netinet/in.h> 
-#include <pthread.h>
-#include <arpa/inet.h>
-#include <stdlib.h> 
-#include <string.h> 
-#include <sys/types.h> 
 
 #define CNN_TCP_SERVER_CLIENTS_MAX 3
 

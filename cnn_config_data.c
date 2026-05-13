@@ -74,6 +74,14 @@ cnn_mqttSub cnn_MqttSubs[] = {
 int cnn_MqttSubsCount = 5;
 // ... mqtt connection ... END
 
+// ... ws Server ... START 
+cnn_wsServer cnn_wsServers[] = {
+	{ 1,	"ws test at ",		"0.0.0.0", 	9093	},
+	{ 2,	"ws test at 9089",	"127.0.0.1", 	9092	},
+	{ -1 }
+};
+int cnn_wsServersCount = 1;
+// ... ws Server ... END 
 // ... tcp Server ... START 
 cnn_tcpServer cnn_tcpServers[] = {
 	{ 1,	"tcp test at ",		"0.0.0.0", 	8091	},

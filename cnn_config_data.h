@@ -38,8 +38,11 @@ extern int cnnDivsCount;
 extern MqHost MqHosts[];
 extern int MqHostsCount;
 
-extern cnn_tcpSPub cnn_tcpSPubs[];
-extern int cnn_tcpSPubsCount;
+extern cnn_wsSPub cnn_wsSPubs[];
+extern int cnn_wsSPubsCount;
+
+extern cnn_wsServer cnn_wsServers[];
+extern int cnn_wsServersCount;
 
 extern cnn_tcpServer cnn_tcpServers[];
 extern int cnn_tcpServersCount;
