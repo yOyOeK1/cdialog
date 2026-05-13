@@ -25,6 +25,14 @@
 #include "cmachine2.h"
 
 
+//typedef struct {
+//    int id;
+//    char name[32];
+//    char ip[16];
+//    int port;
+//} ws_setting_t;
+
+
 void cnn_wsServer_pub( int nId, cnn_Msg *msg ){
 	printf("TODO\n");
 }
@@ -35,7 +43,11 @@ void cwsS_onopen(ws_cli_conn_t client)
 	char *cli, *port;
 	cli  = ws_getaddress(client);
 	port = ws_getport(client);
-	printf("Connection opened, addr: %s, port: %s\n", cli, port);
+	char *sName = ws_getSName( client );
+	int sId = ws_getSId( client );
+	//struct ws_server sc = ws_get_server_context( client );
+	//ws_setting_t si = (ws_setting_t)ws_get_server_user_data(client);
+	printf("Connection opened, addr: %s, port: %s cId:%i sName:%s sId:%i\n", cli, port, client, sName, sId );
 	//ws_sendframe_txt( client, "{\"time\":1,\"a\":1}" );
 }
 void cwsS_onclose(ws_cli_conn_t client)
@@ -69,6 +81,8 @@ void *cmInit_wsServer_pthread( void *vargp ){
 		ws_socket(&(struct ws_server){
 			.host = cnn_wsServers[ s ].ipBind, //"0.0.0.0",
 			.port = cnn_wsServers[ s ].port, //8080,
+			.id = cnn_wsServers[ s ].id,
+			.name = cnn_wsServers[ s ].name,
 			.thread_loop   = 0,
 			.timeout_ms    = 1000,
 			.evs.onopen    = &cwsS_onopen,
