@@ -5,7 +5,7 @@
 
 char *cnn_name = "Playground 001";
 char *cnn_target = "cmachine2Playground001";
-char *cnn_Version = "2026.0511";
+char *cnn_Version = "2026.0511.2";
 
 bool cmtDeb_verbose = false;
 bool cmtBen = false;
@@ -76,8 +76,8 @@ int cnn_MqttSubsCount = 5;
 
 // ... ws Server ... START 
 cnn_wsServer cnn_wsServers[] = {
-	{ 1,	"ws test at ",		"0.0.0.0", 	9093	},
-	{ 2,	"ws test at 9089",	"127.0.0.1", 	9092	},
+	{ 1,	"ws test at ",		"0.0.0.0", 	9092	},
+	{ 2,	"ws test at 9089",	"127.0.0.1", 	9093	},
 	{ -1 }
 };
 int cnn_wsServersCount = 1;
@@ -227,6 +227,7 @@ int cnn_ifsCount = 2;
 #include "cmTools.h"
 #include "ckeyh.h"
 #include "ctcpS.h"
+#include "cwsS.h"
 
 
 
@@ -269,6 +270,10 @@ cnn_Hash cnn_Hashs[] = {
 					CNNTCPSDISCONNECT,	
 							true,	&cnn_tcpServer_disconnect	},
 	{ 27,	"TCP Server - clients",	CNNTCPSCLIENTS,	true,	&cnn_tcpServer_clients		},
+
+	{ 28,	"WS Server",		CNNWSSERVER,	false,	0		},
+	{ 29,	"WS Server - write",	CNNWSSPUB,	true,	&cnn_wsServer_pub	},
+	
 	{ -1 }
 }; 
 int cnn_HashsCount = 23;
@@ -368,6 +373,8 @@ cnn_Nudle cnnNudles[] = {
 							2	},
 	{43,	CNNKEYBIND,	30,	CNNTCPSCLIENTS,	1	},
 	
+	{44,	CNNWSSERVER,	1,	CNNPRINTF,	8	},
+
 	{-1}	
 };
 

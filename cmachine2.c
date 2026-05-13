@@ -37,6 +37,7 @@ extern int chFill;
 #include "cargs.h"
 //#include "cpostprocess.h"
 #include "ctcpS.h"
+#include "cwsS.h"
 
 #endif
 
@@ -420,6 +421,9 @@ int main( int argc, char *argv[] ){
 		cmInit_mqtt();
 		printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");
 #endif	
+#ifdef CN_DO_INIT_WSSERVER
+		cmInit_wsServer();
+#endif
 #ifdef CN_DO_INIT_TCPSERVER
 		cmInit_tcpServer();
 #endif

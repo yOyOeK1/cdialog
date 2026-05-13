@@ -4,10 +4,10 @@
 
 
 
-#define CM_DO_INIT_CANVAS 1
-#define CM_DO_INIT_MQTT 1
+//#define CM_DO_INIT_CANVAS 1
+//#define CM_DO_INIT_MQTT 1
 #define CM_DO_INIT_KEYBIND 1
-#define CN_DO_INIT_TCPSERVER 1
+//#define CN_DO_INIT_TCPSERVER 1
 #define CN_DO_INIT_WSSERVER 1
 
 
@@ -130,10 +130,10 @@ typedef struct {
 #include <sys/types.h> 
 // ws server start
 //
-#define CNNWSSERVER 24
-#define CNNWSSPUB 25
-#define CNNWSSDISCONNECT 26
-#define CNNWSSCLIENTS 27
+#define CNNWSSERVER 28
+#define CNNWSSPUB 29
+//#define CNNWSSDISCONNECT 26
+//#define CNNWSSCLIENTS 27
 
 #define CNN_WS_SERVER_CLIENTS_MAX 3
 

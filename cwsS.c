@@ -22,6 +22,12 @@
 #include <ws.h>
 
 #include "cnn_config_data.h"
+#include "cmachine2.h"
+
+
+void cnn_wsServer_pub( int nId, cnn_Msg *msg ){
+	printf("TODO\n");
+}
 
 
 void cwsS_onopen(ws_cli_conn_t client)
@@ -30,7 +36,7 @@ void cwsS_onopen(ws_cli_conn_t client)
 	cli  = ws_getaddress(client);
 	port = ws_getport(client);
 	printf("Connection opened, addr: %s, port: %s\n", cli, port);
-	ws_sendframe_txt( client, "{\"time\":1,\"a\":1}" );
+	//ws_sendframe_txt( client, "{\"time\":1,\"a\":1}" );
 }
 void cwsS_onclose(ws_cli_conn_t client)
 {
@@ -48,6 +54,11 @@ void cwsS_onmessage(ws_cli_conn_t client,
 
 	ws_sendframe_bcast(8080, (const char*)msg, size, type);
 
+	cnn_Msg msgT;
+	strcpy( msgT.topic, "and/test/ws/server/onMsg" );
+	strcpy( msgT.payload, msg );
+	msgT.nIndex = 0;
+	cm_doWorkAt_byNId( cnn_wsServers[ 0 ].id, CNNWSSERVER, 0, &msgT );
 }
 
 void *cmInit_wsServer_pthread( void *vargp ){
@@ -69,7 +80,7 @@ void *cmInit_wsServer_pthread( void *vargp ){
 	}
 }
 
-int cmInit_wsS(){
+int cmInit_wsServer(){
 	printf("[WSS] ... init START\n");
 	for( int s=0; true ; s++){
 		if( cnn_wsServers[ s ].id == -1 ) break;	
