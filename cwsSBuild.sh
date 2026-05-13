@@ -7,14 +7,14 @@ bSrc="cwsS.c"
 #inc=""
 #libsDir=""
 #libs="-lm"
-inc="-I/home/user/Apps/wsServer/include "
+inc="-I../wsServer/include "
 wsO=" \
-/home/user/Apps/wsServer/src/utf8.o \
-/home/user/Apps/wsServer/src/handshake.o \
-/home/user/Apps/wsServer/src/ws.o \
-/home/user/Apps/wsServer/src/sha1.o \
-/home/user/Apps/wsServer/src/base64.o"
-libsDir="-L/home/user/Apps/wsServer/src "
+../wsServer/src/utf8.o \
+../wsServer/src/handshake.o \
+../wsServer/src/ws.o \
+../wsServer/src/sha1.o \
+../wsServer/src/base64.o"
+libsDir="-L../wsServer/src "
 libs="-lrt -lm -lpthread -lcurses "
 
 echo "#* ... make last"
