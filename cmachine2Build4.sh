@@ -20,10 +20,19 @@ elif test "$1" = "-vh";then
 elif test "$1" = "-b";then
 	echo "# ... build ..."
 
+elif test "$1" = "-a";then
+	echo "# ... Do all ..."
+	./cmachine2Build4.sh -c
+	./cmachine2Build4.sh -bh
+	./cmachine2Build4.sh -b
+	echo "# ... Do all ... DONE"
+	exit 0
+
 elif test "$1" = "-h";then
 	echo "# ... help
  -h 	- this help
-
+ 
+ -a	- do all clean, build .h, build all, run
  -b	- build all
  -c	- as clean *.o
  -bh	- build new *.h

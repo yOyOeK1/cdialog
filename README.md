@@ -102,6 +102,7 @@ In cmachine2 there is wrapper to do more ... can do:
 
 To build cmachine2 Build4
 ```bash
+./cmachine2Build4.sh -c
 ./cmachine2Build4.sh -bh
 ./cmachine2Build4.sh -b
 ```
@@ -130,7 +131,11 @@ sources / reading:
 https://www.geeksforgeeks.org/c/cjson-json-file-write-read-modify-in-c/
 
 ### TODO / FIX / KNOWN bugs
-
+[ ] keyMode need to parse :mN..\n tyle new line 
+[ ] config switcher for builds
+[ ] key parse cmd line function as node
+    use as command interpreter from tcpS or mqtt or ...
+    
 [ ] hub node - empty node doing nothing.
 [ ] cnn_Msg should have 0/1 if it's as pointer or no
     so if not then it's as not changed

@@ -1,5 +1,5 @@
 
-#include "mqNode.h"
+//#include "mqNode.h"
 #include "cnn_config_data.h"
 
 
@@ -62,7 +62,6 @@ MqHost MqHosts[] = {
 };
 int MqHostsCount = 2;
 
-
 cnn_mqttSub cnn_MqttSubs[] = {
 	{1,	1,	"and all",		"and/#"		},
 	{2,	1,	"switch left",		"e01Mux/left",		3	},
@@ -86,7 +85,8 @@ int cnn_tcpServersCount = 1;
 
 
 
-
+// cnnPrintfs
+// id 
 cnn_Printf cnnPrintfs[] = {
 	{1,	"cc print id1",		"Printfs test1 : %s<OK", 		true, -1 	},
 	{2,	"cc print id2",		"Printfs test2 :%s<OK(2)", 		false, -1 	},
