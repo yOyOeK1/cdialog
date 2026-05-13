@@ -97,3 +97,21 @@ void cmt_hashsDump( ){
 	printf("------ cnn_Hashs END \n");
 
 }
+
+void cmt_dump_msgs( int nId, cnn_Msg *msgT ){
+	printf("dump messages -----\n"
+		" | ...   no | id  |var|  topic 	| payload\n");
+	for( int m=0; true; m++ ){
+		if( cnMs[ m ].id == -1 ) break;
+		printf(" |      %03i | %i | %04i [ %s ]\n | . . . [ %s ]\n", m, cnMs[ m ].asVar, cnMs[ m ].id, cnMs[ m ].topic, cnMs[ m ].payload);
+	}
+}
+void cmt_debug_on( int nId, cnn_Msg *msgT ){
+	printf("DEBUG on\n");
+	cmtDeb_verbose = true;
+}
+void cmt_debug_off( int nId, cnn_Msg *msgT ){
+	printf("DEBUG off\n");
+	cmtDeb_verbose = false;
+}
+

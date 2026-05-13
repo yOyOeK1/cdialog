@@ -216,25 +216,10 @@ int cnn_ifsCount = 2;
 
 #include <stdio.h>
 #include "cmachine2.h"
+#include "cmTools.h"
 #include "ckeyh.h"
 #include "ctcpS.h"
 
-void cmr_dump_msgs( int nId, cnn_Msg *msgT ){
-	printf("dump messages -----\n"
-		" | ...   no | id  |var|  topic 	| payload\n");
-	for( int m=0; true; m++ ){
-		if( cnMs[ m ].id == -1 ) break;
-		printf(" |      %03i | %i | %04i [ %s ]\n | . . . [ %s ]\n", m, cnMs[ m ].asVar, cnMs[ m ].id, cnMs[ m ].topic, cnMs[ m ].payload);
-	}
-}
-void cmr_debug_on( int nId, cnn_Msg *msgT ){
-	printf("DEBUG on\n");
-	cmtDeb_verbose = true;
-}
-void cmr_debug_off( int nId, cnn_Msg *msgT ){
-	printf("DEBUG off\n");
-	cmtDeb_verbose = false;
-}
 
 
 cnn_Hash cnn_Hashs[] = {
@@ -261,10 +246,10 @@ cnn_Hash cnn_Hashs[] = {
 
 	{ 17,	"Logic - compale",	CNLIF,		true,	&cml_if		},
 	
-	{ 18,	"Dump - msg's",		CNRDUMPMSG,	true,	&cmr_dump_msgs	},
+	{ 18,	"Dump - msg's",		CNRDUMPMSG,	true,	&cmt_dump_msgs	},
 
-	{ 19,	"Debug on",		CNRDEBUGON,	true,	&cmr_debug_on},
-	{ 20,	"Debug off",		CNRDEBUGOFF,	true,	&cmr_debug_off},
+	{ 19,	"Debug on",		CNRDEBUGON,	true,	&cmt_debug_on},
+	{ 20,	"Debug off",		CNRDEBUGOFF,	true,	&cmt_debug_off},
 
 	{ 21,	"Mouse on",		CNIKEYMOUSE_ENABLE,	true,	&key_mouseKey_enable_byNode	},
 	{ 22,	"Mouse off",		CNIKEYMOUSE_DISABLE,	true,	&key_mouseKey_disable_byNode	},
@@ -280,13 +265,8 @@ cnn_Hash cnn_Hashs[] = {
 }; 
 int cnn_HashsCount = 23;
 
-void cnn_config_init(){
-	printf("# cnn config init ....\n");
-	
-	cnn_Hashs[ 0 ].fPts = &cm_printf;
 
 
-}
 
 // ----- test zene START
 #include <stdio.h>
