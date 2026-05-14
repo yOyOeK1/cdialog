@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include "cnn_config_data.h"
 #include "ctermh.h" 
 
 int col = 70;
@@ -33,6 +34,9 @@ int cc_main_argcParse( int argc, char *argv[] ){
 		} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
 			//printf("#* ... -col=\n");
 			sscanf( argv[ a ], "-col=%d", &col );
+		} else if( strncmp( argv[ a ], "-mode=", 6) == 0 ){
+			sscanf( argv[ a ], "-mode=%d", &cnn_KeyModeNow );
+			printf("#* ... -mode=(%i)\n",cnn_KeyModeNow );
 		} else if( strncmp( argv[ a ], "-chFill=", 8) == 0 ){
 			chFill = argv[ a ][8];
 			printf("#* ... -chFill= (%c)\n",chFill );
@@ -45,6 +49,8 @@ int cc_main_argcParse( int argc, char *argv[] ){
 				"-row=N		- N rows to set\n"
 				"-col=N		- N cols / lines to set\n"
 				"-chFill=.	- . char to use as filler in clear\n"
+				"-mode=N	- N keyMode at start\n"
+				"\n"
 				, col, row
 				);
 			return 0;
