@@ -2,6 +2,11 @@
 # small helper script to compile it as it is...
 #
 
+bTarget="cmachine2.test.bin"
+mainConfigData="cnn_config_data"
+
+
+
 if test "$1" = "-c";then
 	echo "# ... clean *.o"
 	rm ./*.o
@@ -47,21 +52,60 @@ else
 fi
 
 
+gccFlagsExtra=""
+if test "$CMCONFIG" = "";then
+	echo "# EE no env variable CMCONFIG exit 1"
+	exit 1
+else
+	echo "# ... will do config [ $CMCONFIG ]"
+	cPath="./cnn_config_""$CMCONFIG""_data.c"
+	if test -f "$cPath";then
+		echo " file OK"
+		mainConfigData="./cnn_config_""$CMCONFIG""_data"
+	else
+		echo "EE config file not there [ $cPath ]"
+		exit 1
+	fi
+	mods=`grep '#FOR_COMPILER_MODULES_DO ' "$cPath"`
+	mList=""
+	mItem="0"
+	for m in `echo "$mods"`;do
+		if test "$mItem" = "0";then
+			echo "skip first"
+		else
+			mList="$mList ""-D""$m=\"1\""
+		fi
+		mItem="1"
+	done
+	echo "# do modules ... [ $mList ]"
+	gccFlagsExtra="$mList"
+
+
+	fTarget=`grep '*cnn_target' "$cPath" | awk '{print $4}'`
+	fLen=`expr length "$fTarget"`
+	fLen=`expr "$fLen" - "3"`
+	fTrim=`expr substr "$fTarget" 2 $fLen`
+	echo "# fTarget [ $fTarget ] trim [$fTrim]"
+	bTarget="$fTrim"".test.bin"
+
+fi
+
+
+
+
 bMod_wsS=1
 
 
 
 
-
-bTarget="cmachine2.test.bin"
-bSrc="cnn_config_data cmTools cmInits cmCanvas ctcpS ctcpS_v2 cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh ccanvas cargs cpostprocess mqtth cmachine2"
+bSrc="$mainConfigData cmTools cmInits cmCanvas ctcpS ctcpS_v2 cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh ccanvas cargs cpostprocess mqtth cmachine2"
 inc=""
 libsDir=""
 libs="-lm"
 inc="-I/home/yoyo/src/mosquitto-2.0.13/include "
 libsDir="-L/home/yoyo/src/mosquitto-2.0.13/bu/lib "
 libs="-lmosquitto -lrt -lm -lpthread -lcurses -lncurses -lncursesw "
-gccFlags="-g -O3 -DDEBUG -DCPPMACHINE -DMQTT_FROM_MQNODES2" 
+gccFlags="-g -O3 -DDEBUG -DCPPMACHINE -DMQTT_FROM_MQNODES2 $gccFlagsExtra" 
 
 
 if test "$bMod_wsS" = "1";then
