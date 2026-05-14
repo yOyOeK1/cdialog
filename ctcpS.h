@@ -2,7 +2,6 @@
 void cnn_tcp_printf(  );
 void cnn_tcpS_doClick( int chNo, int sNo, int cNo, char *topic, char *msg );
 void cnn_tcpS_onMsg( int sNo, int cNo, char *msg );
-void cnn_tcpS_func(int connfd, int sNo, int cNo); 
 void cnn_tcpServer_disconnect( int nId, cnn_Msg *msgT );
 void cnn_tcpServer_clients( int nId, cnn_Msg *msgT );
 void cnn_tcpServer_pub( int nId, cnn_Msg *msgT );

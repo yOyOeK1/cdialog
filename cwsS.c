@@ -38,33 +38,74 @@ void cnn_wsServer_pub( int nId, cnn_Msg *msg ){
 }
 
 
-void cwsS_onopen(ws_cli_conn_t client)
-{
+int cwsS_getServerIndex_fromWsCli( ws_cli_conn_t client ){
+	int sId = ws_getSId( client );
+	for( int s=0; true; s++ ){
+		if( cnn_wsServers[ s ].id == -1 ) break;
+		if( cnn_wsServers[ s ].id == sId){
+			return s;
+		}
+	}
+
+	return -1;
+}
+
+void cwsS_onopen(ws_cli_conn_t client){
 	char *cli, *port;
 	cli  = ws_getaddress(client);
 	port = ws_getport(client);
 	char *sName = ws_getSName( client );
 	int sId = ws_getSId( client );
+	int s = cwsS_getServerIndex_fromWsCli( client );
 	//struct ws_server sc = ws_get_server_context( client );
 	//ws_setting_t si = (ws_setting_t)ws_get_server_user_data(client);
-	printf("Connection opened, addr: %s, port: %s cId:%i sName:%s sId:%i\n", cli, port, client, sName, sId );
+	printf("[WSS][%i] Connection opened, addr: %s, port: %s cNo:%i [%s]\n", sId, cli, port, client, sName );
 	//ws_sendframe_txt( client, "{\"time\":1,\"a\":1}" );
+
+
+	printf("[WSS][%i] Lookinf for a spot for client ....\n", sId );
+	for( int c=0; c<CNN_WS_SERVER_CLIENTS_MAX; c++ ){
+		if( cnn_wsServers[ s ].online[ c ] == false ){
+			printf(" - slot [%i / %i]\n", c, CNN_WS_SERVER_CLIENTS_MAX );
+			cnn_wsServers[ s ].online[ c ] = true;
+			cnn_wsServers[ s ].clients[ c ] = (void*)client;
+			break;
+		}
+	}
+
+
+
+	cnn_Msg msgT;
+	strcpy( msgT.topic, "and/test/ws/server/status/newClient" );
+	strcpy( msgT.payload, "newClient" );
+	msgT.nIndex = 0;
+	cm_doWorkAt_byNId( sId, CNNWSSERVER, 1, &msgT );
 }
-void cwsS_onclose(ws_cli_conn_t client)
-{
+
+void cwsS_onclose(ws_cli_conn_t client){
 	char *cli;
 	cli = ws_getaddress(client);
-	printf("Connection closed, addr: %s\n", cli);
+	int sId = ws_getSId( client );
+	int s = cwsS_getServerIndex_fromWsCli( client );
+	for( int c=0; c<CNN_WS_SERVER_CLIENTS_MAX; c++ ){
+		if( cnn_wsServers[ s ].online[ c ] == true &&
+			cnn_wsServers[ s ].clients[ c ] == client ){
+			printf(" - at slot [%i]\n", c );
+			cnn_wsServers[ s ].online[ c ] = false;
+			break;
+			
+		}
+	}
+	printf("[WSS][%i] Connection closed, addr: %s\n", sId, cli);
 }
 void cwsS_onmessage(ws_cli_conn_t client,
-	const unsigned char *msg, uint64_t size, int type)
-{
+	const unsigned char *msg, uint64_t size, int type){
 	char *cli;
 	cli = ws_getaddress(client);
 	printf("I receive a message: %s (size: %" PRId64 ", type: %d), from: %s\n",
 		msg, size, type, cli);
 
-	ws_sendframe_bcast(8080, (const char*)msg, size, type);
+	//ws_sendframe_bcast(8080, (const char*)msg, size, type);
 
 	cnn_Msg msgT;
 	strcpy( msgT.topic, "and/test/ws/server/onMsg" );

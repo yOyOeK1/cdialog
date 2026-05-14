@@ -7,7 +7,7 @@
 //#define CM_DO_INIT_CANVAS 1
 //#define CM_DO_INIT_MQTT 1
 #define CM_DO_INIT_KEYBIND 1
-//#define CN_DO_INIT_TCPSERVER 1
+#define CN_DO_INIT_TCPSERVER 1
 #define CN_DO_INIT_WSSERVER 1
 
 

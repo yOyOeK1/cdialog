@@ -374,6 +374,7 @@ cnn_Nudle cnnNudles[] = {
 	{43,	CNNKEYBIND,	30,	CNNTCPSCLIENTS,	1	},
 	
 	{44,	CNNWSSERVER,	1,	CNNPRINTF,	8	},
+	{45,	CNNWSSERVER,	1,	CNNPRINTF,	9, 1	},
 
 	{-1}	
 };

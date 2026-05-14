@@ -34,19 +34,19 @@ void cnn_tcpS_onMsg( int sNo, int cNo, char *msg ){
 	cnn_tcpS_doClick( 0, sNo, cNo, "/and/test/tcp/server/onMsg", msg );
 }
 
-void cnn_tcpS_func(int connfd, int sNo, int cNo){ 
-    char buff[CNN_TCP_SERVER_MAX]; 
-    cnn_tcpServers[ sNo ].online[ cNo ] = true;
-    int n; 
-    for (;;) { 
- 	memset( buff, 0, CNN_TCP_SERVER_MAX );
-        read(connfd, buff, sizeof(buff)); 
-	cnn_tcpS_onMsg( sNo, cNo, buff );
-	if( strlen( buff ) == 0 ) break;
-    } 
-    cnn_tcpServers[ sNo ].online[ cNo ] = false;
-    printf("[TCPS][%i] client[%i] left ...\n", sNo, cNo );
-} 
+//void cnn_tcpS_func(int connfd, int sNo, int cNo){ 
+//    char buff[CNN_TCP_SERVER_MAX]; 
+//    cnn_tcpServers[ sNo ].online[ cNo ] = true;
+//    int n; 
+//    for (;;) { 
+// 	memset( buff, 0, CNN_TCP_SERVER_MAX );
+//        read(connfd, buff, sizeof(buff)); 
+//	cnn_tcpS_onMsg( sNo, cNo, buff );
+//	if( strlen( buff ) == 0 ) break;
+//    } 
+//    cnn_tcpServers[ sNo ].online[ cNo ] = false;
+//    printf("[TCPS][%i] client[%i] left ...\n", sNo, cNo );
+//} 
 
 void cnn_tcpServer_disconnect( int nId, cnn_Msg *msgT ){
 	printf("[TCPS] disconnect all clients for server id[%i]\n", nId );
