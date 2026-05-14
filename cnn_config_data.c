@@ -227,7 +227,9 @@ int cnn_ifsCount = 2;
 #include "cmTools.h"
 #include "ckeyh.h"
 #include "ctcpS.h"
+#include <ws.h>
 #include "cwsS.h"
+
 
 
 

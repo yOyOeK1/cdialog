@@ -37,6 +37,7 @@ extern int chFill;
 #include "cargs.h"
 //#include "cpostprocess.h"
 #include "ctcpS.h"
+#include <ws.h>
 #include "cwsS.h"
 
 #endif
