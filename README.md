@@ -8,7 +8,7 @@
 
  - at postmarketOs arm64
 
-gcc, build-base, ncurses-dev, mosquitto-dev, cjson-dev
+gcc, build-base, ncurses-dev, mosquitto-dev, cjson-dev, bat, wsServer( fork at yOyOeK1/wsServer )
 
 
 
@@ -57,6 +57,7 @@ Current work is at this file. It's semi node-red a.k.a. c language / hardcoded s
 ./cnn_config_types.h:#define CNNMQTTSUB 5
 ./cnn_config_types.h:#define CNNKEYBIND 7
 ./cnn_config_types.h:#define CNNTCPSERVER 24
+./cnn_config_types.h:#define CNNWSSERVER 28
 
 
 all of them should have `cnn_Msg` define as there default values on event. 
@@ -84,6 +85,7 @@ For now some types of `node`s implemended with status:
 ./cnn_config_types.h:#define CNIKEYMOUSE_DISABLE 22
 ./cnn_config_types.h:#define CNNPROGRESSBAR 13
 ./cnn_config_types.h:#define CNNTCPSPUB 25
+./cnn_config_types.h:#define CNNWSSPUB 29
 
 `cnn_config*` files are to set what you want to build. Now it's a bOnaNzA one big test. I'm thinking to use 
 `#define VARIABLES` as main switching mechanizm to decide what to build as binarry.
@@ -105,9 +107,26 @@ To build cmachine2 Build4
 ./cmachine2Build4.sh -c
 ./cmachine2Build4.sh -bh
 ./cmachine2Build4.sh -b
+# OR
+./cmachine2Build4.sh -a
 ```
 It's a devToy so it's starting after successfully build.
 
+
+### dependencies
+
+If you want to use webSocket then you need to have source files. Repository link is in `NOTES` section.
+So directory of ./cdialog and ./wsServer are in same parent directory.
+```
+projectsDir
+|
+__./cdialog
+    __ files
+    __ files
+__./wsServer
+    __ files
+    __ files
+```
 
 ### start nudle - xdev
 
@@ -127,21 +146,33 @@ This will look in `cnnNudles` for chains to start.
 ### NOTES
 
 sources / reading:
+
+* wsServer( fork at yOyOeK1/wsServer )
+    https://github.com/yOyOeK1/wsServer
+
 * cJSON:
-https://www.geeksforgeeks.org/c/cjson-json-file-write-read-modify-in-c/
+    https://www.geeksforgeeks.org/c/cjson-json-file-write-read-modify-in-c/
+
 
 ### TODO / FIX / KNOWN bugs
+
 [ ] keyMode need to parse :mN..\n tyle new line 
+
 [ ] config switcher for builds
+    .._data.c is only in cmachine2Build4 as to build
+    .._types.h is in ..._data.h 
+
 [ ] key parse cmd line function as node
     use as command interpreter from tcpS or mqtt or ...
     
 [ ] hub node - empty node doing nothing.
+
 [ ] cnn_Msg should have 0/1 if it's as pointer or no
     so if not then it's as not changed
     so as pointer can be use as variable
 
 [ ] mqtth when init2 for nudles can send only after receaving first mesage. then it get's it's mqHeader struct 
+
 [ ] ccanvas don't do correct unicode characters :(
 
 

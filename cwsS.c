@@ -32,12 +32,6 @@
 //    int port;
 //} ws_setting_t;
 
-
-void cnn_wsServer_pub( int nId, cnn_Msg *msg ){
-	printf("TODO\n");
-}
-
-
 int cwsS_getServerIndex_fromWsCli( ws_cli_conn_t client ){
 	int sId = ws_getSId( client );
 	for( int s=0; true; s++ ){
@@ -49,6 +43,26 @@ int cwsS_getServerIndex_fromWsCli( ws_cli_conn_t client ){
 
 	return -1;
 }
+
+void cnn_wsServer_pub( int nId, cnn_Msg *msg ){
+	int s;
+	for( int s=0; true; s++ ){
+		if( cnn_wsServers[ s ].id == -1 ) break;
+		if( cnn_wsServers[ s ].id == nId ) break;
+	}
+
+	for( int c=0; c<CNN_WS_SERVER_CLIENTS_MAX; c++ ){
+		if( cnn_wsServers[ s ].online[ c ] == true ){
+			ws_sendframe_txt( (long unsigned int)cnn_wsServers[ s ].clients[ c ],
+					msg->payload 
+				);
+
+		}
+	}
+
+}
+
+
 
 void cwsS_onopen(ws_cli_conn_t client){
 	char *cli, *port;

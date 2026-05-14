@@ -223,11 +223,11 @@ int cnn_ifsCount = 2;
 
 
 #include <stdio.h>
+#include <ws.h>
 #include "cmachine2.h"
 #include "cmTools.h"
 #include "ckeyh.h"
 #include "ctcpS.h"
-#include <ws.h>
 #include "cwsS.h"
 
 
@@ -378,6 +378,8 @@ cnn_Nudle cnnNudles[] = {
 	{44,	CNNWSSERVER,	1,	CNNPRINTF,	8	},
 	{45,	CNNWSSERVER,	1,	CNNPRINTF,	9, 1	},
 
+	{46,	CNNKEYBIND,	31,	CNNWSSPUB,	1	},
+
 	{-1}	
 };
 
@@ -436,6 +438,8 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	{ 28,	 6,	       "tcpS",	0,		"tcp server send",	"",	11  },
 	{ 29,	 6,	       "tcpD",	0,		"tcp server disconect all clients",	"",	9  },
 	{ 30,	 6,	       "tcpd",	0,		"tcp server dump clients list",	"",	9  },
+
+	{ 31,	 6,	       "wsS",	0,		"ws server send",	"",	11  },
 
 	{-1}
 };
