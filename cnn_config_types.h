@@ -7,8 +7,8 @@
 //#define CM_DO_INIT_CANVAS 1
 //#define CM_DO_INIT_MQTT 1
 //#define CM_DO_INIT_KEYBIND 1
-//#define CN_DO_INIT_TCPSERVER 1
-//#define CN_DO_INIT_WSSERVER 1
+//#define CM_DO_INIT_TCPSERVER 1
+//#define CM_DO_INIT_WSSERVER 1
 
 
 
@@ -95,30 +95,9 @@ typedef struct{
 	int msgId;
 } cnn_Div;
 
-#define CNNMQTTSUB 5
-typedef struct {
-	int id;
-	int mqHostId;
-	char name[512];
-	char topic[512];
-	int msgId;
-	int entryDate;
-} cnn_mqttSub;
-
-
-#include <mosquitto.h>
-typedef struct {
-	int id;
-	char name[512]; 
-	char *host;
-	int port;
-	char *chlientId;
-	char *topicPrefix;
-
-	struct mosquitto *mqMosqi;
-	struct mosquitto *mqHeader;
-
-} MqHost;
+#ifdef CM_DO_INIT_MQTT
+#include "cmMqtt_types.h"
+#endif
 
 
 #include <pthread.h>

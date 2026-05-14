@@ -37,8 +37,10 @@ extern int chFill;
 #include "cargs.h"
 //#include "cpostprocess.h"
 #include "ctcpS.h"
+#ifdef CM_DO_INIT_WSSERVER
 #include <ws.h>
 #include "cwsS.h"
+#endif
 
 #endif
 
@@ -106,6 +108,7 @@ void cm_cmd( int nId, cnn_Msg *msgT ){
 	}	
 }
 
+#ifdef CM_DO_INIT_MQTT
 // CNNMQTTPUB 8
 struct mosquitto *mqHea;
 bool mqConnected = false;
@@ -137,6 +140,8 @@ void cm_mqttPub( int nId, cnn_Msg *msgT ){
 		}
 	}	
 }
+#endif
+
 void cm_benchmarkTik(){
 	if( cmtBen ){
 		printf(" | . . . BEN [%lu]ms. \n", time_now_deltaMS( tSms ) );
@@ -166,11 +171,11 @@ bool cm_doWorkAt( int level, cnn_Msg *msgT, int nIndex, int nType, int nId ){
 	}else if( nType == CNNCMD ){
 		cm_cmd( nId, msgT );
 		return true;
-
+#ifdef CM_DO_INIT_MQTT
 	}else if( nType == CNNMQTTPUB ){
 		cm_mqttPub( nId, msgT );
 		return true;
-
+#endif
 	}else if( nType == CNNCANVCLEAR ){
 		cm_CanvClear( nId, msgT );
 		return true;
@@ -296,6 +301,7 @@ void cmInit(){
 
 }
 
+#ifdef CM_DO_INIT_MQTT
 void cnn_mqtt_on_message( struct mosquitto *mosq, void *obj, const struct mosquitto_message *message ){
 	mqHea = mosq;
 	mqConnected = true;
@@ -341,6 +347,7 @@ void cmInit_mqtt(){
 	mqttInit2( &cnn_mqtt_on_message );
 	mqttDoIt2();
 }
+#endif
 
 #ifdef CPPMACHINE
 int main( int argc, char *argv[] ){
@@ -422,10 +429,10 @@ int main( int argc, char *argv[] ){
 		cmInit_mqtt();
 		printf("c cmachine2 -- 3 CPPMACHINE2 ... END\n");
 #endif	
-#ifdef CN_DO_INIT_WSSERVER
+#ifdef CM_DO_INIT_WSSERVER
 		cmInit_wsServer();
 #endif
-#ifdef CN_DO_INIT_TCPSERVER
+#ifdef CM_DO_INIT_TCPSERVER
 		cmInit_tcpServer();
 #endif
 #ifdef CM_DO_INIT_CANVAS

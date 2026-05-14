@@ -93,19 +93,38 @@ fi
 
 
 
-bMod_wsS=1
+bMod_mqS=`echo "$mList" | grep "CM_DO_INIT_MQTT" >> /dev/null && echo "1" || echo "0"`
+echo "# ... build mqS [ $bMod_mqS ]"
+#bMod_mqS="1"
+bMod_wsS=`echo "$mList" | grep "CM_DO_INIT_WSSERVER" >> /dev/null && echo "1" || echo "0"`
+echo "# ... build wsS [ $bMod_wsS ]"
+#bMod_wsS="1"
+bMod_tcpS=`echo "$mList" | grep "CM_DO_INIT_TCPSERVER" >> /dev/null && echo "1" || echo "0"`
+echo "# ... build tcpS [ $bMod_tcpS ]"
+#bMod_tcpS="1"
 
 
-
-
-bSrc="$mainConfigData cmTools cmInits cmCanvas ctcpS ctcpS_v2 cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh ccanvas cargs cpostprocess mqtth cmachine2"
+bSrc="$mainConfigData cmTools cmInits cmCanvas cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh ccanvas cargs cpostprocess cmachine2"
 inc=""
 libsDir=""
 libs="-lm"
 inc="-I/home/yoyo/src/mosquitto-2.0.13/include "
 libsDir="-L/home/yoyo/src/mosquitto-2.0.13/bu/lib "
-libs="-lmosquitto -lrt -lm -lpthread -lcurses -lncurses -lncursesw "
+libs="-lrt -lm -lpthread -lcurses -lncurses -lncursesw "
 gccFlags="-g -O3 -DDEBUG -DCPPMACHINE -DMQTT_FROM_MQNODES2 $gccFlagsExtra" 
+
+
+if test "$bMod_tcpS" = "1";then
+	echo "# addind module tcpS"
+	#libs="$libs "
+	bSrc="ctcpS ctcpS_v2 $bSrc"
+fi
+
+if test "$bMod_mqS" = "1";then
+	echo "# addind module mqS"
+	libs="$libs -lmosquitto"
+	bSrc="mqtth $bSrc"
+fi
 
 
 if test "$bMod_wsS" = "1";then

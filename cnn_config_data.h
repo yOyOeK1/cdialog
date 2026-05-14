@@ -35,8 +35,16 @@ extern int cnnAddsCount;
 extern cnn_Div cnnDivs[];
 extern int cnnDivsCount;
 
+#ifdef CM_DO_INIT_MQTT
 extern MqHost MqHosts[];
 extern int MqHostsCount;
+
+extern cnn_mqttSub cnn_MqttSubs[];
+extern int cnn_MqttSubsCount;
+
+extern cnn_MqttPub cnn_MqttPubs[];
+extern int cnn_MqttPubsCount;
+#endif
 
 extern cnn_wsSPub cnn_wsSPubs[];
 extern int cnn_wsSPubsCount;
@@ -46,12 +54,6 @@ extern int cnn_wsServersCount;
 
 extern cnn_tcpServer cnn_tcpServers[];
 extern int cnn_tcpServersCount;
-
-extern cnn_mqttSub cnn_MqttSubs[];
-extern int cnn_MqttSubsCount;
-
-extern cnn_MqttPub cnn_MqttPubs[];
-extern int cnn_MqttPubsCount;
 
 extern cnn_Canvas cnn_Canvass[];
 extern int cnn_CanvassCount;

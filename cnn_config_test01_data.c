@@ -1,12 +1,12 @@
 //#FOR_COMPILER_MODULES_DO CM_DO_INIT_KEYBIND
-//CM_DO_INIT_CANVAS CM_DO_INIT_MQTT CM_DO_INIT_KEYBIND CN_DO_INIT_TCPSERVER CN_DO_INIT_WSSERVER
+//CM_DO_INIT_CANVAS CM_DO_INIT_MQTT CM_DO_INIT_KEYBIND CM_DO_INIT_TCPSERVER CM_DO_INIT_WSSERVER
 
 //#include "mqNode.h"
 #include "cnn_config_data.h"
 
 
 char *cnn_name = "Playground_test01";
-char *cnn_target = "cmachine2Playground001";
+char *cnn_target = "cmachine2test001";
 char *cnn_Version = "2026.0514";
 
 bool cmtDeb_verbose = false;
@@ -55,6 +55,7 @@ cnn_atStart cnnAtStarts[] = {
 	{-1}
 };
 
+#ifdef CM_DO_INIT_MQTT
 // ... mqtt connection ... START 
 MqHost MqHosts[] = {
 	{1,	"at hu",	"192.168.43.1",		10883,		"cDialogTest2",		"and/"	},
@@ -75,7 +76,10 @@ cnn_mqttSub cnn_MqttSubs[] = {
 };
 int cnn_MqttSubsCount = 5;
 // ... mqtt connection ... END
+#endif
 
+
+#ifdef CM_DO_INIT_WSSERVER
 // ... ws Server ... START 
 cnn_wsServer cnn_wsServers[] = {
 	{ 1,	"ws test at ",		"0.0.0.0", 	9092	},
@@ -83,7 +87,9 @@ cnn_wsServer cnn_wsServers[] = {
 	{ -1 }
 };
 int cnn_wsServersCount = 1;
-// ... ws Server ... END 
+// ... ws Server ... END
+#endif
+#ifdef CM_DO_INIT_TCPSERVER
 // ... tcp Server ... START 
 cnn_tcpServer cnn_tcpServers[] = {
 	{ 1,	"tcp test at ",		"0.0.0.0", 	8091	},
@@ -92,6 +98,7 @@ cnn_tcpServer cnn_tcpServers[] = {
 };
 int cnn_tcpServersCount = 1;
 // ... tcp Server ... END 
+#endif
 
 
 
@@ -223,68 +230,7 @@ int cnn_ifsCount = 2;
 
 
 
-
-#include <stdio.h>
-#include <ws.h>
-#include "cmachine2.h"
-#include "cmTools.h"
-#include "ckeyh.h"
-#include "ctcpS.h"
-#include "cwsS.h"
-
-
-
-
-cnn_Hash cnn_Hashs[] = {
-	{ 1,	"At start",		CNNATSTART, 	false,	0		},
-	{ 5,	"mqtt sub",		CNNMQTTSUB,	false,	0		},
-	{ 7,	"key bind",		CNNKEYBIND,	false,	0 		},
-	
-	{ 2,	"Printf",		CNNPRINTF,	true,	&cm_printf 	},
-	{ 6,	"Cmd",			CNNCMD,		true,	&cm_cmd 	},
-	{ 8,	"mqtt publish",		CNNMQTTPUB,	true,	&cm_mqttPub 	},
-
-	{ 3,	"Add",			CNNADD,		true,	&cm_add		},
-	{ 4,	"Divide",		CNNDIV,		true,	&cm_div 	},
-	{ 12,	"as Time since",	CNNTIMESINCE,	true,	&cm_TimeSince 	},
-	{ 13,	"as Progress bar",	CNNPROGRESSBAR,	true,	&cm_AsProgressBar 	},
-	{ 14,	"as Compas",		CNNCOMPAS,	true,	&cm_AsCompas 	},
-
-	{ 9,	"Canvas clear",		CNNCANVCLEAR,	true,	&cm_CanvClear 	},
-	{ 10,	"Canvas printf",	CNNCANVPRINTF,	true,	&cm_CanvPrintf 	},
-	{ 11,	"Canvas render",	CNNCANVRENDER,	true,	&cm_CanvRender 	},
-
-	{ 15,	"Get time stamp",	CNITIMESTAMP,	true,	&cmi_timeStamp	},
-	{ 16,	"Get time now tt",	CNITIMENOWTT,	true,	&cmi_timeNowTT	},
-
-	{ 17,	"Logic - compale",	CNLIF,		true,	&cml_if		},
-	
-	{ 18,	"Dump - msg's",		CNRDUMPMSG,	true,	&cmt_dump_msgs	},
-
-	{ 19,	"Debug on",		CNRDEBUGON,	true,	&cmt_debug_on},
-	{ 20,	"Debug off",		CNRDEBUGOFF,	true,	&cmt_debug_off},
-
-	{ 21,	"Mouse on",		CNIKEYMOUSE_ENABLE,	true,	&key_mouseKey_enable_byNode	},
-	{ 22,	"Mouse off",		CNIKEYMOUSE_DISABLE,	true,	&key_mouseKey_disable_byNode	},
-	{ 23,	"At mouseKey event",	CNNINPUTEVENT,	false,	0		},
-
-	{ 24,	"TCP Server",		CNNTCPSERVER,	false,	0		},
-	{ 25,	"TCP Server - write",	CNNTCPSPUB,	true,	&cnn_tcpServer_pub	},
-	{ 26,	"TCP Server - disconnect",	
-					CNNTCPSDISCONNECT,	
-							true,	&cnn_tcpServer_disconnect	},
-	{ 27,	"TCP Server - clients",	CNNTCPSCLIENTS,	true,	&cnn_tcpServer_clients		},
-
-	{ 28,	"WS Server",		CNNWSSERVER,	false,	0		},
-	{ 29,	"WS Server - write",	CNNWSSPUB,	true,	&cnn_wsServer_pub	},
-	
-	{ -1 }
-}; 
-int cnn_HashsCount = 23;
-
-
-
-
+#include "cmHash.h"
 // ----- test zene START
 #include <stdio.h>
 void cmn_test0( int id, int msgPts ){
@@ -293,7 +239,6 @@ void cmn_test0( int id, int msgPts ){
 const int *cmn_test0_pts;
 
 // ----- test zene END 
-
 
 
 
@@ -309,8 +254,8 @@ cnn_Nudle cnnNudles[] = {
 	{4,	CNNPRINTF,	2,	CNNADD,		2	},
 	{5,	CNNADD,		2,	CNNDIV,		1	},
 	{6,	CNNDIV,		1,	CNNPRINTF,	3	},
-	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
-	{8,	CNNMQTTSUB,	4,	CNNPRINTF,	5	},
+//	{7,	CNNMQTTSUB,	2,	CNNPRINTF,	4	},
+//	{8,	CNNMQTTSUB,	4,	CNNPRINTF,	5	},
 	{9,	CNNKEYBIND,	8,	CNNCMD,		2	},
 	//{10,	CNNCMD,		2,	CNNDIV,		3	},
 	//{11,	CNNDIV,		3,	CNNPRINTF,	7	},
@@ -334,7 +279,6 @@ cnn_Nudle cnnNudles[] = {
 	{21,	CNNATSTART,	3,	CNNPROGRESSBAR,	1	},
 	{22,	CNNPROGRESSBAR,	1,	CNNPRINTF,	1	},
 
-	{23,	CNNMQTTSUB,	5,	CNNCOMPAS,	1	},
 	//{23,	CNNDIV,		4,	CNNPROGRESSBAR,	1	},
 	//{23,	CNNDIV,		4,	CNNCOMPAS,	1	},
 	{24,	CNNCOMPAS,	1,	CNNPRINTF,	1	},
