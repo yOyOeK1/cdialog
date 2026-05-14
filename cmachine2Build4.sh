@@ -102,9 +102,12 @@ echo "# ... build wsS [ $bMod_wsS ]"
 bMod_tcpS=`echo "$mList" | grep "CM_DO_INIT_TCPSERVER" >> /dev/null && echo "1" || echo "0"`
 echo "# ... build tcpS [ $bMod_tcpS ]"
 #bMod_tcpS="1"
+bMod_ccanvS=`echo "$mList" | grep "CM_DO_INIT_CANVAS" >> /dev/null && echo "1" || echo "0"`
+echo "# ... build ccanvas [ $bMod_ccanvS ]"
+#bMod_ccanvS="1"
 
 
-bSrc="$mainConfigData cmTools cmInits cmCanvas cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh ccanvas cargs cpostprocess cmachine2"
+bSrc="$mainConfigData cmTools cmInits cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh cargs cpostprocess cmachine2"
 inc=""
 libsDir=""
 libs="-lm"
@@ -114,6 +117,11 @@ libs="-lrt -lm -lpthread -lcurses -lncurses -lncursesw "
 gccFlags="-g -O3 -DDEBUG -DCPPMACHINE -DMQTT_FROM_MQNODES2 $gccFlagsExtra" 
 
 
+if test "$bMod_ccanvS" = "1";then
+	echo "# addind module ccanvas"
+	#libs="$libs "
+	bSrc="cmCanvas ccanvas $bSrc"
+fi
 if test "$bMod_tcpS" = "1";then
 	echo "# addind module tcpS"
 	#libs="$libs "

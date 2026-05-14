@@ -147,6 +147,7 @@ cnn_Cmd cnnCmds[] = {
 };
 int cnnCmdsCount = 5;
 
+#ifdef CM_DO_INIT_MQTT
 //
 // cnn_MqttPub
 // id 8
@@ -155,7 +156,8 @@ cnn_MqttPub cnn_MqttPubs[] = {
 	{ -1}
 };
 int cnn_MqttPubsCount = 1;
-
+#endif
+#ifdef CM_DO_INIT_CANVAS
 cnn_Canvas cnn_Canvass[] = {
 	/*id,	name,		autosize,	row,	col,	chFill	*/
 	{1,	"debug",	false,		10,	40,	'1'	},
@@ -193,6 +195,7 @@ cnn_CanvRender cnn_CanvRenders[] = {
 	{ -1 }
 };
 int cnn_CanvRendersCount = 1;
+#endif
 
 // cnn_TimeSince
 // id 12
@@ -266,12 +269,12 @@ cnn_Nudle cnnNudles[] = {
 	{15,	CNNPRINTF,	6,	CNNMQTTPUB,	1	},
 //	{15,	CNNPRINTF,	6,	(int)cmn_test0_pts,	1	},
 
-	{16,	CNNKEYBIND,	3,	CNNCANVPRINTF,	1	},
+//	{16,	CNNKEYBIND,	3,	CNNCANVPRINTF,	1	},
 
 
-	{17,	CNNKEYBIND,	14,	CNNCANVRENDER,	1	},
-	{18,	CNNKEYBIND,	15,	CNNCANVCLEAR,	1	},
-	{18,	CNNKEYBIND,	16,	CNNCANVPRINTF,	1	},
+//	{17,	CNNKEYBIND,	14,	CNNCANVRENDER,	1	},
+//	{18,	CNNKEYBIND,	15,	CNNCANVCLEAR,	1	},
+//	{18,	CNNKEYBIND,	16,	CNNCANVPRINTF,	1	},
 
 	{19,	CNNCMD,		2,	CNNTIMESINCE,	1	},
 	{20,	CNNTIMESINCE,	1,	CNNPRINTF,	5	},
@@ -314,17 +317,17 @@ cnn_Nudle cnnNudles[] = {
 	{38,	CNNATSTART,	4,	CNNPRINTF,	5	},
 //*/
 	
-	{39,	CNNTCPSERVER,	1,	CNNPRINTF,	8	},
-	{40,	CNNTCPSERVER,	1,	CNNPRINTF,	9, 1	},
-	{41,	CNNKEYBIND,	28,	CNNTCPSPUB,	2	},
-	{42,	CNNKEYBIND,	29,	CNNTCPSDISCONNECT,	
-							2	},
-	{43,	CNNKEYBIND,	30,	CNNTCPSCLIENTS,	1	},
+//	{39,	CNNTCPSERVER,	1,	CNNPRINTF,	8	},
+//	{40,	CNNTCPSERVER,	1,	CNNPRINTF,	9, 1	},
+//	{41,	CNNKEYBIND,	28,	CNNTCPSPUB,	2	},
+//	{42,	CNNKEYBIND,	29,	CNNTCPSDISCONNECT,	
+//							2	},
+//	{43,	CNNKEYBIND,	30,	CNNTCPSCLIENTS,	1	},
 	
-	{44,	CNNWSSERVER,	1,	CNNPRINTF,	8	},
-	{45,	CNNWSSERVER,	1,	CNNPRINTF,	9, 1	},
+//	{44,	CNNWSSERVER,	1,	CNNPRINTF,	8	},
+//	{45,	CNNWSSERVER,	1,	CNNPRINTF,	9, 1	},
 
-	{46,	CNNKEYBIND,	31,	CNNWSSPUB,	1	},
+//	{46,	CNNKEYBIND,	31,	CNNWSSPUB,	1	},
 
 	{-1}	
 };

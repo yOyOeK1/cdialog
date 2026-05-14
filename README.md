@@ -102,13 +102,15 @@ In cmachine2 there is wrapper to do more ... can do:
 
 ### building one
 
-To build cmachine2 Build4
+To build cmachine2 Build4. It need a env varbiable in build steps to read config file and include / swap modules for compilator. This is really not elegant part. But whit this steps copilation is only on modules what you use in build.
+cnn_config_X_data.c have special line telling Build4 how to stitch binary. To build full01 target run
 ```bash
+export CMCONFIG="full01"
 ./cmachine2Build4.sh -c
 ./cmachine2Build4.sh -bh
 ./cmachine2Build4.sh -b
 # OR
-./cmachine2Build4.sh -a
+CMCONFIG="full01" ./cmachine2Build4.sh -a
 ```
 It's a devToy so it's starting after successfully build.
 

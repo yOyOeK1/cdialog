@@ -107,6 +107,8 @@ typedef struct{
 #include <stdlib.h> 
 #include <string.h> 
 #include <sys/types.h> 
+
+#ifdef CM_DO_INIT_WSSERVER
 // ws server start
 //
 #define CNNWSSERVER 28
@@ -145,6 +147,8 @@ typedef struct{
 } cnn_wsSPub;
 //
 // ws server end
+#endif
+#ifdef CM_DO_INIT_TCPSERVER
 // tcp server start
 //
 #define CNNTCPSERVER 24
@@ -183,6 +187,7 @@ typedef struct{
 } cnn_tcpSPub;
 //
 // tcp server end
+#endif
 
 #define CNNCMD 6
 typedef struct {

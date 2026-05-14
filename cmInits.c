@@ -63,7 +63,7 @@ void cmInit_cnnAtStart(){
 		printf("\n");
 	}
 }
-
+#ifdef CM_DO_INIT_CANVAS
 void cmInit_cnCanvass(){
 	for( int c=0; true; c++ ){
 		if( cnn_Canvass[ c ].id == -1 ) break;
@@ -84,4 +84,4 @@ void cmInit_cnCanvass(){
 		}
 	}
 }
-
+#endif

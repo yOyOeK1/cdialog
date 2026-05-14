@@ -5,7 +5,9 @@
 #include "cnn_config_types.h"
 
 #include "cmTime.h"
+#ifdef CM_DO_INIT_CANVAS
 #include "cmCanvas.h"
+#endif
 #include "cmMath.h"
 #include "cmAs.h"
 #include "cmLogic.h"
@@ -46,15 +48,20 @@ extern cnn_MqttPub cnn_MqttPubs[];
 extern int cnn_MqttPubsCount;
 #endif
 
+#ifdef CM_DO_INIT_WSSERVER
 extern cnn_wsSPub cnn_wsSPubs[];
 extern int cnn_wsSPubsCount;
 
 extern cnn_wsServer cnn_wsServers[];
 extern int cnn_wsServersCount;
+#endif
 
+#ifdef CM_DO_INIT_TCPSERVER
 extern cnn_tcpServer cnn_tcpServers[];
 extern int cnn_tcpServersCount;
+#endif
 
+#ifdef CM_DO_INIT_CANVAS
 extern cnn_Canvas cnn_Canvass[];
 extern int cnn_CanvassCount;
 
@@ -66,6 +73,7 @@ extern int cnn_CanvPrintfsCount;
 
 extern cnn_CanvRender cnn_CanvRenders[];
 extern int cnn_CanvRendersCount;
+#endif
 
 extern cnn_TimeSince cnn_TimeSinces[];
 extern int cnn_TimeSincesCount;

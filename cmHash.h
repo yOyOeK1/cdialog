@@ -9,7 +9,9 @@
 #include "cmachine2.h"
 #include "cmTools.h"
 #include "ckeyh.h"
+#ifdef CM_DO_INIT_TCPSERVER
 #include "ctcpS.h"
+#endif
 
 
 
@@ -32,11 +34,11 @@ cnn_Hash cnn_Hashs[] = {
 	{ 12,	"as Time since",	CNNTIMESINCE,	true,	&cm_TimeSince 	},
 	{ 13,	"as Progress bar",	CNNPROGRESSBAR,	true,	&cm_AsProgressBar 	},
 	{ 14,	"as Compas",		CNNCOMPAS,	true,	&cm_AsCompas 	},
-
+#ifdef CM_DO_INIT_CANVAS
 	{ 9,	"Canvas clear",		CNNCANVCLEAR,	true,	&cm_CanvClear 	},
 	{ 10,	"Canvas printf",	CNNCANVPRINTF,	true,	&cm_CanvPrintf 	},
 	{ 11,	"Canvas render",	CNNCANVRENDER,	true,	&cm_CanvRender 	},
-
+#endif
 	{ 15,	"Get time stamp",	CNITIMESTAMP,	true,	&cmi_timeStamp	},
 	{ 16,	"Get time now tt",	CNITIMENOWTT,	true,	&cmi_timeNowTT	},
 

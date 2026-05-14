@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include <mosquitto.h>
+
 
 
 #define CMACHINEVER "2026.0505"
@@ -28,18 +28,26 @@ extern int chFill;
 #include "cmTools.h"
 #include "cmInits.h"
 #include "cmTime.h"
+#ifdef CM_DO_INIT_CANVAS
 #include "cmCanvas.h"
+#endif
 //#include "ctermh.h"
+
 #include "timeh.h"
 #include "ckeyh.h"
-#include "mqtth.h"
 //#include "ccanvas.h"
 #include "cargs.h"
 //#include "cpostprocess.h"
+#ifdef CM_DO_INIT_TCPSERVER
 #include "ctcpS.h"
+#endif
 #ifdef CM_DO_INIT_WSSERVER
 #include <ws.h>
 #include "cwsS.h"
+#endif
+#ifdef CM_DO_INIT_MQTT
+#include <mosquitto.h>
+#include "mqtth.h"
 #endif
 
 #endif
@@ -176,6 +184,7 @@ bool cm_doWorkAt( int level, cnn_Msg *msgT, int nIndex, int nType, int nId ){
 		cm_mqttPub( nId, msgT );
 		return true;
 #endif
+#ifdef CM_DO_INIT_CANVAS
 	}else if( nType == CNNCANVCLEAR ){
 		cm_CanvClear( nId, msgT );
 		return true;
@@ -187,7 +196,7 @@ bool cm_doWorkAt( int level, cnn_Msg *msgT, int nIndex, int nType, int nId ){
 	}else if( nType == CNNCANVRENDER ){
 		cm_CanvRender( nId, msgT );
 		return true;
-
+#endif
 	}else if( nType == CNNTIMESINCE ){
 		cm_TimeSince( nId, msgT );
 		return true;
