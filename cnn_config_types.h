@@ -9,6 +9,8 @@
 //#define CM_DO_INIT_KEYBIND 1
 //#define CM_DO_INIT_TCPSERVER 1
 //#define CM_DO_INIT_WSSERVER 1
+//#define CM_DO_INIT_NCURSES 1 
+//#define CM_DO_INIT_NUDLES 1
 
 
 

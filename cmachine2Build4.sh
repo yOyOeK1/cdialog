@@ -105,6 +105,9 @@ echo "# ... build tcpS [ $bMod_tcpS ]"
 bMod_ccanvS=`echo "$mList" | grep "CM_DO_INIT_CANVAS" >> /dev/null && echo "1" || echo "0"`
 echo "# ... build ccanvas [ $bMod_ccanvS ]"
 #bMod_ccanvS="1"
+bMod_ncurS=`echo "$mList" | grep "CM_DO_INIT_NCURSES" >> /dev/null && echo "1" || echo "0"`
+echo "# ... build ncurses [ $bMod_ncurS ]"
+#bMod_ncurS="1"
 
 
 bSrc="$mainConfigData cmTools cmInits cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh cargs cpostprocess cmachine2"
@@ -113,10 +116,15 @@ libsDir=""
 libs="-lm"
 inc="-I/home/yoyo/src/mosquitto-2.0.13/include "
 libsDir="-L/home/yoyo/src/mosquitto-2.0.13/bu/lib "
-libs="-lrt -lm -lpthread -lcurses -lncurses -lncursesw "
+libs="-lrt -lm -lpthread"
 gccFlags="-g -O3 -DDEBUG -DCPPMACHINE -DMQTT_FROM_MQNODES2 $gccFlagsExtra" 
 
 
+if test "$bMod_ncur" = "1";then
+	echo "# addind module ncurses"
+	libs="$libs -lcurses -lncurses -lncursesw"
+	#bSrc=" $bSrc"
+fi
 if test "$bMod_ccanvS" = "1";then
 	echo "# addind module ccanvas"
 	#libs="$libs "
