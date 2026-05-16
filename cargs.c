@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#ifdef CPPCMACHINE
+//#ifdef CPPCMACHINE
 #include "cnn_config_data.h"
-#endif
+//#endif
 
 #include "ctermh.h" 
 
@@ -20,6 +20,7 @@ int chFill = '.';
 
 int cc_main_argcParse( int argc, char *argv[] ){
        for( int a=0; a<argc ; a++ ){
+	       printf("arg test[%s]\n", argv[ a ]);
 		if( strncmp( argv[ a ], "-row=", 5 ) == 0 ){
 			//printf("#* ... -row=\n");
 			sscanf( argv[ a ], "-row=%d", &row );
@@ -36,11 +37,16 @@ int cc_main_argcParse( int argc, char *argv[] ){
 		} else if( strncmp( argv[ a ], "-col=", 5 ) == 0 ){
 			//printf("#* ... -col=\n");
 			sscanf( argv[ a ], "-col=%d", &col );
-#ifdef CPPCMACHINE
+//#ifdef CPPCMACHINE
+		} else if( strncmp( argv[ a ], "-deb", 4) == 0 ){
+			printf("ENABLE DEBUG\n");
+			cmtDeb_verbose = true;
+#ifdef CM_DO_INIT_KEYBIND
 		} else if( strncmp( argv[ a ], "-mode=", 6) == 0 ){
 			sscanf( argv[ a ], "-mode=%d", &cnn_KeyModeNow );
 			printf("#* ... -mode=(%i)\n",cnn_KeyModeNow );
 #endif
+//#endif
 		} else if( strncmp( argv[ a ], "-chFill=", 8) == 0 ){
 			chFill = argv[ a ][8];
 			printf("#* ... -chFill= (%c)\n",chFill );
@@ -54,6 +60,7 @@ int cc_main_argcParse( int argc, char *argv[] ){
 				"-col=N		- N cols / lines to set\n"
 				"-chFill=.	- . char to use as filler in clear\n"
 				"-mode=N	- N keyMode at start\n"
+				"-deb		- enable debug / verbose\n"
 				"\n"
 				, col, row
 				);
