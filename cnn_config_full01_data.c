@@ -1,4 +1,4 @@
-//#FOR_COMPILER_MODULES_DO CM_DO_INIT_KEYBIND CM_DO_INIT_CANVAS CM_DO_INIT_MQTT CM_DO_INIT_KEYBIND CM_DO_INIT_TCPSERVER CM_DO_INIT_WSSERVER CM_DO_INIT_NCURSES CM_DO_INIT_NUDLES CM_DO_MOUSEKEYS CM_DO_CORE
+//#FOR_COMPILER_MODULES_DO CM_DO_INIT_KEYBIND CM_DO_INIT_CANVAS CM_DO_INIT_MQTT CM_DO_INIT_KEYBIND CM_DO_INIT_TCPSERVER CM_DO_INIT_WSSERVER CM_DO_INIT_NCURSES CM_DO_INIT_NUDLES CM_DO_MOUSEKEYS CM_DO_CORE CM_DO_TCPCLIENT
 
 //#include "mqNode.h"
 #include "cnn_config_data.h"
@@ -86,6 +86,17 @@ cnn_wsServer cnn_wsServers[] = {
 };
 int cnn_wsServersCount = 1;
 // ... ws Server ... END 
+#endif
+#ifdef CM_DO_TCPCLIENT
+// ... tcp Client ... START 
+cnn_tcpCClient cnn_tcpCClients[] = {
+	{ 1,	"tcp test at client",		"192.168.43.1", 	18091	},
+	{ 2,	"tcp test at 22 client 22",	"127.0.0.1", 		18092	},
+	{ -1 }
+};
+int cnn_tcpCClinetsCount = 2;
+// ... tcp client ... END 
+
 #endif
 #ifdef CM_DO_INIT_TCPSERVER
 // ... tcp Server ... START 
@@ -333,6 +344,9 @@ cnn_Nudle cnnNudles[] = {
 	{45,	CNNWSSERVER,	1,	CNNPRINTF,	9, 1	},
 
 	{46,	CNNKEYBIND,	31,	CNNWSSPUB,	1	},
+
+	{47,	CNNTCPCLIENT,	2,	CNNPRINTF,	8	},
+	{48,	CNNTCPCLIENT,	2,	CNNPRINTF,	9, 1	},
 
 	{-1}	
 };

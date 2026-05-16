@@ -17,6 +17,9 @@
 #ifdef CM_DO_INIT_TCPSERVER
 #include "ctcpS.h"
 #endif
+#ifdef CM_DO_TCPCLIENT
+#include "ctcpC.h"
+#endif
 
 
 
@@ -61,7 +64,7 @@ cnn_Hash cnn_Hashs[] = {
 #endif
 	{ 23,	"At mouseKey event",	CNNINPUTEVENT,	false,	0		},
 #ifdef CM_DO_INIT_TCPSERVER
-	{ 24,	"TCP Server",		CNNTCPSERVER,	false,	0		},
+	{ 24,	"TCP Server",		CNNTCPSERVER,	false,	0			},
 	{ 25,	"TCP Server - write",	CNNTCPSPUB,	true,	&cnn_tcpServer_pub	},
 	{ 26,	"TCP Server - disconnect",	
 					CNNTCPSDISCONNECT,	
@@ -69,8 +72,12 @@ cnn_Hash cnn_Hashs[] = {
 	{ 27,	"TCP Server - clients",	CNNTCPSCLIENTS,	true,	&cnn_tcpServer_clients		},
 #endif
 #ifdef CM_DO_INIT_WSSERVER
-	{ 28,	"WS Server",		CNNWSSERVER,	false,	0		},
+	{ 28,	"WS Server",		CNNWSSERVER,	false,	0			},
 	{ 29,	"WS Server - write",	CNNWSSPUB,	true,	&cnn_wsServer_pub	},
+#endif	
+#ifdef CM_DO_TCPCLIENT
+	{ 30,	"TCP Client",		CNNTCPCLIENT,		false,	0			},
+	{ 31,	"TCP Client - write",	CNNTCPCLIENTPUB,	true,	&cnn_tcpCClient_pub	},
 #endif	
 	{ -1 }
 }; 

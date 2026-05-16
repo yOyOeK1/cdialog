@@ -61,6 +61,11 @@ extern cnn_tcpServer cnn_tcpServers[];
 extern int cnn_tcpServersCount;
 #endif
 
+#ifdef CM_DO_TCPCLIENT
+extern cnn_tcpCClient cnn_tcpCClients[];
+extern int cnn_tcpCClientsCount;
+#endif
+
 #ifdef CM_DO_INIT_CANVAS
 extern cnn_Canvas cnn_Canvass[];
 extern int cnn_CanvassCount;

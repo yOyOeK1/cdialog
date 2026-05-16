@@ -41,6 +41,9 @@ extern int chFill;
 //#include "ccanvas.h"
 #include "cargs.h"
 //#include "cpostprocess.h"
+#ifdef CM_DO_TCPCLIENT
+#include "ctcpC.h"
+#endif
 #ifdef CM_DO_INIT_TCPSERVER
 #include "ctcpS.h"
 #endif
@@ -409,6 +412,9 @@ int main( int argc, char *argv[] ){
 #endif	
 #ifdef CM_DO_INIT_WSSERVER
 		cmInit_wsServer();
+#endif
+#ifdef CM_DO_TCPCLIENT
+		cmInit_tcpCClient();
 #endif
 #ifdef CM_DO_INIT_TCPSERVER
 		cmInit_tcpServer();

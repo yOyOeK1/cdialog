@@ -13,6 +13,7 @@
 //[ ]#define CM_DO_INIT_NUDLES 1
 //#define CM_DO_MOUSEKEYS 1
 //#define CM_DO_CORE 1
+//#define CM_DO_TCPCLIENT 1
 
 
 #define CNITIMESTAMP 15
@@ -150,6 +151,29 @@ typedef struct{
 } cnn_wsSPub;
 //
 // ws server end
+#endif
+#ifdef CM_DO_TCPCLIENT
+// int sec.
+#define CNN_TCP_CLIENTS_RECONNECT 10
+#define CNNTCPCLIENT 30
+#define CNNTCPCLIENTPUB 31
+typedef struct{
+	int id;
+	char name[512];
+	
+	char ipBind[14];
+	int port;
+
+	bool online;
+	char status;
+
+	int sockfd, connfd;
+	struct sockaddr_in servaddr, cli; 
+
+	pthread_t tId;
+
+} cnn_tcpCClient;
+
 #endif
 #ifdef CM_DO_INIT_TCPSERVER
 // tcp server start

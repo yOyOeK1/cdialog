@@ -114,6 +114,9 @@ echo "# ... build mouse key events [ $bMod_mouKeyS ]"
 bMod_keyS=`echo "$mList" | grep "CM_DO_INIT_KEYBIND" >> /dev/null && echo "1" || echo "0"`
 echo "# ... build ncurses [ $bMod_keyS ]"
 #bMod_keyS="1"
+bMod_tcpc=`echo "$mList" | grep "CM_DO_TCPCLIENT" >> /dev/null && echo "1" || echo "0"`
+echo "# ... build tcpc [ $bMod_tcpc ]"
+#bMod_tcpc="1"
 
 
 
@@ -127,6 +130,11 @@ libs="-lrt -lm -lpthread"
 gccFlags="-g -O3 -DDEBUG -DCPPMACHINE -DMQTT_FROM_MQNODES2 $gccFlagsExtra" 
 
 
+if test "$bMod_tcpc" = "1";then
+	echo "# addind module tcp client"
+	#libs="$libs "
+	bSrc="ctcpC $bSrc"
+fi
 if test "$bMod_keyS" = "1";then
 	echo "# addind module keyBinds"
 	#libs="$libs "
