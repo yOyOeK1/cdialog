@@ -35,7 +35,9 @@ extern int chFill;
 //#include "ctermh.h"
 
 #include "timeh.h"
+#ifdef CM_DO_INIT_KEYBIND
 #include "ckeyh.h"
+#endif
 //#include "ccanvas.h"
 #include "cargs.h"
 //#include "cpostprocess.h"

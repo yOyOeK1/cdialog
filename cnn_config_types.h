@@ -301,6 +301,8 @@ typedef struct{
 	int srcChNo;
 } cnn_Nudle;
 
+
+#ifdef CM_DO_INIT_KEYBIND
 typedef struct{
 	int id;
 	char name[512]; 
@@ -319,6 +321,7 @@ typedef struct{
 	char args[512];
 	int msgId;
 }cnn_KeyBind;
+#endif
 
 
 #endif

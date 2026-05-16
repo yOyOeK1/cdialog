@@ -8,8 +8,12 @@
 #endif
 #include "cmachine2.h"
 #include "cmTools.h"
+#ifdef CM_DO_CORE
 #include "cmCore.h"
+#endif
+#ifdef CM_DO_INIT_KEYBIND
 #include "ckeyh.h"
+#endif
 #ifdef CM_DO_INIT_TCPSERVER
 #include "ctcpS.h"
 #endif
@@ -22,7 +26,9 @@ cnn_Hash cnn_Hashs[] = {
 #ifdef CM_DO_INIT_MQTT
 	{ 5,	"mqtt sub",		CNNMQTTSUB,	false,	0		},
 #endif
+#ifdef CM_DO_INIT_KEYBIND
 	{ 7,	"key bind",		CNNKEYBIND,	false,	0 		},
+#endif
 	
 	{ 2,	"Printf",		CNNPRINTF,	true,	&cm_printf 	},
 	{ 6,	"Cmd",			CNNCMD,		true,	&cm_cmd 	},

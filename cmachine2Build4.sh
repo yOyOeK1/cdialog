@@ -109,12 +109,15 @@ bMod_ncurS=`echo "$mList" | grep "CM_DO_INIT_NCURSES" >> /dev/null && echo "1" |
 echo "# ... build ncurses [ $bMod_ncurS ]"
 #bMod_ncurS="1"
 bMod_mouKeyS=`echo "$mList" | grep "CM_DO_MOUSEKEYS" >> /dev/null && echo "1" || echo "0"`
-echo "# ... build ncurses [ $bMod_mouKeyS ]"
-#bMod_kouKeyS="1"
+echo "# ... build mouse key events [ $bMod_mouKeyS ]"
+#bMod_mouKeyS="1"
+bMod_keyS=`echo "$mList" | grep "CM_DO_INIT_KEYBIND" >> /dev/null && echo "1" || echo "0"`
+echo "# ... build ncurses [ $bMod_keyS ]"
+#bMod_keyS="1"
 
 
 
-bSrc="$mainConfigData cmCore cmTools cmInits cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh cargs cpostprocess cmachine2"
+bSrc="$mainConfigData cmCore cmTools cmInits cmMath cmAs cmLogic cmTime timeh cmdh ctermh cargs cpostprocess cmachine2"
 inc=""
 libsDir=""
 libs="-lm"
@@ -124,7 +127,12 @@ libs="-lrt -lm -lpthread"
 gccFlags="-g -O3 -DDEBUG -DCPPMACHINE -DMQTT_FROM_MQNODES2 $gccFlagsExtra" 
 
 
-if test "$bMod_ncur" = "1";then
+if test "$bMod_keyS" = "1";then
+	echo "# addind module keyBinds"
+	#libs="$libs "
+	bSrc="ckeyh $bSrc"
+fi
+if test "$bMod_ncurS" = "1";then
 	echo "# addind module ncurses"
 	libs="$libs -lcurses -lncurses -lncursesw"
 	#bSrc=" $bSrc"

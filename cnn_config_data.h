@@ -101,11 +101,14 @@ extern int cnn_HashsCount;
 extern cnn_Nudle cnnNudles[];
 extern int cnnNudlesCount;
 
+#ifdef CM_DO_INIT_KEYBIND
 extern cnn_KeyMode cnn_KeyModes[];
 extern int cnn_KeyModesCount;
+
 extern int cnn_KeyModeNow;
 
 extern cnn_KeyBind cnn_KeyBinds[];
 extern int cnn_KeyBindsCount;
+#endif
 
 #endif
