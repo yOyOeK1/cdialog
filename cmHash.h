@@ -8,6 +8,7 @@
 #endif
 #include "cmachine2.h"
 #include "cmTools.h"
+#include "cmCore.h"
 #include "ckeyh.h"
 #ifdef CM_DO_INIT_TCPSERVER
 #include "ctcpS.h"
@@ -48,9 +49,10 @@ cnn_Hash cnn_Hashs[] = {
 
 	{ 19,	"Debug on",		CNRDEBUGON,	true,	&cmt_debug_on},
 	{ 20,	"Debug off",		CNRDEBUGOFF,	true,	&cmt_debug_off},
-
+#ifdef CM_DO_MOUSEKEYS
 	{ 21,	"Mouse on",		CNIKEYMOUSE_ENABLE,	true,	&key_mouseKey_enable_byNode	},
 	{ 22,	"Mouse off",		CNIKEYMOUSE_DISABLE,	true,	&key_mouseKey_disable_byNode	},
+#endif
 	{ 23,	"At mouseKey event",	CNNINPUTEVENT,	false,	0		},
 #ifdef CM_DO_INIT_TCPSERVER
 	{ 24,	"TCP Server",		CNNTCPSERVER,	false,	0		},

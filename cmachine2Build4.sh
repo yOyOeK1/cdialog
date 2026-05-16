@@ -108,9 +108,13 @@ echo "# ... build ccanvas [ $bMod_ccanvS ]"
 bMod_ncurS=`echo "$mList" | grep "CM_DO_INIT_NCURSES" >> /dev/null && echo "1" || echo "0"`
 echo "# ... build ncurses [ $bMod_ncurS ]"
 #bMod_ncurS="1"
+bMod_mouKeyS=`echo "$mList" | grep "CM_DO_MOUSEKEYS" >> /dev/null && echo "1" || echo "0"`
+echo "# ... build ncurses [ $bMod_mouKeyS ]"
+#bMod_kouKeyS="1"
 
 
-bSrc="$mainConfigData cmTools cmInits cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh cargs cpostprocess cmachine2"
+
+bSrc="$mainConfigData cmCore cmTools cmInits cmMath cmAs cmLogic cmTime timeh ckeyh cmdh ctermh cargs cpostprocess cmachine2"
 inc=""
 libsDir=""
 libs="-lm"

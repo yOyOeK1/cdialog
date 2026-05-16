@@ -1,8 +1,6 @@
 /* file: [ ./cmachine2.c ] */
 int cm_msg_getIndex_byId( int id );
 cnn_Msg cm_msgClone( int msgId );
-void cm_printf( int id, cnn_Msg *msgT );
-void cm_cmd( int nId, cnn_Msg *msgT );
 void cm_mqttPub( int nId, cnn_Msg *msgT );
 void cm_benchmarkTik();
 bool cm_doWorkAt( int level, cnn_Msg *msgT, int nIndex, int nType, int nId );

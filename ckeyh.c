@@ -27,6 +27,8 @@ bool keyCmdOk;
 
 
 
+#ifdef CM_DO_MOUSEKEYS
+
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
@@ -45,6 +47,7 @@ void key_mouseKey_disable(){
 void key_mouseKey_disable_byNode( int nId, cnn_Msg *msgT ){
 	key_mouseKey_disable();
 }
+
 
 void key_mouseKey_modeMouse( int modeNo ){
 	if( modeNo == 0  ){ // mouse pc
@@ -68,6 +71,8 @@ void key_cmInputEvent( char *eType, char *msg ){
 
 
 }
+
+
 
 void key_mouseKey_enable(){
     // 1. Save original settings and register reset on exit
@@ -121,7 +126,7 @@ void key_mouseKey_enable_byNode( int nId, cnn_Msg *msgT ){
 }
 
 
-
+#endif
 
 
 
