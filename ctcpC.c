@@ -8,31 +8,16 @@
 
 #define SA struct sockaddr
 
-//typedef struct {
-//    int id;
-//    char name[32];
-//    char ip[16];
-//    int port;
-//} tcpC_setting_t;
-
-//int cnn_tcpC_getServerIndex_fromWsCli( tcpC_cli_conn_t client ){
-//	int sId = ws_getSId( client );
-//	for( int s=0; true; s++ ){
-//		if( cnn_tcpCClients[ s ].id == -1 ) break;
-//		if( cnn_tcpCClients[ s ].id == sId){
-//			return s;
-//		}
-//	}
-//
-//	return -1;
-//}
-
 void cnn_tcpCClient_pub( int nId, cnn_Msg *msg ){
 	int s;
 	for( int s=0; true; s++ ){
 		if( cnn_tcpCClients[ s ].id == -1 ) break;
-		if( cnn_tcpCClients[ s ].id == nId ) break;
+		if( cnn_tcpCClients[ s ].id == nId &&
+			cnn_tcpCClients[ s ].online == true ){
 
+			write( cnn_tcpCClients[ s ].sockfd, msg->payload, sizeof( msg->payload ));
+			break;
+		}
 			//ws_sendframe_txt( (long unsigned int)cnn_tcpCClients[ s ].clients[ c ],
 			//		msg->payload 
 			//	);
@@ -42,72 +27,6 @@ void cnn_tcpCClient_pub( int nId, cnn_Msg *msg ){
 	}
 }
 
-
-/*
-void cwsS_onopen(ws_cli_conn_t client) {
-	char *cli, *port;
-	//cli  = ws_getaddress(client);
-	//port = ws_getport(client);
-	//char *sName = ws_getSName( client );
-	//int sId = ws_getSId( client );
-	//int s = cwsS_getServerIndex_fromWsCli( client );
-	//struct ws_server sc = ws_get_server_context( client );
-	//ws_setting_t si = (ws_setting_t)ws_get_server_user_data(client);
-	printf("[TCPC][%i] Connection opened, addr: %s, port: %s cNo:%i [%s]\n", sId, cli, port, client, sName );
-	//ws_sendframe_txt( client, "{\"time\":1,\"a\":1}" );
-
-	printf("[TCPC][%i] Lookinf for a spot for client ....\n", sId );
-	for( int c=0; c<CNN_WS_SERVER_CLIENTS_MAX; c++ ){
-		if( cnn_tcpCClients[ s ].online[ c ] == false ){
-			printf(" - slot [%i / %i]\n", c, CNN_WS_SERVER_CLIENTS_MAX );
-			cnn_tcpCClients[ s ].online[ c ] = true;
-			cnn_tcpCClients[ s ].clients[ c ] = (void*)client;
-			break;
-		}
-	}
-
-
-
-	cnn_Msg msgT;
-	strcpy( msgT.topic, "and/test/ws/server/status/newClient" );
-	strcpy( msgT.payload, "newClient" );
-	msgT.nIndex = 0;
-	cm_doWorkAt_byNId( sId, CNNTCPCERVER, 1, &msgT );
-
-}
-
-void cwsS_onclose(ws_cli_conn_t client) {
-	char *cli;
-	cli = ws_getaddress(client);
-	int sId = ws_getSId( client );
-	int s = cwsS_getServerIndex_fromWsCli( client );
-	for( int c=0; c<CNN_WS_SERVER_CLIENTS_MAX; c++ ){
-		if( cnn_tcpCClients[ s ].online[ c ] == true &&
-			cnn_tcpCClients[ s ].clients[ c ] == client ){
-			printf(" - at slot [%i]\n", c );
-			cnn_tcpCClients[ s ].online[ c ] = false;
-			break;
-			
-		}
-	}
-	printf("[TCPC][%i] Connection closed, addr: %s\n", sId, cli);
-}
-void cwsS_onmessage(ws_cli_conn_t client,
-	const unsigned char *msg, uint64_t size, int type){
-	char *cli;
-	cli = ws_getaddress(client);
-	printf("I receive a message: %s (size: %" PRId64 ", type: %d), from: %s\n",
-		msg, size, type, cli);
-
-	//ws_sendframe_bcast(8080, (const char*)msg, size, type);
-
-	cnn_Msg msgT;
-	strcpy( msgT.topic, "and/test/ws/server/onMsg" );
-	strcpy( msgT.payload, msg );
-	msgT.nIndex = 0;
-	cm_doWorkAt_byNId( cnn_tcpCClients[ 0 ].id, CNNTCPCERVER, 0, &msgT );
-}
-*/
 void cm_tcpC_function( int i ){
 	char buff[512];
 	int n;
@@ -160,7 +79,7 @@ int cmInit_tcpC_byIndex( int i ){
 	// connect the client socket to server socket
 	if (connect(cnn_tcpCClients[ i ].sockfd, (SA*)&cnn_tcpCClients[ i ].servaddr, sizeof(cnn_tcpCClients[ i ].servaddr))
 			!= 0) {
-		printf("[TCPC] connection with the server failed...[%s:%i]\n",
+		printf("[TCPC]EE connection with the server failed...[%s:%i]\n",
 			cnn_tcpCClients[ i ].ipBind, cnn_tcpCClients[ i ].port );
 		return -1;
 	}
@@ -189,22 +108,10 @@ void *cmInit_tcpCClient_pthread( void *vargp ){
 	bool initStatus = true;
 	while( true ){
 
-		printf("[TCPC][%i] ... spoon\n", s );
 		cmInit_tcpC_byIndex( s );
+		printf("[TCPC][%i] ... retry in (%i) sec.\n", s, CNN_TCP_CLIENTS_RECONNECT );
+		
 		sleep( CNN_TCP_CLIENTS_RECONNECT );
-		/*
-		ws_socket(&(struct ws_server){
-			.host = cnn_tcpCClients[ s ].ipBind, //"0.0.0.0",
-			.port = cnn_tcpCClients[ s ].port, //8080,
-			.id = cnn_tcpCClients[ s ].id,
-			.name = cnn_tcpCClients[ s ].name,
-			.thread_loop   = 0,
-			.timeout_ms    = 1000,
-			.evs.onopen    = &cwsS_onopen,
-			.evs.onclose   = &cwsS_onclose,
-			.evs.onmessage = &cwsS_onmessage
-		});
-		*/
 
 	}
 }
@@ -233,15 +140,6 @@ int cmInit_tcpCClient(){
 #ifdef CPPCTCPCTEST
 int main(void)
 {
-//	ws_socket(&(struct ws_server){
-//		.host = "0.0.0.0",
-//		.port = 8080,
-//		.thread_loop   = 0,
-//		.timeout_ms    = 1000,
-//		.evs.onopen    = &cwsS_onopen,
-//		.evs.onclose   = &cwsS_onclose,
-//		.evs.onmessage = &cwsS_onmessage
-//	});
 
 	return (0);
 }

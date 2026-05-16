@@ -348,6 +348,8 @@ cnn_Nudle cnnNudles[] = {
 	{47,	CNNTCPCLIENT,	2,	CNNPRINTF,	8	},
 	{48,	CNNTCPCLIENT,	2,	CNNPRINTF,	9, 1	},
 
+	{49,	CNNKEYBIND,	32,	CNNTCPCLIENTPUB,	2	},
+
 	{-1}	
 };
 
@@ -408,6 +410,8 @@ cnn_KeyBind cnn_KeyBinds[] = {
 	{ 30,	 6,	       "tcpd",	0,		"tcp server dump clients list",	"",	9  },
 
 	{ 31,	 6,	       "wsS",	0,		"ws server send",	"",	11  },
+
+	{ 32,	 6,	       "tcpC",	0,		"tcp client send",	"",	11  },
 
 	{-1}
 };
